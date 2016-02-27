@@ -1,8 +1,29 @@
-h1 {
-   width: 100%;
-   margin-top: 5em;
-   text-align: center;
-   color: #44a;
-   font-size: 40pt;
+body {
+   background-color: #27ae60;
+   color: #ffffff;
    font-family: sans-serif;
+}
+
+h1 {
+   color: #ffffff;
+   font-size: 40pt;
+}
+
+.failed {
+   text-align: center;
+   padding 100px;
+   width: 100%;
+   font-size 12pt;
+}
+
+.red {
+   background-color: #c70039;
+}
+
+.yellow {
+   background-color: #f5b041;
+}
+
+.grey {
+   background-color: #808b96;
 }

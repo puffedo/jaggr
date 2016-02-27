@@ -10,9 +10,12 @@
        [:title "JAGGR"]
        (include-css "/css/style.css")]
       [:body
-       [:h1 "RED"]
-       [:div (str (:unclaimed failed-jobs))]
-       [:h1 "YELLOW"]
-       [:div (str (:claimed failed-jobs))]
-       [:h1 "GREY"]
-       [:div (str (:unclaimable failed-jobs))]])))
+       [:div {:class "red failed"}
+        [:h1 "Unclaimed failed jobs!"]
+        [:div (str (:unclaimed failed-jobs))]]
+       [:div {:class "yellow failed"}
+        [:h1 "All failed jobs are claimed"]
+        [:div (str (:claimed failed-jobs))]]
+       [:div {:class "grey failed"}
+        [:h1 "Some monor jobs failed"]
+        [:div (str (:unclaimable failed-jobs))]]])))
