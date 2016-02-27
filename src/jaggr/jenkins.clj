@@ -3,7 +3,6 @@
             [clojure.data.json :as json]
             [omniconf.core :as config]))
 
-;; TODO get credentials from cli
 ;; calls the Jenkins JSON api for a given url (must end with /),
 ;; returns the body of the response as JSON with keys converted to clojure keywords
 (defn- get-from-jenkins [base-url params]
@@ -15,7 +14,6 @@
          {:basic-auth [(config/get :user) (config/get :user-token)]}))
     :key-fn keyword))
 
-;; TODO get url from cli
 ;; gets the jobs REST resource for the globally configures base-url
 (defn- get-jobs-rsrc []
   (:jobs
