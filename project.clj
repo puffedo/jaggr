@@ -5,10 +5,10 @@
   :url "https://github.com/puffedo/jaggr"
 
   :scm {:name "git"
-        :url "https://github.com/puffedo/jaggr"}
+        :url  "https://github.com/puffedo/jaggr"}
 
   :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+            :url  "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [ring/ring-core "1.4.0"]
@@ -17,10 +17,10 @@
                  [hiccup "1.0.5"]
                  [http-kit "2.1.19"]
                  [org.clojure/data.json "0.2.6"]
-                 [com.grammarly/omniconf "0.2.2"]]
+                 [com.grammarly/omniconf "0.2.2"]
+                 [http-kit.fake "0.2.2"]]
 
-  :dev-dependencies [[ring/ring-devel "1.1.0"]
-                     [http-kit.fake "0.2.2"]]
+  :dev-dependencies [[ring/ring-devel "1.1.0"]]
 
   :plugins [[lein-ring "0.7.1"]]
 

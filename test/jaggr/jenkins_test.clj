@@ -1,7 +1,7 @@
 (ns jaggr.jenkins-test
   (:use jaggr.jenkins)
   (:use clojure.test)
-  (:require [org.httpkit.fake :refer [with-fake-http]]
+  (:require [org.httpkit.fake :refer (with-fake-http)]
             [omniconf.core :as config]))
 
 
@@ -62,30 +62,30 @@
                         (is (not-empty last-build-rsrc))
                         (is (= true (:claimed last-build-rsrc)))
                         (is (= "somebody" (:claimedBy last-build-rsrc)))
-                        (is (= "some reason" (:reason last-build-rsrc)))))
+                        (is (= "some reason" (:reason last-build-rsrc))))))
 
-                    (testing "An unclaimed last-build-REST-resource contains :claimed = false"
+                  (testing "An unclaimed last-build-REST-resource contains :claimed = false"
 
-                      (with-fake-http
-                        [#"http://some-base-url/view/failed-job/api/json?.*" {:body get-job-response-body}
-                         #"http://some-base-url/job/failed-job/42/api/json?.*" {:body get-build-response-body-unclaimed}]
+                    (with-fake-http
+                      [#"http://some-base-url/view/failed-job/api/json?.*" {:body get-job-response-body}
+                       #"http://some-base-url/job/failed-job/42/api/json?.*" {:body get-build-response-body-unclaimed}]
 
-                        (let [last-build-rsrc (@#'jaggr.jenkins/get-last-build-rsrc failed-job-rsrc)]
+                      (let [last-build-rsrc (@#'jaggr.jenkins/get-last-build-rsrc failed-job-rsrc)]
 
-                          (is (not-empty last-build-rsrc))
-                          (is (= false (:claimed last-build-rsrc))))))
+                        (is (not-empty last-build-rsrc))
+                        (is (= false (:claimed last-build-rsrc))))))
 
-                    (testing "A last-build-REST-resource of an unclaimable job contains no claimed-state, claimer or reason."
+                  (testing "A last-build-REST-resource of an unclaimable job contains no claimed-state, claimer or reason."
 
-                      (with-fake-http
-                        [#"http://some-base-url/view/failed-job/api/json?.*" {:body get-job-response-body}
-                         #"http://some-base-url/job/failed-job/42/api/json?.*" {:body get-build-response-body-unclaimable}]
+                    (with-fake-http
+                      [#"http://some-base-url/view/failed-job/api/json?.*" {:body get-job-response-body}
+                       #"http://some-base-url/job/failed-job/42/api/json?.*" {:body get-build-response-body-unclaimable}]
 
-                        (let [last-build-rsrc (@#'jaggr.jenkins/get-last-build-rsrc failed-job-rsrc)]
+                      (let [last-build-rsrc (@#'jaggr.jenkins/get-last-build-rsrc failed-job-rsrc)]
 
-                          (is (nil? (:claimed last-build-rsrc)))
-                          (is (nil? (:claimedBy last-build-rsrc)))
-                          (is (nil? (:reason last-build-rsrc)))))))))))))))
+                        (is (nil? (:claimed last-build-rsrc)))
+                        (is (nil? (:claimedBy last-build-rsrc)))
+                        (is (nil? (:reason last-build-rsrc))))))))))))))
 
   (testing "Failed jobs with claimed builds are returned under the key :claimed ."
 
