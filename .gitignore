@@ -6,4 +6,4 @@ pom.xml
 classes
 target
 /.idea
-.lein-repl-history
+.lein-*
