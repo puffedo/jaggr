@@ -12,20 +12,23 @@
   ([] (init []))
   ([args]
    (config/define
-     {:base-url   {:description "The Jenkins URL that shows all jobs to monitor"
-                   :type        :string
-                   :required    true}
-      :port       {:description "The port"
-                   :type        :number
-                   :default     3000}
-      :user       {:descriptions "A Jenkins user that has access to the base url"
-                   :type         :string
-                   :required     true}
-      :user-token {:description "The users access token (see 'Configuration' page in your Jenkins user profile)"
-                   :type        :string
-                   :required    true
-                   :secret      true}}
-     )
+     {:base-url     {:description "The Jenkins URL that shows all jobs to monitor"
+                     :type        :string
+                     :required    true}
+      :user         {:descriptions "A Jenkins user that has access to the base url"
+                     :type         :string
+                     :required     true}
+      :user-token   {:description "The users access token (see 'Configuration' page in your Jenkins user profile)"
+                     :type        :string
+                     :required    true
+                     :secret      true}
+      :refresh-rate {:description "The time between two automatic page reloads in seconds"
+                     :type        :number
+                     :default     60}
+      :port         {:description "The port"
+                     :type        :number
+                     :default     3000}})
+
    (config/populate-from-env)
    (config/populate-from-cmd args)
    (config/verify :quit-on-error true)))

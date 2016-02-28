@@ -32,10 +32,18 @@ full team ownership.
 
 JAGGR will watch all _claimable_ jobs of a given project and show an overall status for all jobs:
 
-* **RED:** At least one job has failed (status red or yellow) and has not bee claimed. Stop work immediately until somebody
+* **RED**
+
+    At least one job has failed (status red or yellow) and has not bee claimed. Stop work immediately until somebody
 claims the broken job and fixes it as soon as possible
-* **YELLOW:** Some jobs have failed, but all of them have been claimed. Check in and merge with care.
-* **GREEN:** Hooray, all jobs that are in your teams responsibility, are in a healthy state!
+
+* **YELLOW**
+
+    Some jobs have failed, but all of them have been claimed. Check in and merge with care.
+
+* **GREEN**
+
+    Hooray, all jobs that are in your teams responsibility, are in a healthy state!
 
 ## Installation and usage
 
@@ -60,16 +68,29 @@ java -jar target/jaggr-0.1.0-standalone.jar --port 8080 --user me --user-token a
 
 Parameters:
 
-* `port`
-    defaults to 3000
 * `user`
+
     a jenkins user with privileges to see the project's jobs
+
 * `user-token`
+
     the users api-token. It  can be obtained from the jenkins user profile configuration page
+
 * `base-url`
+
     the url of the page that shows all jobs to be monitored. Must end with a slash!
 
-All parameters can also be specified as environment variables (`USER`, `USER_TOKEN`, `PORT`, `BASE_URL`)
+Optional Parameters:
+
+* `port`
+
+    defaults to 3000
+
+* `refresh-rate`
+
+    defaults to 60s
+
+All parameters can also be specified as environment variables (`USER`, `USER_TOKEN`, `BASE_URL`, ...)
 
 
 ## Development

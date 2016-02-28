@@ -1,6 +1,7 @@
 (ns jaggr.views
   (:use [hiccup core page]
-        [jaggr.jenkins]))
+        [jaggr.jenkins])
+  (:require [omniconf.core :as config]))
 
 (defn job-details [job]
   (when-not (empty? job)
@@ -24,7 +25,7 @@
   (let [failed-jobs (get-failed-jobs)]
     (html5
       [:head
-       [:meta {:http-equiv "refresh" :content "120"}]
+       [:meta {:http-equiv "refresh" :content (str (config/get :refresh-rate))}]
        [:title "JAGGR"]
        (include-css "/css/style.css")]
       [:body
