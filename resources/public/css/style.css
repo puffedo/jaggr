@@ -1,18 +1,22 @@
-body {
-   background-color: #27ae60;
+html, body {
+   background-color: #000000;
    color: #ffffff;
    font-family: sans-serif;
+   width: 100%;
+   height: 100%;
+   margin: 0;
+   padding: 0;
+   border: none;
 }
 
 h1 {
-   color: #ffffff;
    font-size: 40pt;
 }
 
-.failed {
+.fullscreen {
    text-align: center;
-   padding 100px;
    width: 100%;
+   min-height: 100%;
    font-size 12pt;
 }
 
@@ -24,6 +28,18 @@ h1 {
    background-color: #f5b041;
 }
 
-.grey {
-   background-color: #808b96;
+.green {
+   background-color: #27ae60;
+}
+
+.subtext {
+   font-size: 12pt;
+   font-style: italic;
+   padding: 1em;
+}
+
+.job-name {
+   font-size: 16pt;
+   font-style: bold;
+   padding: 0.3em;
 }
