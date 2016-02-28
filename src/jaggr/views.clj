@@ -11,7 +11,7 @@
        (when-not (empty? (:reason job))
          [:div.job-reason "'" (h (:reason job)) "'"])
        (when-not (empty? (:claimedBy job))
-         [:div.job-claimed-by "was heroically claimed by" (h (:claimedBy job))])
+         [:div.job-claimed-by "was heroically claimed by " (h (:claimedBy job))])
        ])))
 
 (defn job-list [jobs]
