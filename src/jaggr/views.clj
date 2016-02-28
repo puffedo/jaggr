@@ -17,5 +17,5 @@
         [:h1 "All failed jobs are claimed"]
         [:div (str (:claimed failed-jobs))]]
        [:div {:class "grey failed"}
-        [:h1 "Some monor jobs failed"]
+        [:h1 "Some minor jobs failed"]
         [:div (str (:unclaimable failed-jobs))]]])))

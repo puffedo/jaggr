@@ -52,4 +52,4 @@
     (group-by #(cond
                 (= true (:claimed %1)) :claimed
                 (= false (:claimed %1)) :unclaimed
-                :else :unlcaimable))))
+                :else :unclaimable))))
