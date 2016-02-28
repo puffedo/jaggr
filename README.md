@@ -34,7 +34,7 @@ JAGGR will watch all _claimable_ jobs of a given project and show an overall sta
 
 * **RED**
 
-    At least one job has failed (status red or yellow) and has not bee claimed. Stop work immediately until somebody
+    At least one job has failed (status red or yellow) and has not been claimed. Stop work immediately until somebody
 claims the broken job and fixes it as soon as possible
 
 * **YELLOW**
