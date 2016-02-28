@@ -1,12 +1,19 @@
 html, body {
-   background-color: #000000;
+
+   background: url(http://lorempixel.com/g/400/200) no-repeat center center fixed;
+   -webkit-background-size: cover;
+   -moz-background-size: cover;
+   -o-background-size: cover;
+   background-size: cover;
+
    color: #ffffff;
-   font-family: sans-serif;
+   font-family: 'Open Sans', sans-serif;
    width: 100%;
    height: 100%;
    margin: 0;
    padding: 0;
    border: none;
+   position: absolute;
 }
 
 h1 {
@@ -18,18 +25,20 @@ h1 {
    width: 100%;
    min-height: 100%;
    font-size 12pt;
+   position: absolute;
 }
 
+
 .red {
-   background-color: #c70039;
+   background: rgba(255,0,0,0.7);
 }
 
 .yellow {
-   background-color: #f5b041;
+   background: rgba(220,120,0,0.7);
 }
 
 .green {
-   background-color: #27ae60;
+   background: rgba(0,100,0,0.7);
 }
 
 .subtext {

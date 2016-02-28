@@ -11,7 +11,7 @@
        (when-not (empty? (:reason job))
          [:div.job-reason "'" (h (:reason job)) "'"])
        (when-not (empty? (:claimedBy job))
-           [:div.job-claimed-by "was heroically claimed by" (h (:claimedBy job))])
+         [:div.job-claimed-by "was heroically claimed by" (h (:claimedBy job))])
        ])))
 
 (defn job-list [jobs]
@@ -27,19 +27,21 @@
       [:head
        [:meta {:http-equiv "refresh" :content (str (config/get :refresh-rate))}]
        [:title "JAGGR"]
-       (include-css "/css/style.css")]
+       (include-css "/css/style.css")
+       (include-css "https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic")]
+
       [:body
        (cond
          (not-empty (:unclaimed failed-jobs))
-         [:div.red.fullscreen
-          [:h1 "BROKEN BUILDS! CLAIM AND FIX!"]
-          [:div.subtext
-           "have a look at the broken builds - find someone who can fix the problem - claim the builds and fix them"]
-          (job-list (:unclaimed failed-jobs))]
+           [:div.red.fullscreen
+            [:h1 "BROKEN BUILDS - CLAIM AND FIX!"]
+            [:div.subtext
+             "have a look at the broken builds - find someone who can fix the problem - claim the builds and fix them"]
+            (job-list (:unclaimed failed-jobs))]
 
          (not-empty (:claimed failed-jobs))
          [:div.yellow.fullscreen
-          [:h1 "BROKEN BUILDS - HELP IS ON THE WAY"]
+          [:h1 "BROKEN BUILDS - HELP IS ON THE WAY!"]
           [:div.subtext
            "see if you can help - check in with care - be careful with merges"]
           (job-list (:claimed failed-jobs))]
