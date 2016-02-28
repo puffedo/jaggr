@@ -36,7 +36,7 @@
          (cond
            (not-empty (:unclaimed failed-jobs))
            [:div.red.fullscreen
-            [:h1 "BROKEN BUILDS - CLAIM AND FIX!"]
+            [:h1 "BROKEN BUILDS - CLAIM AND FIX THEM!"]
             [:div.subtext
              "have a look at the broken builds - find someone who can fix the problem - claim the builds and fix them"]
             (job-list (:unclaimed failed-jobs))]
@@ -50,14 +50,14 @@
 
            (not-empty (:unclaimable failed-jobs))
            [:div.green.fullscreen
-            [:h1 "MOST BUILDS MOSTLY OK"]
-            [:div.subtext "have a look at some of these jobs as well"]
+            [:h1 "MOST BUILDS ARE MOSTLY OK"]
+            [:div.subtext "maybe have a look at some of these jobs as well"]
             (job-list (:unclaimable failed-jobs))]
 
            :else
            [:div.green.fullscreen
             [:h1 "HOORAY!"]
-            [:div.subtext "all builds are green!"]])]))
+            [:div.subtext "all builds are green! - better go home..."]])]))
 
     (catch Exception e
       (html5
