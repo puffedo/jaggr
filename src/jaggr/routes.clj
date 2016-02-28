@@ -9,7 +9,7 @@
   (:gen-class :main true))
 
 (defn init
-  ([] init [])
+  ([] (init []))
   ([args]
    (config/define
      {:base-url   {:description "The Jenkins URL that shows all jobs to monitor"

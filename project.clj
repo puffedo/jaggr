@@ -25,7 +25,7 @@
   :plugins [[lein-ring "0.7.1"]]
 
   :ring {:handler jaggr.routes/app
-         :init    routes/init}
+         :init    jaggr.routes/init}
 
   :main jaggr.routes
 
