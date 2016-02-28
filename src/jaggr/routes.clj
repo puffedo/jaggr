@@ -1,13 +1,35 @@
 (ns jaggr.routes
   (:use compojure.core
         jaggr.views
-        [hiccup.middleware :only (wrap-base-url)])
+        [hiccup.middleware :only (wrap-base-url)]
+        [ring.adapter.jetty :only (run-jetty)])
   (:require [compojure.route :as route]
             [compojure.handler :as handler]
-            [compojure.response :as response]
-            [jaggr.config :as config]))
+            [omniconf.core :as config])
+  (:gen-class :main true))
 
-(config/init [])
+(defn init
+  ([] init [])
+  ([args]
+   (config/define
+     {:base-url   {:description "The Jenkins URL that shows all jobs to monitor"
+                   :type        :string
+                   :required    true}
+      :port       {:description "The port"
+                   :type        :number
+                   :default     3000}
+      :user       {:descriptions "A Jenkins user that has access to the base url"
+                   :type         :string
+                   :required     true}
+      :user-token {:description "The users access token (see 'Configuration' page in your Jenkins user profile)"
+                   :type        :string
+                   :required    true
+                   :secret      true}}
+     )
+   (config/populate-from-env)
+   (config/populate-from-cmd args)
+   (config/verify :quit-on-error true)))
+
 
 (defroutes main-routes
            (GET "/" [] (index-page))
@@ -15,5 +37,14 @@
            (route/not-found "Page not found"))
 
 (def app
+  "This is the entry point for the application when
+  started via lein ring server"
   (-> (handler/site main-routes)
       (wrap-base-url)))
+
+(defn -main
+  "This is the main entry point for the application when
+  started directly from the command line"
+  [& args]
+  (init args)
+  (run-jetty app {:port (config/get :port)}))
