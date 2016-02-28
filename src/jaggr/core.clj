@@ -1,4 +1,4 @@
-(ns jaggr.routes
+(ns jaggr.core
   (:use compojure.core
         jaggr.views
         [hiccup.middleware :only (wrap-base-url)]
