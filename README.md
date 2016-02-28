@@ -14,9 +14,12 @@ world"-agreement to fix broken builds before doing anything else.
 However, there are other jobs, like build jobs for experimental branches or long living feature branches owned by
 individual developers, are less critical, so a failed build should not stop the world.
 
-The jenkins claims plugin solves part of the problem: Jenkins jobs can be configured to be claimable,
+The jenkins claims plugin can help here: Jenkins jobs can be configured to be claimable,
 so any developer can claim a broken build job, telling the others developers that they can continue doing
-something else. However, this is not reflected in the build monitors. Developers get used to seeing lots of
+something else.
+
+However, this is not reflected in the build monitors. Claimed broken builds or failed jobs owned by individuals cannot
+be distinguished from problems that the whole team should handle. Developers get used to seeing lots of
 red end yellow jobs and hope, somebody else cares.
 
 JAGGR tries to solve this problem.
@@ -29,10 +32,10 @@ full team ownership.
 
 JAGGR will watch all _claimable_ jobs of a given project and show an overall status for all jobs:
 
-* RED: At least one job has failed (status red or yellow) and has not bee claimed. Stop work immediately until somebody
+* **RED:** At least one job has failed (status red or yellow) and has not bee claimed. Stop work immediately until somebody
 claims the broken job and fixes it as soon as possible
-* YELLOW: Some jobs have failed, but all of them have been claimed. Check in and merge with care.
-* GREEN: Hooray, all jobs that are in your teams responsibility, are in a healthy state!
+* **YELLOW:** Some jobs have failed, but all of them have been claimed. Check in and merge with care.
+* **GREEN:** Hooray, all jobs that are in your teams responsibility, are in a healthy state!
 
 ## Installation and usage
 
