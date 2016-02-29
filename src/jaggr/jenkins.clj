@@ -23,7 +23,8 @@
       "tree=jobs[name,color,url]")))
 
 
-;; returns red, yellow or nil, can be used as a predicate
+;; returns red or yellow if this is the actual color of the job
+;; or nil otherwise. can be used as a predicate
 (defn- red-or-yellow [job-rsrc]
   (#{"red" "yellow"} (:color job-rsrc)))
 
@@ -33,13 +34,20 @@
   (filter red-or-yellow (get-jobs-rsrc)))
 
 
+;; gets the url of the last build from jenkins for a given job-REST-resource
+(defn- get-last-build-url [job-rsrc]
+  (get-in
+    (get-from-jenkins (:url job-rsrc) "tree=lastBuild[url]")
+    [:lastBuild :url]))
+
+
 ;; gets the claim info for a job resource and throws away everything else
-(defn- get-last-build-rsrc [job-rsrc]
-  (let [builds-rsrc
-        (get-from-jenkins (:url job-rsrc) "tree=lastBuild[url]")
-        last-build-rsrc
-        (get-from-jenkins (get-in builds-rsrc [:lastBuild :url]) "tree=actions[claimed,claimedBy,reason]")]
-    (first (filter not-empty (:actions last-build-rsrc)))))
+(defn- get-last-build-rsrc [last-build-url]
+  (->>
+    (get-from-jenkins last-build-url "tree=actions[claimed,claimedBy,reason]")
+    (:actions)
+    (filter not-empty)
+    (first)))
 
 
 (defn get-failed-jobs []
@@ -48,7 +56,10 @@
    :name, :claimed, :claimedBy and :reason"
   (->>
     (for [failed-job-rsrc (get-failed-jobs-rsrc)]
-      (assoc (get-last-build-rsrc failed-job-rsrc) :name (:name failed-job-rsrc)))
+      (->
+        (get-last-build-url failed-job-rsrc)
+        (get-last-build-rsrc)
+        (assoc :name (:name failed-job-rsrc))))
     (group-by #(cond
                 (= true (:claimed %1)) :claimed
                 (= false (:claimed %1)) :unclaimed

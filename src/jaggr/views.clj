@@ -3,21 +3,21 @@
         [jaggr.jenkins])
   (:require [omniconf.core :as config]))
 
+
 (defn job-details [job]
   (when-not (empty? job)
-    (html5
-      [:div.job
-       [:div.job-name (h (:name job))]
-       (when-not (empty? (:claimedBy job))
-         [:div.job-claimed-by "was heroically claimed by " (h (:claimedBy job))])
-       (when-not (empty? (:reason job))
-         [:div.job-reason "'" (h (:reason job)) "'"])])))
+    [:div.job
+     [:div.job-name (h (:name job))]
+     (when-not (empty? (:claimedBy job))
+       [:div.job-claimed-by "was heroically claimed by " (h (:claimedBy job))])
+     (when-not (empty? (:reason job))
+       [:div.job-reason "'" (h (:reason job)) "'"])]))
+
 
 (defn job-list [jobs]
   (when-not (empty? jobs)
-    (html5
-      [:div.job-list
-       (for [job jobs] (job-details job))])))
+    [:div.job-list
+     (for [job jobs] (job-details job))]))
 
 
 (defn header []
@@ -26,6 +26,7 @@
    [:title "JAGGR"]
    (include-css "/css/style.css")
    (include-css "https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic")])
+
 
 (defn index-page []
   (try
@@ -57,7 +58,7 @@
            :else
            [:div.green.fullscreen
             [:h1 "HOORAY!"]
-            [:div.subtext "all builds are green! - better go home..."]])]))
+            [:div.subtext "all builds are green! - better go home now..."]])]))
 
     (catch Exception e
       (html5
