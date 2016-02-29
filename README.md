@@ -1,8 +1,8 @@
 **Disclaimer: this is _very_ alpha...**
 
-![Jaggr](jaggr-logo.png?raw=true)
+![Jaggr](resources/public/img/jaggr-logo.png?raw=true)
 
-___Jaggr___ is a build monitor for Jenkins, that makes use of the Jenkins Claims plugin.
+**Jaggr** is a build monitor for Jenkins, that makes use of the Jenkins Claims plugin.
 It shows a single aggregated status (red, yellow, green) for all jobs of a project
 and takes claimed builds into account.
 
@@ -22,15 +22,15 @@ However, this is not reflected in the build monitors. Claimed broken builds or f
 be distinguished from problems that the whole team should handle. Developers get used to seeing lots of
 red end yellow jobs on their build monitor and hope, somebody else cares.
 
-___Jaggr___ tries to solve this problem.
+**Jaggr** tries to solve this problem.
 
 ## Claims and job status semantics
 
-___Jaggr___ presumes, that all critical, team-owned jobs are configured to be claimable, so one team member can claim a broken
+**Jaggr** presumes, that all critical, team-owned jobs are configured to be claimable, so one team member can claim a broken
 job and all others can continue working. Non-critical jobs should be not claimable, since there is no
 full team ownership.
 
-___Jaggr___ will watch all _claimable_ jobs of a given project and show an overall status for all jobs:
+**Jaggr** will watch all _claimable_ jobs of a given project and show an overall status for all jobs:
 
 * **RED**
 
@@ -63,7 +63,7 @@ In the project base directory:
 
 ```sh
 lein uberjar
-java -jar target/Jaggr-0.1.0-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/my-project/
+java -jar target/jaggr-0.1.0-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/my-project/
 ```
 
 Parameters:
@@ -112,7 +112,7 @@ Changes in the code will be visible in the browser after a page reload.
 
 
 
-Contributions welcome, there is also a [trello board](https://trello.com/b/uzKqvnY8/___Jaggr___) for tasks and ideas.
+Contributions welcome, there is also a [trello board](https://trello.com/b/uzKqvnY8/**Jaggr**) for tasks and ideas.
 
 
 ## License
