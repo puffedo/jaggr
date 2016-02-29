@@ -120,3 +120,7 @@ Contributions welcome, there is also a [trello board](https://trello.com/b/uzKqv
 Copyright (C) 2016 Steffen Frank
 
 licensed under the [Eclipse Public License](http://www.eclipse.org/legal/epl-v10.html)
+
+## Kudos
+
+Logo based on an illustration by [vectorportal](http://www.vectorportal.com/subcategory/167/MICK-JAGGER-VECTOR-ILLUSTRATION.eps/ifile/10647/detailtest.asp), thanks to Schorsch and Marcus!
