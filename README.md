@@ -1,8 +1,8 @@
 **Disclaimer: this is _very_ alpha...**
 
-![JAGGR](jaggr-logo.png?raw=true)
+![Jaggr](jaggr-logo.png?raw=true)
 
-JAGGR is a build monitor for Jenkins, that makes use of the Jenkins Claims plugin.
+___Jaggr___ is a build monitor for Jenkins, that makes use of the Jenkins Claims plugin.
 It shows a single aggregated status (red, yellow, green) for all jobs of a project
 and takes claimed builds into account.
 
@@ -22,15 +22,15 @@ However, this is not reflected in the build monitors. Claimed broken builds or f
 be distinguished from problems that the whole team should handle. Developers get used to seeing lots of
 red end yellow jobs on their build monitor and hope, somebody else cares.
 
-JAGGR tries to solve this problem.
+___Jaggr___ tries to solve this problem.
 
 ## Claims and job status semantics
 
-JAGGR presumes, that all critical, team-owned jobs are configured to be claimable, so one team member can claim a broken
+___Jaggr___ presumes, that all critical, team-owned jobs are configured to be claimable, so one team member can claim a broken
 job and all others can continue working. Non-critical jobs should be not claimable, since there is no
 full team ownership.
 
-JAGGR will watch all _claimable_ jobs of a given project and show an overall status for all jobs:
+___Jaggr___ will watch all _claimable_ jobs of a given project and show an overall status for all jobs:
 
 * **RED**
 
@@ -52,7 +52,7 @@ claims the broken job and fixes it as soon as possible
 * Install the claims plugin
 * make all jobs owned by the team claimable
 
-**JAGGR**
+**Jaggr**
 
 There are no binaries on github yet, so you have to build them from source, using:
 
@@ -63,7 +63,7 @@ In the project base directory:
 
 ```sh
 lein uberjar
-java -jar target/jaggr-0.1.0-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/my-project/
+java -jar target/___Jaggr___-0.1.0-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/my-project/
 ```
 
 Parameters:
@@ -112,7 +112,7 @@ Changes in the code will be visible in the browser after a page reload.
 
 
 
-Contributions welcome, there is also a [trello board](https://trello.com/b/uzKqvnY8/jaggr) for tasks and ideas.
+Contributions welcome, there is also a [trello board](https://trello.com/b/uzKqvnY8/___Jaggr___) for tasks and ideas.
 
 
 ## License
@@ -123,4 +123,4 @@ licensed under the [Eclipse Public License](http://www.eclipse.org/legal/epl-v10
 
 ## Kudos
 
-Logo based on an illustration by [vectorportal](http://www.vectorportal.com/subcategory/167/MICK-JAGGER-VECTOR-ILLUSTRATION.eps/ifile/10647/detailtest.asp), thanks to Schorsch and Marcus!
+Logo based on an illustration by [vectorportal.com](http://www.vectorportal.com/subcategory/167/MICK-JAGGER-VECTOR-ILLUSTRATION.eps/ifile/10647/detailtest.asp), thanks to Schorsch and Marcus!
