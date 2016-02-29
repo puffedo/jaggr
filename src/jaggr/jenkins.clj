@@ -1,4 +1,5 @@
-(ns jaggr.jenkins
+q(ns jaggr.jenkins
+
   (:require [org.httpkit.client :as http]
             [clojure.data.json :as json]
             [omniconf.core :as config]))
@@ -11,11 +12,12 @@
     (:body
       @(http/get
          (str base-url "api/json?" params)
-         {:basic-auth [(config/get :user) (config/get :user-token)]}))
+         {:basic-auth [(config/get :user) (config/get :user-token)]
+          :keepalive  -1}))
     :key-fn keyword))
 
 
-;; gets the jobs REST resource for the globally configures base-url
+;; gets the jobs REST resource for the globally configured base-url
 (defn- get-jobs-rsrc []
   (:jobs
     (get-from-jenkins

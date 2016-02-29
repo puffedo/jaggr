@@ -1,6 +1,6 @@
 **Disclaimer: this is _very_ alpha...**
 
-# JAGGR
+![JAGGR](jaggr-logo.png?raw=true)
 
 JAGGR is a build monitor for Jenkins, that makes use of the Jenkins Claims plugin.
 It shows a single aggregated status (red, yellow, green) for all jobs of a project
