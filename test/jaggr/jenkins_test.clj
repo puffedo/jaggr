@@ -55,7 +55,7 @@
                   (let [last-build-url (@#'jaggr.jenkins/get-last-build-url (first failed-jobs-rsrc))]
                     (is (= "http://some-base-url/job/failed-job/42/" last-build-url))
 
-                    (testing "A claimed build's REST-resource contains claimed-state, claimer and reason."
+                    (testing "When fetching a claimed last-build-REST-resource, it contains claimed-state, claimer and reason."
 
                       (with-fake-http
                         [#"http://some-base-url/job/failed-job/42/api/json?.*" {:body get-build-response-body-claimed}]
@@ -67,7 +67,7 @@
                           (is (= "somebody" (:claimedBy last-build-rsrc)))
                           (is (= "some reason" (:reason last-build-rsrc))))))
 
-                    (testing "An unclaimed last-build-REST-resource contains :claimed = false"
+                    (testing "When fetching an unclaimed last-build-REST-resource, it contains :claimed = false"
 
                       (with-fake-http
                         [#"http://some-base-url/view/failed-job/api/json?.*" {:body get-job-response-body}
@@ -78,7 +78,7 @@
                           (is (not-empty last-build-rsrc))
                           (is (= false (:claimed last-build-rsrc))))))
 
-                    (testing "A last-build-REST-resource of an unclaimable job contains no claimed-state, claimer or reason."
+                    (testing "When fetching a last-build-REST-resource of an unclaimable job, it contains no claimed-state, claimer or reason."
 
                       (with-fake-http
                         [#"http://some-base-url/view/failed-job/api/json?.*" {:body get-job-response-body}
