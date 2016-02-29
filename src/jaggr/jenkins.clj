@@ -1,4 +1,4 @@
-q(ns jaggr.jenkins
+(ns jaggr.jenkins
 
   (:require [org.httpkit.client :as http]
             [clojure.data.json :as json]

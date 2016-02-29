@@ -34,6 +34,7 @@
       (html5
         (header)
         [:body
+         [:img#logo {:src "/img/jaggr-logo.png"}]
          (cond
            (not-empty (:unclaimed failed-jobs))
            [:div.red.fullscreen
