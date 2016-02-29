@@ -16,6 +16,12 @@ html, body {
    position: absolute;
 }
 
+#logo {
+   position: absolute;
+   right: 0px;
+   bottom: 0px;
+}
+
 h1 {
    font-size: 40pt;
 }
