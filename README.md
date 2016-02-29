@@ -63,7 +63,7 @@ In the project base directory:
 
 ```sh
 lein uberjar
-java -jar target/___Jaggr___-0.1.0-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/my-project/
+java -jar target/Jaggr-0.1.0-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/my-project/
 ```
 
 Parameters:
