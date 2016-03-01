@@ -18,8 +18,11 @@ html, body {
 
 #logo {
    position: absolute;
-   left: 0px;
+   right: 0px;
    bottom: 0px;
+   padding: 50px;
+   height: 150px;
+   width: 150px;
 }
 
 h1 {
