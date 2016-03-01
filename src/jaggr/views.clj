@@ -25,7 +25,8 @@
    [:meta {:http-equiv "refresh" :content (str (config/get :refresh-rate))}]
    [:title "JAGGR"]
    (include-css "/css/style.css")
-   (include-css "https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic")])
+   (include-css "https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic")
+   [:link {:rel "shortcut icon" :href "img/favicon.ico"}]])
 
 
 (defn index-page []
