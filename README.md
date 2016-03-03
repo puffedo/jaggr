@@ -1,5 +1,3 @@
-**Disclaimer: this is _very_ alpha...**
-
 ![Jaggr](resources/public/img/jaggr-logo-and-text.png?raw=true)
 
 **Jaggr** is a build monitor for Jenkins, that makes use of the Jenkins Claims plugin.
@@ -54,16 +52,15 @@ claims the broken job and fixes it as soon as possible
 
 **Jaggr**
 
-There are no binaries on github yet, so you have to build them from source, using:
+Install [java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
-* [java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-* [leiningen](http://leiningen.org/#install)
+Download the [latest Jaggr release](https://github.com/puffedo/jaggr/releases)
 
 In the project base directory:
 
 ```sh
 lein uberjar
-java -jar target/jaggr-0.1.0-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/my-project/
+java -jar target/jaggr-<version>-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/my-project/
 ```
 
 Parameters:
