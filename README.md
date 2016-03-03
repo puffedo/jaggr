@@ -59,7 +59,6 @@ Download the [latest Jaggr release](https://github.com/puffedo/jaggr/releases)
 In the project base directory:
 
 ```sh
-lein uberjar
 java -jar target/jaggr-<version>-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/tv/
 ```
 
@@ -108,7 +107,11 @@ lein ring server
 Changes in the code will be visible in the browser after a page reload.
 
 
+You can build the executable jar with
 
+```sh
+lein uberjar
+```
 Contributions welcome, there is also a [trello board](https://trello.com/b/uzKqvnY8/**Jaggr**) for tasks and ideas.
 
 
