@@ -50,7 +50,7 @@
       (testing "The jobs-REST-resource is retrieved, it contains all jobs."
 
         (with-fake-http
-          [#"http://some-base-url/api/json?.*" {:body get-jobs-response-body}]
+          [#"http://some-base-url/api/json?.*" get-jobs-response-body]
 
           (let [jobs-rsrc (@#'jaggr.jenkins/get-jobs-rsrc)]
             (is (= 2 (count jobs-rsrc)))
@@ -66,7 +66,7 @@
                 (testing "A failed job's last-build-REST-resource is located."
 
                   (with-fake-http
-                    [#"http://some-base-url/view/failed-job/api/json?.*" {:body get-job-response-body}]
+                    [#"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body]
 
                     (let [last-build-url (@#'jaggr.jenkins/get-last-build-url (first failed-jobs-rsrc))]
                       (is (= "http://some-base-url/job/failed-job/42/" last-build-url))
@@ -74,7 +74,7 @@
                       (testing "When fetching a claimed last-build-REST-resource, it contains claimed-state, claimer and reason."
 
                         (with-fake-http
-                          [#"http://some-base-url/job/failed-job/42/api/json?.*" {:body get-build-response-body-claimed}]
+                          [#"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-claimed]
 
                           (let [last-build-rsrc (@#'jaggr.jenkins/get-last-build-rsrc last-build-url)]
 
@@ -86,8 +86,8 @@
                       (testing "When fetching an unclaimed last-build-REST-resource, it contains :claimed = false"
 
                         (with-fake-http
-                          [#"http://some-base-url/view/failed-job/api/json?.*" {:body get-job-response-body}
-                           #"http://some-base-url/job/failed-job/42/api/json?.*" {:body get-build-response-body-unclaimed}]
+                          [#"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body
+                           #"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-unclaimed]
 
                           (let [last-build-rsrc (@#'jaggr.jenkins/get-last-build-rsrc last-build-url)]
 
@@ -97,8 +97,8 @@
                       (testing "When fetching a last-build-REST-resource of an unclaimable job, it contains no claimed-state, claimer or reason."
 
                         (with-fake-http
-                          [#"http://some-base-url/view/failed-job/api/json?.*" {:body get-job-response-body}
-                           #"http://some-base-url/job/failed-job/42/api/json?.*" {:body get-build-response-body-unclaimable}]
+                          [#"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body
+                           #"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-unclaimable]
 
                           (let [last-build-rsrc (@#'jaggr.jenkins/get-last-build-rsrc last-build-url)]
 
@@ -109,9 +109,9 @@
     (testing "Failed jobs with claimed builds are returned under the key :claimed ."
 
       (with-fake-http
-        [#"http://some-base-url/api/json?.*" {:body get-jobs-response-body}
-         #"http://some-base-url/view/failed-job/api/json?.*" {:body get-job-response-body}
-         #"http://some-base-url/job/failed-job/42/api/json?.*" {:body get-build-response-body-claimed}]
+        [#"http://some-base-url/api/json?.*" get-jobs-response-body
+         #"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body
+         #"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-claimed]
 
         (is (not-empty (:claimed (get-failed-jobs))))
         (is (empty? (:unclaimed (get-failed-jobs))))
@@ -120,9 +120,9 @@
     (testing "Failed jobs with unclaimed builds are returned under the key :unclaimed ."
 
       (with-fake-http
-        [#"http://some-base-url/api/json?.*" {:body get-jobs-response-body}
-         #"http://some-base-url/view/failed-job/api/json?.*" {:body get-job-response-body}
-         #"http://some-base-url/job/failed-job/42/api/json?.*" {:body get-build-response-body-unclaimed}]
+        [#"http://some-base-url/api/json?.*" get-jobs-response-body
+         #"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body
+         #"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-unclaimed]
 
         (is (not-empty (:unclaimed (get-failed-jobs))))
         (is (empty? (:claimed (get-failed-jobs))))
@@ -131,9 +131,9 @@
     (testing "Failed unclaimable jobs are returned under the key :unclaimable ."
 
       (with-fake-http
-        [#"http://some-base-url/api/json?.*" {:body get-jobs-response-body}
-         #"http://some-base-url/view/failed-job/api/json?.*" {:body get-job-response-body}
-         #"http://some-base-url/job/failed-job/42/api/json?.*" {:body get-build-response-body-unclaimable}]
+        [#"http://some-base-url/api/json?.*" get-jobs-response-body
+         #"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body
+         #"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-unclaimable]
 
         (is (not-empty (:unclaimable (get-failed-jobs))))
         (is (empty? (:claimed (get-failed-jobs))))
