@@ -36,6 +36,7 @@
 
 (defroutes main-routes
            (GET "/" [] (index-page))
+           (GET "/backgroundimage" [] (background-image))
            (route/resources "/")
            (route/not-found "Page not found"))
 

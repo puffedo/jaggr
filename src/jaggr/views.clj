@@ -1,7 +1,11 @@
+
 (ns jaggr.views
   (:use [hiccup core page]
         [jaggr.jenkins])
-  (:require [omniconf.core :as config]))
+  (:require [omniconf.core :as config]
+            [clojure.java.io :as io]))
+
+
 
 
 (defn job-details [job]
@@ -71,3 +75,51 @@
           [:div.subtext "is Jenkins accessible? - wrong parameters? - network problems?"]
           [:div "I tried to access " (config/get :base-url) " with user " (config/get :user)]
           [:div "trying again every " (config/get :refresh-rate) " seconds"]]]))))
+
+
+(defn selectRandomImageFrom [directory]
+  (def files (.listFiles (io/file directory)))
+    :else
+      { 
+        :status 200
+        :body (io/file (rand-nth files))
+      })
+
+(defn redirectToImageService[]
+  {
+    :status 302
+    :headers { "Location" "http://lorempixel.com/g/400/200" }
+    :body ""
+  })
+
+
+(defn imageFrom [directory]
+  (def files (.listFiles (io/file directory)))
+  (cond
+    (empty? files)
+      (redirectToImageService)
+    :else
+      (selectRandomImageFrom directory)))
+
+
+(defn green-page []
+  (imageFrom "images/green/"))
+
+
+(defn red-page []
+  (imageFrom "images/red/"))
+
+
+(defn yellow-page []
+  (imageFrom "images/yellow/"))
+
+
+(defn background-image []
+  (let [failed-jobs (get-failed-jobs)]
+    (cond
+      (not-empty (:unclaimed failed-jobs))
+        (red-page)
+      (not-empty (:claimed failed-jobs))
+        (yellow-page)
+      :else
+        (green-page))))
