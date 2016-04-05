@@ -88,6 +88,10 @@ Optional Parameters:
 
 All parameters can also be specified as environment variables (`USER`, `USER_TOKEN`, `BASE_URL`, ...)
 
+**Background images**
+
+Background images are automatically loaded from lorempixel.com. You can place custom images next to the executable into folders images/red, images/yellow or images/green.
+Images are selected randomly.
 
 ## Development
 
