@@ -59,7 +59,7 @@ Download the [latest Jaggr release](https://github.com/puffedo/jaggr/releases)
 In the project base directory:
 
 ```sh
-java -jar target/jaggr-<version>-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/tv/
+java -jar jaggr-<version>-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/tv/
 ```
 
 Parameters:
