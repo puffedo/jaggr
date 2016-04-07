@@ -127,6 +127,6 @@ licensed under the [Eclipse Public License](http://www.eclipse.org/legal/epl-v10
 
 ## Kudos
 
-The logo is based on an illustration by [vectorportal.com](http://www.vectorportal.com/subcategory/167/MICK-JAGGER-VECTOR-ILLUSTRATION.eps/ifile/10647/detailtest.asp), thanks to Schorsch and Marcus!
+The logo is based on an illustration by [vectorportal.com](http://www.vectorportal.com/subcategory/167/MICK-JAGGER-VECTOR-ILLUSTRATION.eps/ifile/10647/detailtest.asp), thanks to Schorsch and [Marcus](https://github.com/molk)!
 
 Thanks to [Hinnerk](https://github.com/hinnerkoetting) for the custom background image feature!
