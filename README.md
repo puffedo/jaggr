@@ -1,6 +1,6 @@
 ![Jaggr](resources/public/img/jaggr-logo-and-text.png?raw=true)
 
-**Jaggr** is a build monitor for Jenkins, that makes use of the Jenkins Claims plugin.
+**Jaggr** is a build monitor for Jenkins, that makes use of the [Jenkins Claim plugin](https://wiki.jenkins-ci.org/display/JENKINS/Claim+plugin).
 It shows a single aggregated status (red, yellow, green) for all jobs of a project
 and takes claimed builds into account.
 
@@ -12,7 +12,7 @@ world"-agreement to fix broken builds before doing anything else.
 However, there are less critical jobs, like build jobs for experimental branches or long living feature branches owned by
 individual developers, where a failed build should not stop the world.
 
-The jenkins claims plugin can help here: Jenkins jobs can be configured to be claimable,
+The Jenkins Claim plugin can help here: Jenkins jobs can be configured to be claimable,
 so any developer can claim a broken build job, telling the others developers that they can continue doing
 something else.
 
@@ -47,7 +47,7 @@ claims the broken job and fixes it as soon as possible
 
 **Jenkins**
 
-* Install the claims plugin
+* Install the [Jenkins Claim plugin](https://wiki.jenkins-ci.org/display/JENKINS/Claim+plugin)
 * make all jobs owned by the team claimable
 
 **Jaggr**
@@ -127,4 +127,6 @@ licensed under the [Eclipse Public License](http://www.eclipse.org/legal/epl-v10
 
 ## Kudos
 
-Logo based on an illustration by [vectorportal.com](http://www.vectorportal.com/subcategory/167/MICK-JAGGER-VECTOR-ILLUSTRATION.eps/ifile/10647/detailtest.asp), thanks to Schorsch and Marcus!
+The logo is based on an illustration by [vectorportal.com](http://www.vectorportal.com/subcategory/167/MICK-JAGGER-VECTOR-ILLUSTRATION.eps/ifile/10647/detailtest.asp), thanks to Schorsch and Marcus!
+
+Thanks to [Hinnerk](https://github.com/hinnerkoetting) for the custom background image feature!
