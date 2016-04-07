@@ -3,7 +3,8 @@
   (:use [hiccup core page]
         [jaggr.jenkins])
   (:require [omniconf.core :as config]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.tools.logging :as log]))
 
 
 
@@ -67,6 +68,7 @@
             [:div.subtext "all builds are green! - better go home now..."]])]))
 
     (catch Exception e
+      (log/error e "Something is wrong here!")
       (html5
         (header)
         [:body
