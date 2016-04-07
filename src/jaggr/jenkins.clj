@@ -2,7 +2,8 @@
 
   (:require [org.httpkit.client :as http]
             [clojure.data.json :as json]
-            [omniconf.core :as config]))
+            [omniconf.core :as config]
+            [clojure.tools.logging :as log]))
 
 
 ;; calls the Jenkins JSON api for a given url (must end with /),
@@ -56,13 +57,17 @@
   "fetches all failed jobs from jenkins and returns a map that devides them in three classes:
    :claimed, :unclaimed and :unclaimable. For each job of each class, a map is returned with
    :name, :claimed, :claimedBy and :reason"
-  (->>
-    (for [failed-job-rsrc (get-failed-jobs-rsrc)]
-      (->
-        (get-last-build-url failed-job-rsrc)
-        (get-last-build-rsrc)
-        (assoc :name (:name failed-job-rsrc))))
-    (group-by #(cond
-                (= true (:claimed %1)) :claimed
-                (= false (:claimed %1)) :unclaimed
-                :else :unclaimable))))
+  (try
+    (->>
+      (for [failed-job-rsrc (get-failed-jobs-rsrc)]
+        (->
+          (get-last-build-url failed-job-rsrc)
+          (get-last-build-rsrc)
+          (assoc :name (:name failed-job-rsrc))))
+      (group-by #(cond
+                  (= true (:claimed %1)) :claimed
+                  (= false (:claimed %1)) :unclaimed
+                  :else :unclaimable)))
+    (catch Exception e
+      (log/error e "Error while trying to access the Jenkins API and make sense of the data")
+      (throw e))))
