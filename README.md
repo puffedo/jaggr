@@ -10,7 +10,7 @@ Most Jenkins jobs are owned by the whole team and should never be broken for a l
 world"-agreement to fix broken builds before doing anything else.
 
 However, there are less critical jobs, like build jobs for experimental branches or long living feature branches owned by
-individual developers, where a failed build should not stop the world.
+individual developers, where a failed job should not stop the world.
 
 The Jenkins Claim plugin can help with the team-owned jobs: Jenkins jobs can be configured to be claimable,
 so any developer can claim a broken build, telling the others that they can continue doing something else.
@@ -25,19 +25,20 @@ cares.
 ## Claims and job status semantics
 
 **Jaggr** presumes, that all critical, team-owned jobs are configured to be claimable, so one team member can claim a broken
-job and all others can continue working. Non-critical jobs should be not claimable, since there is no
+build and all others can continue working. Non-critical jobs should be not claimable, since there is no
 full team ownership.
 
 **Jaggr** will watch all _claimable_ jobs of a given project and show an overall status for all jobs:
 
 * **RED**
 
-    At least one job has failed (status red or yellow) and has not been claimed. Stop work immediately until somebody
-claims the broken job and fixes it as soon as possible
+    At least one job has failed (status red or yellow) and the broken build has not been claimed. Stop work immediately
+    until somebody claims the broken build.
 
 * **YELLOW**
 
-    Some jobs have failed, but all of them have been claimed. Check in and merge with care.
+    Some jobs have failed, but all of them have been claimed. Claimers fix the broken builds, everybody else checks in
+    and merge with extra care.
 
 * **GREEN**
 
@@ -90,8 +91,8 @@ All parameters can also be specified as environment variables (`USER`, `USER_TOK
 
 **Background images**
 
-Background images are automatically loaded from lorempixel.com. You can place custom images next to the executable into folders images/red, images/yellow or images/green.
-Images are selected randomly.
+Background images are automatically loaded from lorempixel.com. You can place custom images next to the executable into
+folders images/red, images/yellow or images/green. Images are selected randomly. It works best with grayscale images!
 
 ## Development
 
