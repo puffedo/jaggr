@@ -2,18 +2,31 @@
   (:use compojure.core
         jaggr.views
         [hiccup.middleware :only (wrap-base-url)]
-        [ring.adapter.jetty :only (run-jetty)])
+        [ring.adapter.jetty :only (run-jetty)]
+        [url-normalizer.core :only (normalize)])
   (:require [compojure.route :as route]
             [compojure.handler :as handler]
             [omniconf.core :as config])
   (:gen-class :main true))
+
+;; removes query and fragment from a url string
+;; ensures, it ends swith a slash
+(defn- normalize-url-string [url]
+  (let [pure-url
+        (.toString
+          (normalize url {:remove-query?    true
+                          :remove-fragment? true}))]
+    (if (.endsWith pure-url "/" )
+      pure-url
+      (str pure-url "/"))))
+
 
 (defn init
   ([] (init []))
   ([args]
    (config/define
      {:base-url     {:description "The Jenkins URL that shows all jobs to monitor"
-                     :type        :string
+                     :parser      normalize-url-string
                      :required    true}
       :user         {:descriptions "A Jenkins user that has access to the base url"
                      :type         :string

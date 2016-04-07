@@ -75,7 +75,7 @@ Parameters:
 
 * `base-url`
 
-    the url of the page that shows all jobs to be monitored. Must end with a slash!
+    the url of the page that shows all jobs to be monitored
 
 Optional Parameters:
 
