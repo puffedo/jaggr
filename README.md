@@ -12,13 +12,13 @@ world"-agreement to fix broken builds before doing anything else.
 However, there are less critical jobs, like build jobs for experimental branches or long living feature branches owned by
 individual developers, where a failed build should not stop the world.
 
-The Jenkins Claim plugin can help here: Jenkins jobs can be configured to be claimable,
-so any developer can claim a broken build job, telling the others developers that they can continue doing
-something else.
+The Jenkins Claim plugin can help with the team-owned jobs: Jenkins jobs can be configured to be claimable,
+so any developer can claim a broken build, telling the others that they can continue doing something else.
 
-However, this is not reflected in the build monitors. Claimed broken builds or failed jobs owned by individuals cannot
-be distinguished from problems that the whole team should handle. Developers get used to seeing lots of
-red end yellow jobs on their build monitor and hope, somebody else cares.
+Unfortunately, this is not reflected in the build monitors. Claimed broken builds or failed jobs owned by individuals cannot
+be distinguished from problems that the whole team should handle. Claimed builds cannot be distinguished from unclaimed
+builds. Developers get used to seeing lots of red end yellow jobs on their build monitor and to hoping, somebody else
+cares.
 
 **Jaggr** tries to solve this problem.
 
