@@ -103,12 +103,16 @@ folders images/red, images/yellow or images/green. Images are selected randomly.
 
 ## Development
 
-Master build status: [![Build Status](https://travis-ci.org/puffedo/jaggr.svg?branch=master)](https://travis-ci.org/puffedo/jaggr)
+**Current build status**
 
-Install
+[![Build Status](https://travis-ci.org/puffedo/jaggr.svg?branch=master)](https://travis-ci.org/puffedo/jaggr)
+
+**Install**
 
 * [java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * [leiningen](http://leiningen.org/#install)
+
+**Run in DEV mode**
 
 Set environment variables for `USER`, `USER_TOKEN` and `BASE_URL` or provide a `default.config` file (see above)
 
@@ -120,13 +124,19 @@ lein ring server
 
 Changes in the code will be visible in the browser after a page reload.
 
+**Build**
 
 You can build the executable jar with
 
 ```sh
 lein uberjar
 ```
-Contributions welcome, there is also a [Trello board](https://trello.com/b/uzKqvnY8/Jaggr) for tasks and ideas.
+
+**Contribute**
+
+Contributions welcome!
+
+There is also a [Trello board](https://trello.com/b/uzKqvnY8/Jaggr) for features and ideas.
 
 
 ## License
