@@ -103,7 +103,7 @@ folders images/red, images/yellow or images/green. Images are selected randomly.
 
 ## Development
 
-[![Build Status](https://travis-ci.org/puffedo/jaggr.svg?branch=master)](https://travis-ci.org/puffedo/jaggr)
+Master build status: [![Build Status](https://travis-ci.org/puffedo/jaggr.svg?branch=master)](https://travis-ci.org/puffedo/jaggr)
 
 Install
 
