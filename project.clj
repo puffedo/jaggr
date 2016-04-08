@@ -1,4 +1,4 @@
-(defproject jaggr "0.2.0-SNAPSHOT"
+(defproject jaggr "0.2.0"
 
   :description "An aggregated CI traffic light for jenkins, based on the Jenkins Claims plugin"
 
