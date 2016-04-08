@@ -26,14 +26,14 @@ html, body {
 }
 
 h1 {
-   font-size: 40pt;
+   font-size: 4vw;
 }
 
 .fullscreen {
    text-align: center;
    width: 100%;
    min-height: 100%;
-   font-size 12pt;
+   font-size 1vw;
    position: absolute;
 }
 
@@ -55,13 +55,13 @@ h1 {
 }
 
 .subtext {
-   font-size: 12pt;
+   font-size: 1.4vw;
    font-style: italic;
    padding: 1em;
 }
 
 .job-name {
-   font-size: 16pt;
+   font-size: 2vw;
    font-style: bold;
    padding: 0.3em;
 }
