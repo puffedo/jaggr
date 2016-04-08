@@ -103,6 +103,8 @@ folders images/red, images/yellow or images/green. Images are selected randomly.
 
 ## Development
 
+[![Build Status](https://travis-ci.org/puffedo/jaggr.svg?branch=master)](https://travis-ci.org/puffedo/jaggr)
+
 Install
 
 * [java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
