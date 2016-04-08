@@ -1,6 +1,7 @@
 (ns jaggr.core
   (:use compojure.core
         jaggr.views
+        [clojure.java.io :only (as-file)]
         [hiccup.middleware :only (wrap-base-url)]
         [ring.adapter.jetty :only (run-jetty)]
         [url-normalizer.core :only (normalize)])
@@ -40,10 +41,15 @@
                      :default     60}
       :port         {:description "The port"
                      :type        :number
-                     :default     3000}})
+                     :default     3000}
+     :config-file   {:description "A file containing config parameters"
+                     :type        :string
+                     :default     "default.config"}})
 
    (config/populate-from-env)
-   (config/populate-from-cmd args)
+   (config/populate-from-cmd args) ;; read cmd line params, so a user can specify the confog-file param
+   (if (.exists (as-file (config/get :config-file))) (config/populate-from-file (config/get :config-file)))
+   (config/populate-from-cmd args) ;; re-apply cmd line params to override params from config-file
    (config/verify :quit-on-error true)))
 
 

@@ -6,19 +6,18 @@ and takes claimed builds into account.
 
 ## Why?
 
-Most Jenkins jobs are owned by the whole team and should never be broken for a long time. Most teams have a "stop the
+Most Jenkins jobs are owned by the whole team and should never be broken for a long time. Many teams have a "stop the
 world"-agreement to fix broken builds before doing anything else.
 
-However, there are less critical jobs, like build jobs for experimental branches or long living feature branches owned by
-individual developers, where a failed job should not stop the world.
+However, there are less critical jobs, like build jobs for experimental branches or long living feature branches owned
+by individual developers, where a failed job should not stop the world.
 
 The Jenkins Claim plugin can help with the team-owned jobs: Jenkins jobs can be configured to be claimable,
 so any developer can claim a broken build, telling the others that they can continue doing something else.
 
-Unfortunately, this is not reflected in the build monitors. Claimed broken builds or failed jobs owned by individuals cannot
-be distinguished from problems that the whole team should handle. Claimed builds cannot be distinguished from unclaimed
-builds. Developers get used to seeing lots of red end yellow jobs on their build monitor and to hoping, somebody else
-cares.
+Unfortunately, this is not reflected in the build monitors. Failed jobs owned by individuals cannot be distinguished
+from problems that the whole team should handle. Claimed builds cannot be distinguished from unclaimed builds.
+Developers get used to seeing lots of red end yellow jobs on their build monitor and to hoping, somebody else cares.
 
 **Jaggr** tries to solve this problem.
 
@@ -49,7 +48,7 @@ full team ownership.
 **Jenkins**
 
 * Install the [Jenkins Claim plugin](https://wiki.jenkins-ci.org/display/JENKINS/Claim+plugin)
-* make all jobs owned by the team claimable
+* make all team-owned jobs claimable
 
 **Jaggr**
 
@@ -87,7 +86,15 @@ Optional Parameters:
 
     defaults to 60s
 
+* `config-file`
+
+    a file with parameters - see `example.config`. Or rename your config file to `default.config`, so it will be loaded
+    automatically
+
 All parameters can also be specified as environment variables (`USER`, `USER_TOKEN`, `BASE_URL`, ...)
+
+Parameters specified via the command line override config file parameters. Config file parameters override environment
+variables.
 
 **Background images**
 
