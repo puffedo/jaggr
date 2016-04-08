@@ -1,6 +1,6 @@
 ![Jaggr](resources/public/img/jaggr-logo-and-text.png?raw=true)
 
-**Jaggr** is a build monitor for Jenkins, that makes use of the [Jenkins Claim plugin](https://wiki.jenkins-ci.org/display/JENKINS/Claim+plugin).
+**Jaggr** is a build monitor for Jenkins that makes use of the [Jenkins Claim plugin](https://wiki.jenkins-ci.org/display/JENKINS/Claim+plugin).
 It shows a single aggregated status (red, yellow, green) for all jobs of a project
 and takes claimed builds into account.
 
@@ -37,7 +37,7 @@ full team ownership.
 * **YELLOW**
 
     Some jobs have failed, but all of them have been claimed. Claimers fix the broken builds, everybody else checks in
-    and merge with extra care.
+    and merges with extra care.
 
 * **GREEN**
 
@@ -108,7 +108,7 @@ Install
 * [java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * [leiningen](http://leiningen.org/#install)
 
-Set environment variables for `USER`, `USER_TOKEN` and `BASE_URL` (see above)
+Set environment variables for `USER`, `USER_TOKEN` and `BASE_URL` or provide a `default.config` file (see above)
 
 Build and start the server with leiningen:
 
@@ -124,7 +124,7 @@ You can build the executable jar with
 ```sh
 lein uberjar
 ```
-Contributions welcome, there is also a [trello board](https://trello.com/b/uzKqvnY8/**Jaggr**) for tasks and ideas.
+Contributions welcome, there is also a [Trello board](https://trello.com/b/uzKqvnY8/Jaggr) for tasks and ideas.
 
 
 ## License
