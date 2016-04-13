@@ -33,6 +33,6 @@
   :profiles
   {:dev
    {:dependencies [[http-kit.fake "0.2.2"]
-                   [kerodon "0.5.0"]]}
+                   [kerodon "0.7.0"]]}
    }
   )

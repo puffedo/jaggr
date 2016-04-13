@@ -35,3 +35,23 @@
               "The error Page should not show the status 'green' -
               an exception ws thrown, so the status cannot be determined reliably"))))
 
+(deftest display-red-page-when-unclaimed-failed-builds-exist
+  (with-redefs-fn
+    {#'jenkins/get-failed-jobs
+     (fn []
+       {:unclaimed   [{:name      "failed-unclaimed-build"
+                       :claimedBy nil :claimed false :reason nil}]
+        :claimed     [{:name      "failed-claimed-build-should-be-ignored"
+                       :claimedBy "somebody" :claimed true :reason "a reason"}]
+        :unclaimable [{:name "failed-unclaimable-build-should-be-ignored"}]}
+       )}
+    #(-> (session app)
+         (visit "/")
+         (has (attr-contains? [:div] :class "red")
+              "The red Page should be shown when unclaimed failed builds exist")
+         (has (some-text?  "failed-unclaimed-build")
+              "The name of the unclaimed failed job should by displayed")
+         (has (missing? [:div.yellow])
+              "The Page should not show the status 'yellow'")
+         (has (missing? [:div.green])
+              "The Page should not show the status 'green'"))))
