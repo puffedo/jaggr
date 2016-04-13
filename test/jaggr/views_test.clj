@@ -35,6 +35,7 @@
               "The error Page should not show the status 'green' -
               an exception ws thrown, so the status cannot be determined reliably"))))
 
+
 (deftest display-red-page-when-unclaimed-failed-builds-exist
   (with-redefs-fn
     {#'jenkins/get-failed-jobs
@@ -43,18 +44,19 @@
                        :claimedBy nil :claimed false :reason nil}]
         :claimed     [{:name      "failed-claimed-build-should-be-ignored"
                        :claimedBy "somebody" :claimed true :reason "a reason"}]
-        :unclaimable [{:name "failed-unclaimable-build-should-be-ignored"}]}
-       )}
+        :unclaimable [{:name "failed-unclaimable-build-should-be-ignored"}]})}
+
     #(-> (session app)
          (visit "/")
          (has (attr-contains? [:div] :class "red")
               "The red Page should be shown when unclaimed failed builds exist")
-         (has (some-text?  "failed-unclaimed-build")
+         (has (some-text? "failed-unclaimed-build")
               "The name of the unclaimed failed job should by displayed")
          (has (missing? [:div.yellow])
               "The Page should not show the status 'yellow'")
          (has (missing? [:div.green])
               "The Page should not show the status 'green'"))))
+
 
 (deftest display-yellow-page-when-all-failed-builds-are-claimed
   (with-redefs-fn
@@ -62,19 +64,38 @@
      (fn []
        {:claimed     [{:name      "failed-claimed-build"
                        :claimedBy "somebody" :claimed true :reason "a reason"}]
-        :unclaimable [{:name "failed-unclaimable-build-should-be-ignored"}]}
-       )}
+        :unclaimable [{:name "failed-unclaimable-build-should-be-ignored"}]})}
+
     #(-> (session app)
          (visit "/")
          (has (attr-contains? [:div] :class "yellow")
               "The yellow Page should be shown when all failed builds are claimed")
-         (has (some-text?  "failed-claimed-build")
+         (has (some-text? "failed-claimed-build")
               "The name of the claimed failed job should by displayed")
-         (has (some-text?  "somebody")
+         (has (some-text? "somebody")
               "The name of the claimer of the failed job should by displayed")
-         (has (some-text?  "a reason")
+         (has (some-text? "a reason")
               "The reason for the job failure should by displayed")
          (has (missing? [:div.red])
               "The Page should not show the status 'red'")
          (has (missing? [:div.green])
               "The Page should not show the status 'green'"))))
+
+
+(deftest display-green-page-when-no-failed-builds-exist
+  (with-redefs-fn
+    {#'jenkins/get-failed-jobs
+     (fn []
+       {:unclaimable [{:name "failed-unclaimable-build"}]})}
+
+    #(-> (session app)
+         (visit "/")
+         (has (attr-contains? [:div] :class "green")
+              "The green Page should be shown when no claimable failed jobs exist")
+         (has (some-text? "failed-unclaimable-build")
+              "since there are no more team-owned broken builds,
+              the other failed builds should be shown for information)")
+         (has (missing? [:div.red])
+              "The Page should not show the status 'red'")
+         (has (missing? [:div.yellow])
+              "The Page should not show the status 'yellow'"))))
