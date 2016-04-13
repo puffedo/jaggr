@@ -91,10 +91,10 @@
     #(-> (session app)
          (visit "/")
          (has (attr-contains? [:div] :class "green")
-              "The green Page should be shown when no claimable failed jobs exist")
+              "The green page should be shown when no claimable failed jobs exist")
          (has (some-text? "failed-unclaimable-build")
-              "since there are no more team-owned broken builds,
-              the other failed builds should be shown for information)")
+              "since there are no more claimable (= team-owned) failed builds,
+              the other failed jobs should be shown for information)")
          (has (missing? [:div.red])
               "The green page should not show have elements of class 'red'")
          (has (missing? [:div.yellow])
