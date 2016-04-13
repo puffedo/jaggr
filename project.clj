@@ -32,6 +32,7 @@
 
   :profiles
   {:dev
-   {:dependencies [[http-kit.fake "0.2.2"]]}
+   {:dependencies [[http-kit.fake "0.2.2"]
+                   [kerodon "0.5.0"]]}
    }
   )
