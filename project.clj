@@ -19,7 +19,6 @@
                  [http-kit "2.1.19"]
                  [org.clojure/data.json "0.2.6"]
                  [com.grammarly/omniconf "0.2.2"]
-                 [http-kit.fake "0.2.2"]
                  [url-normalizer "0.5.3-1"]]
 
   :dev-dependencies [[ring/ring-devel "1.1.0"]]
@@ -31,4 +30,8 @@
 
   :main jaggr.core
 
+  :profiles
+  {:dev
+   {:dependencies [[http-kit.fake "0.2.2"]]}
+   }
   )
