@@ -24,16 +24,16 @@
     #(-> (session app)
          (visit "/")
          (has (attr-contains? [:div] :class "error")
-              "The error Page should have an element of class 'error'")
+              "The error page should have an element of class 'error'")
          (has (missing? [:div.red])
-              "The error Page should not show the status 'red' -
-              an exception ws thrown, so the status cannot be determined reliably")
+              "The error page should not show the status 'red' -
+              an exception was thrown, so the status cannot be determined reliably")
          (has (missing? [:div.yellow])
-              "The error Page should not show the status 'yellow' -
-              an exception ws thrown, so the status cannot be determined reliably")
+              "The error page should not show the status 'yellow' -
+              an exception was thrown, so the status cannot be determined reliably")
          (has (missing? [:div.green])
-              "The error Page should not show the status 'green' -
-              an exception ws thrown, so the status cannot be determined reliably"))))
+              "The error page should not show the status 'green' -
+              an exception was thrown, so the status cannot be determined reliably"))))
 
 
 (deftest display-red-page-when-unclaimed-failed-builds-exist
@@ -49,13 +49,13 @@
     #(-> (session app)
          (visit "/")
          (has (attr-contains? [:div] :class "red")
-              "The red Page should be shown when unclaimed failed builds exist")
+              "The red page should be shown when unclaimed failed builds exist")
          (has (some-text? "failed-unclaimed-build")
-              "The name of the unclaimed failed job should by displayed")
+              "The name of the unclaimed failed job should be displayed")
          (has (missing? [:div.yellow])
-              "The Page should not show the status 'yellow'")
+              "The red page should not show have elements of class 'yellow'")
          (has (missing? [:div.green])
-              "The Page should not show the status 'green'"))))
+              "The red page should not show have elements of class 'green'"))))
 
 
 (deftest display-yellow-page-when-all-failed-builds-are-claimed
@@ -73,13 +73,13 @@
          (has (some-text? "failed-claimed-build")
               "The name of the claimed failed job should by displayed")
          (has (some-text? "somebody")
-              "The name of the claimer of the failed job should by displayed")
+              "The name of the claimer of the failed build should by displayed")
          (has (some-text? "a reason")
               "The reason for the job failure should by displayed")
          (has (missing? [:div.red])
-              "The Page should not show the status 'red'")
+              "The yellow page should not show have elements of class 'red'")
          (has (missing? [:div.green])
-              "The Page should not show the status 'green'"))))
+              "The yellow page should not show have elements of class 'green'"))))
 
 
 (deftest display-green-page-when-no-failed-builds-exist
@@ -96,6 +96,6 @@
               "since there are no more team-owned broken builds,
               the other failed builds should be shown for information)")
          (has (missing? [:div.red])
-              "The Page should not show the status 'red'")
+              "The green page should not show have elements of class 'red'")
          (has (missing? [:div.yellow])
-              "The Page should not show the status 'yellow'"))))
+              "The green page should not show have elements of class 'yellow'"))))
