@@ -17,7 +17,7 @@ so any developer can claim a broken build, telling the others that they can cont
 
 Unfortunately, this is not reflected in the build monitors. Failed jobs owned by individuals cannot be distinguished
 from problems that the whole team should handle. Claimed builds cannot be distinguished from unclaimed builds.
-Developers get used to seeing lots of red end yellow jobs on their build monitor and to hoping, somebody else cares.
+Developers get used to seeing lots of red end yellow jobs on their build monitor, hoping somebody else cares.
 
 **Jaggr** tries to solve this problem.
 
@@ -62,6 +62,17 @@ In the project base directory:
 java -jar jaggr-<version>-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/tv/
 ```
 
+If you don' want to type the config parameters repeatedly, you can also create a file named `default.config` (or copy
+and rename [example.config](https://github.com/puffedo/jaggr/blob/master/example.config) ) and set the parameters there:
+
+```
+{
+   :user        "my-user"
+   :user-token  "xyzabcdef"
+   :base-url    "http://my-jenkins:8081/jenkins/my-project/"
+}
+```
+
 Parameters:
 
 * `user`
@@ -88,8 +99,7 @@ Optional Parameters:
 
 * `config-file`
 
-    a file with parameters - see `example.config`. Or rename your config file to `default.config`, so it will be loaded
-    automatically
+    location and name of the config file (default: `./default.config`)
 
 All parameters can also be specified as environment variables (`USER`, `USER_TOKEN`, `BASE_URL`, ...)
 
@@ -103,9 +113,10 @@ folders images/red, images/yellow or images/green. Images are selected randomly.
 
 ## Development
 
-**Current build status**
+**Current status**
 
 [![Build Status](https://travis-ci.org/puffedo/jaggr.svg?branch=master)](https://travis-ci.org/puffedo/jaggr)
+[![Dependencies Status](https://jarkeeper.com/puffedo/jaggr/status.svg)](https://jarkeeper.com/puffedo/jaggr)
 
 **Install**
 
