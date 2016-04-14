@@ -14,10 +14,10 @@
 ;; ensures, it ends swith a slash
 (defn- normalize-url-string [url]
   (let [pure-url
-        (.toString
+        (str
           (normalize url {:remove-query?    true
                           :remove-fragment? true}))]
-    (if (.endsWith pure-url "/" )
+    (if (.endsWith pure-url "/")
       pure-url
       (str pure-url "/"))))
 
@@ -42,14 +42,14 @@
       :port         {:description "The port"
                      :type        :number
                      :default     3000}
-     :config-file   {:description "A file containing config parameters"
+      :config-file  {:description "A file containing config parameters"
                      :type        :string
                      :default     "default.config"}})
 
    (config/populate-from-env)
-   (config/populate-from-cmd args) ;; read cmd line params, so a user can specify the confog-file param
+   (config/populate-from-cmd args)                          ;; read cmd line params, so a user can specify the confog-file param
    (if (.exists (as-file (config/get :config-file))) (config/populate-from-file (config/get :config-file)))
-   (config/populate-from-cmd args) ;; re-apply cmd line params to override params from config-file
+   (config/populate-from-cmd args)                          ;; re-apply cmd line params to override params from config-file
    (config/verify :quit-on-error true)))
 
 

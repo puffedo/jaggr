@@ -13,14 +13,14 @@
   (when-not (empty? job)
     [:div.job
      [:div.job-name (h (:name job))]
-     (when-not (empty? (:claimedBy job))
+     (when (:claimedBy job)
        [:div.job-claimed-by "was heroically claimed by " (h (:claimedBy job))])
-     (when-not (empty? (:reason job))
+     (when (:reason job)
        [:div.job-reason "'" (h (:reason job)) "'"])]))
 
 
 (defn job-list [jobs]
-  (when-not (empty? jobs)
+  (when jobs
     [:div.job-list
      (for [job jobs] (job-details job))]))
 
