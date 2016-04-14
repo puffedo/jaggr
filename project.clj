@@ -14,7 +14,7 @@
                  [org.clojure/tools.logging "0.3.1"]
                  [ring/ring-core "1.4.0"]
                  [ring/ring-jetty-adapter "1.4.0"]
-                 [compojure "1.4.0"]
+                 [compojure "1.5.0"]
                  [hiccup "1.0.5"]
                  [http-kit "2.1.19"]
                  [org.clojure/data.json "0.2.6"]
@@ -23,7 +23,7 @@
 
   :dev-dependencies [[ring/ring-devel "1.1.0"]]
 
-  :plugins [[lein-ring "0.7.1"]]
+  :plugins [[lein-ring "0.9.7"]]
 
   :ring {:handler jaggr.core/app
          :init    jaggr.core/init}
