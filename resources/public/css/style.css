@@ -18,8 +18,8 @@ html, body {
 
 #logo {
    position: absolute;
-   right: 0px;
-   bottom: 0px;
+   right: 0;
+   bottom: 0;
    padding: 50px;
    height: 150px;
    width: 150px;
@@ -33,24 +33,28 @@ h1 {
    text-align: center;
    width: 100%;
    min-height: 100%;
-   font-size 1vw;
+   font-size: 1vw;
    position: absolute;
 }
 
 
 .red {
+   background: red;
    background: rgba(200,0,0,0.7);
 }
 
 .yellow {
+   background: yellow;
    background: rgba(240,160,0,0.7);
 }
 
 .green {
+   background: green;
    background: rgba(0,100,0,0.7);
 }
 
 .error {
+   background: black;
    background: rgba(20,0,0,0.9);
 }
 
@@ -62,6 +66,6 @@ h1 {
 
 .job-name {
    font-size: 2vw;
-   font-style: bold;
+   font-weight: bold;
    padding: 0.3em;
 }
