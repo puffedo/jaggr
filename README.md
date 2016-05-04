@@ -117,6 +117,7 @@ folders images/red, images/yellow or images/green. Images are selected randomly.
 
 [![Build Status](https://travis-ci.org/puffedo/jaggr.svg?branch=master)](https://travis-ci.org/puffedo/jaggr)
 [![Dependencies Status](https://jarkeeper.com/puffedo/jaggr/status.svg)](https://jarkeeper.com/puffedo/jaggr)
+[![Issue Count](https://codeclimate.com/github/puffedo/jaggr/badges/issue_count.svg)](https://codeclimate.com/github/puffedo/jaggr)
 
 **Install**
 
