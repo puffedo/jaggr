@@ -79,7 +79,7 @@
                           (let [last-build-rsrc (@#'jaggr.jenkins/get-last-build-rsrc last-build-url)]
 
                             (is (not-empty last-build-rsrc))
-                            (is (= true (:claimed last-build-rsrc)))
+                            (is (true? (:claimed last-build-rsrc)))
                             (is (= "somebody" (:claimedBy last-build-rsrc)))
                             (is (= "some reason" (:reason last-build-rsrc))))))
 
@@ -92,7 +92,7 @@
                           (let [last-build-rsrc (@#'jaggr.jenkins/get-last-build-rsrc last-build-url)]
 
                             (is (not-empty last-build-rsrc))
-                            (is (= false (:claimed last-build-rsrc))))))
+                            (is (false? (:claimed last-build-rsrc))))))
 
                       (testing "When fetching a last-build-REST-resource of an unclaimable job, it contains no claimed-state, claimer or reason."
 

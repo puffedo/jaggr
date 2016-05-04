@@ -10,7 +10,7 @@
 
 
 (defn job-details [job]
-  (when-not (empty? job)
+  (when job
     [:div.job
      [:div.job-name (h (:name job))]
      (when (:claimedBy job)
