@@ -1,4 +1,4 @@
-# Jaggr
+# Jaggr - the Jenkins aggregator
 
 ![Jaggr](resources/public/img/jaggr-logo-and-text.png?raw=true)
 
@@ -59,21 +59,20 @@ status for all jobs:
 
 ### Jenkins
 
-* Install the
-[Jenkins Claim plugin](https://wiki.jenkins-ci.org/display/JENKINS/Claim+plugin)
-* make all team-owned jobs claimable
+Install the [Jenkins Claim plugin](https://wiki.jenkins-ci.org/display/JENKINS/Claim+plugin)
+
+Make all team-owned jobs claimable
 
 ### Jaggr
 
-Install
-[java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+Install [java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
 Download the [latest Jaggr release](https://github.com/puffedo/jaggr/releases)
 
 In the project base directory:
 
 ```sh
-java -jar jaggr-<version>-standalone.jar --port 8080 --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/tv/
+java -jar jaggr-<version>-standalone.jar --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/tv/
 ```
 
 If you don' want to type the config parameters repeatedly, you can also create a
