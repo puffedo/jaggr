@@ -9,6 +9,9 @@ engines:
     checks:
       MD026:
         enabled: false
+  kibit:
+    enabled: true
 ratings:
   paths:
   - "**.css"
+  - "**.clj"
