@@ -72,7 +72,8 @@ Download the [latest Jaggr release](https://github.com/puffedo/jaggr/releases)
 In the project base directory:
 
 ```sh
-java -jar jaggr-<version>-standalone.jar --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/tv/
+java -jar jaggr-<version>-standalone.jar --user me --user-token asdfghjkl
+--base-url http://my-ci/jenkins/view/tv/
 ```
 
 If you don' want to type the config parameters repeatedly, you can also create a
@@ -178,7 +179,8 @@ licensed under the
 ## Kudos
 
 The logo is based on an illustration by
-[vectorportal.com](http://www.vectorportal.com/subcategory/167/MICK-JAGGER-VECTOR-ILLUSTRATION.eps/ifile/10647/detailtest.asp), thanks to Schorsch and [Marcus](https://github.com/molk)!
+[vectorportal.com](http://www.vectorportal.com/subcategory/167/MICK-JAGGER-VECTOR-ILLUSTRATION.eps/ifile/10647/detailtest.asp)
+thanks to Schorsch and [Marcus](https://github.com/molk)!
 
 Thanks to [Hinnerk](https://github.com/hinnerkoetting) for the custom background
 image feature!
