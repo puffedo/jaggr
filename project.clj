@@ -23,7 +23,8 @@
 
   :dev-dependencies [[ring/ring-devel "1.1.0"]]
 
-  :plugins [[lein-ring "0.9.7"]]
+  :plugins [[lein-ring "0.9.7"]
+            [lein-cloverage "1.0.6"]]
 
   :ring {:handler jaggr.core/app
          :init    jaggr.core/init}
