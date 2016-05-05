@@ -3,7 +3,7 @@ engines:
   # CSS checks
   csslint:
     enabled: true
-  # disallow FIXME comments
+  # disallow FIX-ME comments
   fixme:
     enabled: true
   # assure good style in README.md
