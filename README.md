@@ -133,6 +133,7 @@ images/green. Images are selected randomly. It works best with grayscale images!
 
 [![Build Status](https://travis-ci.org/puffedo/jaggr.svg?branch=master)](https://travis-ci.org/puffedo/jaggr)
 [![Dependencies Status](https://jarkeeper.com/puffedo/jaggr/status.svg)](https://jarkeeper.com/puffedo/jaggr)
+[![Coverage Status](https://coveralls.io/repos/github/puffedo/jaggr/badge.svg?branch=master)](https://coveralls.io/github/puffedo/jaggr?branch=master)
 [![Issue Count](https://codeclimate.com/github/puffedo/jaggr/badges/issue_count.svg)](https://codeclimate.com/github/puffedo/jaggr)
 
 ### Install
