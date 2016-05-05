@@ -1,17 +1,29 @@
 ---
 engines:
+  # CSS checks
   csslint:
     enabled: true
+  # disallow FIXME comments
   fixme:
     enabled: true
+  # assure good style in README.md
   markdownlint:
     enabled: true
     checks:
+      # disable a check that disallows using punctation in headers - "Why?" should be a legtimate header
       MD026:
         enabled: false
+  # suggest more idiomatic clojure
   kibit:
     enabled: true
+  # check the few lines of shell scripts as well
+  engines:
+    shellcheck:
+      enabled: true
 ratings:
   paths:
   - "**.css"
+  - "**.md"
   - "**.clj"
+  - "**.sh"
+
