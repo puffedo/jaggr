@@ -17,9 +17,8 @@ engines:
   kibit:
     enabled: true
   # check the few lines of shell scripts as well
-  engines:
-    shellcheck:
-      enabled: true
+  shellcheck:
+    enabled: true
 ratings:
   paths:
   - "**.css"
