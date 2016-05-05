@@ -72,8 +72,7 @@ Download the [latest Jaggr release](https://github.com/puffedo/jaggr/releases)
 In the project base directory:
 
 ```sh
-java -jar jaggr-<version>-standalone.jar --user me --user-token asdfghjkl
---base-url http://my-ci/jenkins/view/tv/
+java -jar jaggr-<version>-standalone.jar --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/tv/
 ```
 
 If you don' want to type the config parameters repeatedly, you can also create a
