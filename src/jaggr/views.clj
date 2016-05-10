@@ -85,29 +85,23 @@
            [:div "trying again every " (config/get :refresh-rate) " seconds"]]]]))))
 
 
-(defn selectRandomImageFrom [directory]
-  (def files (.listFiles (io/file directory)))
-  :else
-  {
-   :status 200
-   :body   (io/file (rand-nth files))
-   })
+(defn selectRandomImageFrom [files]
+  {:status 200
+   :body   (io/file (rand-nth files))})
 
 (defn redirectToImageService []
-  {
-   :status  302
+  {:status  302
    :headers {"Location" "http://lorempixel.com/g/400/200"}
-   :body    ""
-   })
+   :body    ""})
 
 
 (defn imageFrom [directory]
-  (def files (.listFiles (io/file directory)))
-  (cond
-    (empty? files)
-    (redirectToImageService)
-    :else
-    (selectRandomImageFrom directory)))
+  (let [files (.listFiles (io/file directory))]
+    (cond
+      (empty? files)
+      (redirectToImageService)
+      :else
+      (selectRandomImageFrom files))))
 
 
 (defn green-page []
