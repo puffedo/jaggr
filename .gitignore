@@ -5,6 +5,7 @@ pom.xml
 *.iml
 classes
 target
-/.idea
+cov
+.idea
 .lein-*
-test/jaggr/default.config
+default.config
