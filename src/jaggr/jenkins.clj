@@ -57,13 +57,13 @@
    :claimed, :unclaimed and :unclaimable. For each job of each class, a map is returned with
    :name, :claimed, :claimedBy and :reason"
 
-  (->>
-    (for [failed-job-rsrc (get-failed-jobs-rsrc)]
-      (->
-        (get-last-build-url failed-job-rsrc)
-        (get-last-build-rsrc)
-        (assoc :name (:name failed-job-rsrc))))
-    (group-by #(cond
-                (true? (:claimed %1)) :claimed
-                (false? (:claimed %1)) :unclaimed
-                :else :unclaimable))))
+  (group-by
+    #(cond
+      (true? (:claimed %)) :claimed
+      (false? (:claimed %)) :unclaimed
+      :else :unclaimable)
+    (for
+      [failed-job-rsrc (get-failed-jobs-rsrc)]
+      (-> (get-last-build-url failed-job-rsrc)
+          (get-last-build-rsrc)
+          (assoc :name (:name failed-job-rsrc))))))
