@@ -55,7 +55,10 @@
 
 (defroutes main-routes
            (GET "/" [] (index-page))
-           (GET "/backgroundimage" [] (background-image))
+           (GET "/background-image-red" [] (background-image-red))
+           (GET "/background-image-yellow" [] (background-image-yellow))
+           (GET "/background-image-green" [] (background-image-green))
+           (GET "/background-image-error" [] (background-image-error))
            (route/resources "/")
            (route/not-found "Page not found"))
 

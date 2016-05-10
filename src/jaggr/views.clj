@@ -41,7 +41,7 @@
          (cond
            (not-empty (:unclaimed failed-jobs))
            [:div.fullscreen
-            [:img {:src "/backgroundimage"}]
+            [:img {:src "/background-image-red"}]
             [:div.fullscreen.red
              [:h1 "BROKEN BUILDS - CLAIM AND FIX THEM!"]
              [:div.subtext
@@ -50,7 +50,7 @@
 
            (not-empty (:claimed failed-jobs))
            [:div.fullscreen
-            [:img {:src "/backgroundimage"}]
+            [:img {:src "/background-image-yellow"}]
             [:div.yellow.fullscreen
              [:h1 "BROKEN BUILDS - HELP IS ON THE WAY!"]
              [:div.subtext
@@ -59,7 +59,7 @@
 
            (not-empty (:unclaimable failed-jobs))
            [:div.fullscreen
-            [:img {:src "/backgroundimage"}]
+            [:img {:src "/background-image-green"}]
             [:div.green.fullscreen
              [:h1 "MOST BUILDS ARE MOSTLY OK"]
              [:div.subtext "maybe have a look at some of these jobs as well"]
@@ -77,7 +77,7 @@
         [:body
          [:img#logo {:src "/img/jaggr-logo.png"}]
          [:div.fullscreen
-          [:img {:src "/img/jaggr-logo.png"}]
+          [:img {:src "/background-image-error"}]
           [:div.fullscreen.error
            [:h1 "SOMETHING IS WRONG HERE"]
            [:div.subtext "is Jenkins accessible? - wrong parameters? - network problems?"]
@@ -85,17 +85,18 @@
            [:div "trying again every " (config/get :refresh-rate) " seconds"]]]]))))
 
 
-(defn selectRandomImageFrom [files]
+;; show specific background images if provided, random pictures otherwise
+
+(defn- selectRandomImageFrom [files]
   {:status 200
    :body   (io/file (rand-nth files))})
 
-(defn redirectToImageService []
+(defn- redirectToImageService []
   {:status  302
    :headers {"Location" "http://lorempixel.com/g/400/200"}
    :body    ""})
 
-
-(defn imageFrom [directory]
+(defn- imageFrom [directory]
   (let [files (.listFiles (io/file directory))]
     (cond
       (empty? files)
@@ -103,25 +104,15 @@
       :else
       (selectRandomImageFrom files))))
 
-
-(defn green-page []
-  (imageFrom "images/green/"))
-
-
-(defn red-page []
+(defn background-image-red []
   (imageFrom "images/red/"))
 
-
-(defn yellow-page []
+(defn background-image-yellow []
   (imageFrom "images/yellow/"))
 
+(defn background-image-green []
+  (imageFrom "images/green/"))
 
-(defn background-image []
-  (let [failed-jobs (get-failed-jobs)]
-    (cond
-      (not-empty (:unclaimed failed-jobs))
-      (red-page)
-      (not-empty (:claimed failed-jobs))
-      (yellow-page)
-      :else
-      (green-page))))
+(defn background-image-error []
+  (imageFrom "images/error/"))
+
