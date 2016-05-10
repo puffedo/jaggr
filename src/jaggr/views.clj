@@ -51,7 +51,7 @@
            (not-empty (:claimed failed-jobs))
            [:div.fullscreen
             [:img {:src "/background-image-yellow"}]
-            [:div.yellow.fullscreen
+            [:div.fullscreen.yellow
              [:h1 "BROKEN BUILDS - HELP IS ON THE WAY!"]
              [:div.subtext
               "see if you can help - check in with care - be careful with merges"]
@@ -60,13 +60,13 @@
            (not-empty (:unclaimable failed-jobs))
            [:div.fullscreen
             [:img {:src "/background-image-green"}]
-            [:div.green.fullscreen
+            [:div.fullscreen.green
              [:h1 "MOST BUILDS ARE MOSTLY OK"]
              [:div.subtext "maybe have a look at some of these jobs as well"]
              (job-list (:unclaimable failed-jobs))]]
 
            :else
-           [:div.green.fullscreen
+           [:div.fullscreen.green
             [:h1 "HOORAY!"]
             [:div.subtext "all builds are green! - better go home now..."]])]))
 

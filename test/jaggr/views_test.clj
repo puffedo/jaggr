@@ -23,7 +23,7 @@
     {#'jenkins/get-failed-jobs (fn [] (throw (.Exception "An exception")))}
     #(-> (session app)
          (visit "/")
-         (has (attr-contains? [:div] :class "error")
+         (has (attr-contains? [:div.error] :class "error")
               "The error page should have an element of class 'error'")
          (has (missing? [:div.red])
               "The error page should not show the status 'red' -
@@ -48,7 +48,7 @@
 
     #(-> (session app)
          (visit "/")
-         (has (attr-contains? [:div] :class "red")
+         (has (attr-contains? [:div.red] :class "red")
               "The red page should be shown when unclaimed failed builds exist")
          (has (some-text? "failed-unclaimed-build")
               "The name of the unclaimed failed job should be displayed")
@@ -68,7 +68,7 @@
 
     #(-> (session app)
          (visit "/")
-         (has (attr-contains? [:div] :class "yellow")
+         (has (attr-contains? [:div.yellow] :class "yellow")
               "The yellow Page should be shown when all failed builds are claimed")
          (has (some-text? "failed-claimed-build")
               "The name of the claimed failed job should by displayed")
@@ -90,7 +90,7 @@
 
     #(-> (session app)
          (visit "/")
-         (has (attr-contains? [:div] :class "green")
+         (has (attr-contains? [:div.green] :class "green")
               "The green page should be shown when no claimable failed jobs exist")
          (has (some-text? "failed-unclaimable-build")
               "since there are no more claimable (= team-owned) failed builds,
