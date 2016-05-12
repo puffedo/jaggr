@@ -99,3 +99,92 @@
               "The green page should not show have elements of class 'red'")
          (has (missing? [:div.yellow])
               "The green page should not show have elements of class 'yellow'"))))
+
+
+(deftest red-custom-image-is-used-when-provided
+  (let [image-placeholder "PLACEHOLDER FOR IMAGE"]
+    (with-redefs-fn
+      {#'jaggr.views/selectRandomImageFrom
+       (fn [dir]
+         (if (= "images/red/" dir)
+           image-placeholder
+           nil))}
+
+      #(-> (session app)
+           (visit "/background-image-red")
+           (has (status? 200)
+                "The red image page is found")
+           (has (some-text? image-placeholder)
+                "The body contains the provided image")))))
+
+
+(deftest yellow-custom-image-is-used-when-provided
+  (let [image-placeholder "PLACEHOLDER FOR IMAGE"]
+    (with-redefs-fn
+      {#'jaggr.views/selectRandomImageFrom
+       (fn [dir]
+         (if (= "images/yellow/" dir)
+           image-placeholder
+           nil))}
+
+      #(-> (session app)
+           (visit "/background-image-yellow")
+           (has (status? 200)
+                "The yellow image page is found")
+           (has (some-text? image-placeholder)
+                "The body contains the provided image")))))
+
+
+(deftest green-custom-image-is-used-when-provided
+  (let [image-placeholder "PLACEHOLDER FOR IMAGE"]
+    (with-redefs-fn
+      {#'jaggr.views/selectRandomImageFrom
+       (fn [dir]
+         (if (= "images/green/" dir)
+           image-placeholder
+           nil))}
+
+      #(-> (session app)
+           (visit "/background-image-green")
+           (has (status? 200)
+                "The green image page is found")
+           (has (some-text? image-placeholder)
+                "The body contains the provided image")))))
+
+
+(deftest error-custom-image-is-used-when-provided
+  (let [image-placeholder "PLACEHOLDER FOR IMAGE"]
+    (with-redefs-fn
+      {#'jaggr.views/selectRandomImageFrom
+       (fn [dir]
+         (if (= "images/error/" dir)
+           image-placeholder
+           nil))}
+
+      #(-> (session app)
+           (visit "/background-image-error")
+           (has (status? 200)
+                "The error image page is found")
+           (has (some-text? image-placeholder)
+                "The body contains the provided image")))))
+
+
+(deftest redirect-to-image-service-when-no-image-is-provided
+  (with-redefs-fn
+    {#'jaggr.views/selectRandomImageFrom
+     (fn [_] nil)}
+
+    #(-> (session app)
+         (visit "/background-image-red")
+         (has (status? 302)
+              "redirect to image service when no red image is provided")
+         (visit "/background-image-yellow")
+         (has (status? 302)
+              "redirect to image service when no yellow image is provided")
+         (visit "/background-image-green")
+         (has (status? 302)
+              "redirect to image service when no green image is provided")
+         (visit "/background-image-error")
+         (has (status? 302)
+              "redirect to image service when no error image is provided"))))
+
