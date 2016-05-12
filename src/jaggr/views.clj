@@ -87,22 +87,19 @@
 
 ;; show specific background images if provided, random pictures otherwise
 
-(defn- selectRandomImageFrom [files]
-  {:status 200
-   :body   (io/file (rand-nth files))})
+(defn- selectRandomImageFrom [dir]
+  (if-let [files (.listFiles (io/file dir))]
+    (io/file (rand-nth files))
+    nil))
 
-(defn- redirectToImageService []
-  {:status  302
-   :headers {"Location" "http://lorempixel.com/g/400/200"}
-   :body    ""})
-
-(defn- imageFrom [directory]
-  (let [files (.listFiles (io/file directory))]
-    (cond
-      (empty? files)
-      (redirectToImageService)
-      :else
-      (selectRandomImageFrom files))))
+(defn- imageFrom [dir]
+  (if-let [image (selectRandomImageFrom dir)]
+    {:status 200
+     :body   image}
+    ;; redirect to random image service when no image was found in the directory
+    {:status  302
+     :headers {"Location" "http://lorempixel.com/g/400/200"}
+     :body    ""}))
 
 (defn background-image-red []
   (imageFrom "images/red/"))
