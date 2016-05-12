@@ -18,6 +18,7 @@
    (include-css "https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic")
    [:link {:rel "shortcut icon" :href "img/favicon.ico"}]])
 
+
 (defn job-details [job]
   (when job
     [:div.job
@@ -93,14 +94,14 @@
 ;;
 
 ;; returns a random file from the provided directory or nil if the directory is empty
-;; or doesn not exist. The file type is nit checked, so no non-image files should be in
+;; or doesn't exist. The file type is not checked, so no non-image files should be in
 ;; the directory
 (defn- random-image-from [dir]
   (if-let [files (.listFiles (io/file dir))]
     (io/file (rand-nth files))
     nil))
 
-;; returns a http response that contains an image from the provided driectory or
+;; returns an http response that contains an image from the provided directory or
 ;; redirects to an image service if not such file exists
 (defn- image-from [dir]
   (if-let [image (random-image-from dir)]
@@ -113,18 +114,18 @@
      :body    ""}))
 
 (defn background-image-red []
-  "returns a http response that contains a background image for red screens"
+  "returns an http response that contains a background image for red screens"
   (image-from "images/red/"))
 
 (defn background-image-yellow []
-  "returns a http response that contains a background image for yellow screens"
+  "returns an http response that contains a background image for yellow screens"
   (image-from "images/yellow/"))
 
 (defn background-image-green []
-  "returns a http response that contains a background image for green screens"
+  "returns an http response that contains a background image for green screens"
   (image-from "images/green/"))
 
 (defn background-image-error []
-  "returns a http response that contains a background image for error screens"
+  "returns an http response that contains a background image for error screens"
   (image-from "images/error/"))
 
