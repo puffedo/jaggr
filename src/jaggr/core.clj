@@ -47,9 +47,12 @@
                      :default     "default.config"}})
 
    (config/populate-from-env)
-   (config/populate-from-cmd args)                          ;; read cmd line params, so a user can specify the confog-file param
-   (if (.exists (as-file (config/get :config-file))) (config/populate-from-file (config/get :config-file)))
-   (config/populate-from-cmd args)                          ;; re-apply cmd line params to override params from config-file
+    ; read cmd line paramaterss, so a user can specify the config-file parameter
+   (config/populate-from-cmd args)
+   (if (.exists (as-file (config/get :config-file)))
+     (config/populate-from-file (config/get :config-file)))
+    ; re-apply cmd line parameters to override parameters from config-file
+   (config/populate-from-cmd args)
    (config/verify :quit-on-error true)))
 
 
