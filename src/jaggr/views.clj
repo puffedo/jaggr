@@ -70,9 +70,11 @@
              (job-list (:unclaimable failed-jobs))]]
 
            :else
-           [:div.fullscreen.green
-            [:h1 "HOORAY!"]
-            [:div.subtext "all builds are green! - better go home now..."]])]))
+           [:div.fullscreen
+            [:img {:src "/background-image-green"}]
+            [:div.fullscreen.green
+             [:h1 "HOORAY!"]
+             [:div.subtext "all builds are green! - better go home now..."]]])]))
 
     (catch Exception e
       (log/error e "Something is wrong here!")
