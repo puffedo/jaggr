@@ -87,13 +87,13 @@
 
 ;; show specific background images if provided, random pictures otherwise
 
-(defn- selectRandomImageFrom [dir]
+(defn- random-image-from [dir]
   (if-let [files (.listFiles (io/file dir))]
     (io/file (rand-nth files))
     nil))
 
-(defn- imageFrom [dir]
-  (if-let [image (selectRandomImageFrom dir)]
+(defn- image-from [dir]
+  (if-let [image (random-image-from dir)]
     {:status 200
      :body   image}
     ;; redirect to random image service when no image was found in the directory
@@ -102,14 +102,14 @@
      :body    ""}))
 
 (defn background-image-red []
-  (imageFrom "images/red/"))
+  (image-from "images/red/"))
 
 (defn background-image-yellow []
-  (imageFrom "images/yellow/"))
+  (image-from "images/yellow/"))
 
 (defn background-image-green []
-  (imageFrom "images/green/"))
+  (image-from "images/green/"))
 
 (defn background-image-error []
-  (imageFrom "images/error/"))
+  (image-from "images/error/"))
 

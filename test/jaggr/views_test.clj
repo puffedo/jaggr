@@ -104,7 +104,7 @@
 (deftest red-custom-image-is-used-when-provided
   (let [image-placeholder "PLACEHOLDER FOR IMAGE"]
     (with-redefs-fn
-      {#'jaggr.views/selectRandomImageFrom
+      {#'jaggr.views/random-image-from
        (fn [dir]
          (if (= "images/red/" dir)
            image-placeholder
@@ -121,7 +121,7 @@
 (deftest yellow-custom-image-is-used-when-provided
   (let [image-placeholder "PLACEHOLDER FOR IMAGE"]
     (with-redefs-fn
-      {#'jaggr.views/selectRandomImageFrom
+      {#'jaggr.views/random-image-from
        (fn [dir]
          (if (= "images/yellow/" dir)
            image-placeholder
@@ -138,7 +138,7 @@
 (deftest green-custom-image-is-used-when-provided
   (let [image-placeholder "PLACEHOLDER FOR IMAGE"]
     (with-redefs-fn
-      {#'jaggr.views/selectRandomImageFrom
+      {#'jaggr.views/random-image-from
        (fn [dir]
          (if (= "images/green/" dir)
            image-placeholder
@@ -155,7 +155,7 @@
 (deftest error-custom-image-is-used-when-provided
   (let [image-placeholder "PLACEHOLDER FOR IMAGE"]
     (with-redefs-fn
-      {#'jaggr.views/selectRandomImageFrom
+      {#'jaggr.views/random-image-from
        (fn [dir]
          (if (= "images/error/" dir)
            image-placeholder
@@ -171,7 +171,7 @@
 
 (deftest redirect-to-image-service-when-no-image-is-provided
   (with-redefs-fn
-    {#'jaggr.views/selectRandomImageFrom
+    {#'jaggr.views/random-image-from
      (fn [_] nil)}
 
     #(-> (session app)
