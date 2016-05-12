@@ -6,6 +6,9 @@
             [clojure.tools.logging :as log]))
 
 
+;;
+;; index page
+;;
 
 (defn header []
   [:head
@@ -85,31 +88,43 @@
            [:div "trying again every " (config/get :refresh-rate) " seconds"]]]]))))
 
 
-;; show specific background images if provided, random pictures otherwise
+;;
+;; background image handling
+;;
 
+;; returns a random file from the provided directory or nil if the directory is empty
+;; or doesn not exist. The file type is nit checked, so no non-image files should be in
+;; the directory
 (defn- random-image-from [dir]
   (if-let [files (.listFiles (io/file dir))]
     (io/file (rand-nth files))
     nil))
 
+;; returns a http response that contains an image from the provided driectory or
+;; redirects to an image service if not such file exists
 (defn- image-from [dir]
   (if-let [image (random-image-from dir)]
+    ;; file exists
     {:status 200
      :body   image}
-    ;; redirect to random image service when no image was found in the directory
+    ;; no file is found
     {:status  302
      :headers {"Location" "http://lorempixel.com/g/400/200"}
      :body    ""}))
 
 (defn background-image-red []
+  "returns a http response that contains a background image for red screens"
   (image-from "images/red/"))
 
 (defn background-image-yellow []
+  "returns a http response that contains a background image for yellow screens"
   (image-from "images/yellow/"))
 
 (defn background-image-green []
+  "returns a http response that contains a background image for green screens"
   (image-from "images/green/"))
 
 (defn background-image-error []
+  "returns a http response that contains a background image for error screens"
   (image-from "images/error/"))
 
