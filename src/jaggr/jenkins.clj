@@ -1,8 +1,8 @@
 (ns jaggr.jenkins
-
   (:require [org.httpkit.client :as http]
             [clojure.data.json :as json]
-            [omniconf.core :as config]))
+            [omniconf.core :as config]
+            [clojure.core.async :refer [>! >!! <! <!! close! go-loop chan into to-chan]]))
 
 
 ;; calls the Jenkins JSON api for a given url (must end with /),
@@ -43,6 +43,18 @@
     [:lastBuild :url]))
 
 
+;; gets the url of the last build from jenkins for a given job-REST-resource
+(defn- add-last-build-url-chan [job-rsrc-chan]
+  (let [out (chan)]
+    (go-loop [job-rsrc (<! job-rsrc-chan)]
+      (if job-rsrc
+        (do
+          (>! out (assoc job-rsrc :last-build-url (get-last-build-url job-rsrc)))
+          (recur (<! job-rsrc-chan)))
+        (close! out)))
+    out))
+
+
 ;; gets the claim info for a job resource and throws away everything else
 (defn- get-last-build-rsrc [last-build-url]
   (->>
@@ -52,18 +64,34 @@
     (first)))
 
 
+;; adds information on it's last build's claim state to a job resource
+;; the job resource must have a :last-build-url
+(defn- add-claim-info-chan [job-rsrc-chan]
+  (let [out (chan)]
+    (go-loop [job-rsrc (<! job-rsrc-chan)]
+      (if job-rsrc
+        (do
+          (->>
+            (get-last-build-rsrc (:last-build-url job-rsrc))
+            (merge job-rsrc)
+            (>! out))
+          (recur (<! job-rsrc-chan)))
+        (close! out)))
+    out))
+
+
 (defn get-failed-jobs []
   "fetches all failed jobs from jenkins and returns a map that devides them in three classes:
    :claimed, :unclaimed and :unclaimable. For each job of each class, a map is returned with
    :name, :claimed, :claimedBy and :reason"
-
-  (group-by
-    #(cond
-      (true? (:claimed %)) :claimed
-      (false? (:claimed %)) :unclaimed
-      :else :unclaimable)
-    (for
-      [failed-job-rsrc (get-failed-jobs-rsrc)]
-      (-> (get-last-build-url failed-job-rsrc)
-          (get-last-build-rsrc)
-          (assoc :name (:name failed-job-rsrc))))))
+  (let [aggregated-job-info-chan
+        (-> (get-failed-jobs-rsrc)
+            (to-chan)
+            (add-last-build-url-chan)
+            (add-claim-info-chan))]
+    (group-by
+      #(cond
+        (true? (:claimed %)) :claimed
+        (false? (:claimed %)) :unclaimed
+        :else :unclaimable)
+      (<!! (into '() aggregated-job-info-chan)))))
