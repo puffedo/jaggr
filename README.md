@@ -82,7 +82,7 @@ add the parameters
 -- user jenkins-user --user-token ABDCE12345
 ```
 
-The user token can be obtained from the Configuration age in your Jankins user profile.
+The user token can be obtained from the Configuration page in your Jankins user profile.
 
 If you don' want to type the config parameters repeatedly, you can also create a
 file named `default.config` (or copy and rename
