@@ -94,7 +94,7 @@
                     (timeout (* 1000 refresh-rate))])]
     (when-not vals
       (throw (TimeoutException.
-               (str "Did not retrieve anything from the Jenkins API within " refresh-rate " seconds!"))))
+               (str "Did not retrieve all required job data from the Jenkins API within " refresh-rate " seconds!"))))
     vals))
 
 
