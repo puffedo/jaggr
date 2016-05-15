@@ -4,8 +4,7 @@
   (:require [hiccup.element :refer (link-to)]
             [omniconf.core :as config]
             [clojure.java.io :as io]
-            [clojure.tools.logging :as log])
-  (:import (java.io File)))
+            [clojure.tools.logging :as log]))
 
 
 ;;
