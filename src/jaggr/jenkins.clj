@@ -83,7 +83,7 @@
 
 ;; wait until a channel closes and retrieve all its values as a collection,
 ;; timeout when refresh interval is exceeded
-(defn drain-or-timeout [c]
+(defn- drain-or-timeout [c]
   (let [refresh-rate (config/get :refresh-rate)
         [vals _] (alts!!
                    [(into '() c)
