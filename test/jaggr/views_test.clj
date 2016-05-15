@@ -41,10 +41,13 @@
     {#'jenkins/get-failed-jobs
      (fn []
        {:unclaimed   [{:name      "failed-unclaimed-build"
-                       :claimedBy nil :claimed false :reason nil}]
+                       :claimedBy nil :claimed false :reason nil
+                       :last-build-url "/failed-unclaimed-build/"}]
         :claimed     [{:name      "failed-claimed-build-should-be-ignored"
-                       :claimedBy "somebody" :claimed true :reason "a reason"}]
-        :unclaimable [{:name "failed-unclaimable-build-should-be-ignored"}]})}
+                       :claimedBy "somebody" :claimed true :reason "a reason"
+                       :last-build-url "/failed-claimed-build/"}]
+        :unclaimable [{:name "failed-unclaimable-build-should-be-ignored"}
+                      :last-build-url "/failed-unclaimable-build/"]})}
 
     #(-> (session app)
          (visit "/")
@@ -52,6 +55,8 @@
               "The red page should be shown when unclaimed failed builds exist")
          (has (some-text? "failed-unclaimed-build")
               "The name of the unclaimed failed job should be displayed")
+         (has (link? :href "/failed-unclaimed-build/")
+              "A link to the jobs last broken build should exist")
          (has (missing? [:div.yellow])
               "The red page should not show have elements of class 'yellow'")
          (has (missing? [:div.green])
@@ -63,8 +68,10 @@
     {#'jenkins/get-failed-jobs
      (fn []
        {:claimed     [{:name      "failed-claimed-build"
-                       :claimedBy "somebody" :claimed true :reason "a reason"}]
-        :unclaimable [{:name "failed-unclaimable-build-should-be-ignored"}]})}
+                       :claimedBy "somebody" :claimed true :reason "a reason"
+                       :last-build-url "/failed-claimed-build/"}]
+        :unclaimable [{:name "failed-unclaimable-build-should-be-ignored"
+                       :last-build-url "/failed-unclaimable-build/"}]})}
 
     #(-> (session app)
          (visit "/")
@@ -72,6 +79,8 @@
               "The yellow Page should be shown when all failed builds are claimed")
          (has (some-text? "failed-claimed-build")
               "The name of the claimed failed job should by displayed")
+         (has (link? :href "/failed-claimed-build/")
+              "A link to the jobs last broken build should exist")
          (has (some-text? "somebody")
               "The name of the claimer of the failed build should by displayed")
          (has (some-text? "a reason")
@@ -86,7 +95,7 @@
   (with-redefs-fn
     {#'jenkins/get-failed-jobs
      (fn []
-       {:unclaimable [{:name "failed-unclaimable-build"}]})}
+       {:unclaimable [{:name "failed-unclaimable-build" :last-build-url "/failed-unclaimable-build/"}]})}
 
     #(-> (session app)
          (visit "/")
@@ -95,6 +104,8 @@
          (has (some-text? "failed-unclaimable-build")
               "since there are no more claimable (= team-owned) failed builds,
               the other failed jobs should be shown for information)")
+         (has (link? :href "/failed-unclaimable-build/")
+              "A link to the jobs last broken build should exist")
          (has (missing? [:div.red])
               "The green page should not show have elements of class 'red'")
          (has (missing? [:div.yellow])

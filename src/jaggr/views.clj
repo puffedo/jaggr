@@ -1,7 +1,8 @@
 (ns jaggr.views
   (:use [hiccup core page]
         [jaggr.jenkins])
-  (:require [omniconf.core :as config]
+  (:require [hiccup.element :refer (link-to)]
+            [omniconf.core :as config]
             [clojure.java.io :as io]
             [clojure.tools.logging :as log]))
 
@@ -22,7 +23,10 @@
 (defn job-details [job]
   (when job
     [:div.job
-     [:div.job-name (h (:name job))]
+
+     (if-let [l-b-url (:last-build-url job)]
+       (link-to {:class "job-name"} l-b-url (h (:name job)))
+       [:div.job-name (h (:name job))])
      (when (:claimedBy job)
        [:div.job-claimed-by "was heroically claimed by " (h (:claimedBy job))])
      (when (:reason job)
