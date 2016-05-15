@@ -2,7 +2,8 @@
   (:require [org.httpkit.client :as http]
             [clojure.data.json :as json]
             [omniconf.core :as config]
-            [clojure.core.async :refer [>! >!! <! <!! close! go-loop chan into to-chan]]))
+            [clojure.core.async :refer [>! >!! <! <!! alts!! timeout close! go-loop chan into to-chan]])
+  (:import (java.util.concurrent TimeoutException)))
 
 
 ;; calls the Jenkins JSON api for a given url (must end with /),
@@ -56,7 +57,7 @@
 
 
 ;; gets the claim info for a job resource and throws away everything else
-(defn- get-last-build-rsrc [last-build-url]
+(defn- get-claim-info [last-build-url]
   (->>
     (get-from-jenkins last-build-url "tree=actions[claimed,claimedBy,reason]")
     (:actions)
@@ -72,7 +73,7 @@
       (if job-rsrc
         (do
           (->>
-            (get-last-build-rsrc (:last-build-url job-rsrc))
+            (get-claim-info (:last-build-url job-rsrc))
             (merge job-rsrc)
             (>! out))
           (recur (<! job-rsrc-chan)))
@@ -94,4 +95,12 @@
         (true? (:claimed %)) :claimed
         (false? (:claimed %)) :unclaimed
         :else :unclaimable)
-      (<!! (into '() aggregated-job-info-chan)))))
+      (let [refresh-rate (config/get :refresh-rate)
+            [val _]
+            (alts!!
+              [(into '() aggregated-job-info-chan)
+               (timeout (* 1000 refresh-rate))])]
+        (when-not val
+          (throw (TimeoutException.
+                   (str "Did not retrieve anything from the Jenkins API within " refresh-rate " seconds!"))))
+        val))))

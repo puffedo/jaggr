@@ -1,9 +1,11 @@
 (ns jaggr.jenkins-test
   (:use jaggr.jenkins)
   (:use clojure.test)
+  (:require [jaggr.test-util :refer (with-preserved-start-params)])
+  (:require [jaggr.core :refer (init)])
   (:require [org.httpkit.fake :refer (with-fake-http)]
-            [omniconf.core :as config]))
-
+            [omniconf.core :as config])
+  (:import (java.util.concurrent TimeoutException)))
 
 
 ;; test fixtures
@@ -25,23 +27,12 @@
   get-build-response-body-unclaimable
   "{\"actions\":[{}]}")
 
-; set test values for start parameters but restore the old state afterwards
-(defn with-start-params [fn]
-  (let [old-base-url (config/get :base-url)
-        old-user (config/get :user)
-        old-user-token (config/get :user-token)]
-    (config/set :base-url "http://some-base-url/")
-    (config/set :user "some-user")
-    (config/set :user-token "some-token")
-    (fn)
-    (config/set :base-url old-base-url)
-    (config/set :user old-user)
-    (config/set :user-token old-user-token))
-  )
 
-(use-fixtures :once with-start-params)
+(use-fixtures :once with-preserved-start-params)
 
 (deftest jenkins-api-access
+
+  (init '("--base-url" "http://some-base-url/" "--user" "me" "--user-token" "token"))
 
   (testing "The Jenkins JSON api is used to find failed jobs and group them by the claimed-state of their last broken build."
 
@@ -76,7 +67,7 @@
                         (with-fake-http
                           [#"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-claimed]
 
-                          (let [last-build-rsrc (@#'jaggr.jenkins/get-last-build-rsrc last-build-url)]
+                          (let [last-build-rsrc (@#'jaggr.jenkins/get-claim-info last-build-url)]
 
                             (is (not-empty last-build-rsrc))
                             (is (true? (:claimed last-build-rsrc)))
@@ -89,7 +80,7 @@
                           [#"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body
                            #"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-unclaimed]
 
-                          (let [last-build-rsrc (@#'jaggr.jenkins/get-last-build-rsrc last-build-url)]
+                          (let [last-build-rsrc (@#'jaggr.jenkins/get-claim-info last-build-url)]
 
                             (is (not-empty last-build-rsrc))
                             (is (false? (:claimed last-build-rsrc))))))
@@ -100,7 +91,7 @@
                           [#"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body
                            #"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-unclaimable]
 
-                          (let [last-build-rsrc (@#'jaggr.jenkins/get-last-build-rsrc last-build-url)]
+                          (let [last-build-rsrc (@#'jaggr.jenkins/get-claim-info last-build-url)]
 
                             (is (nil? (:claimed last-build-rsrc)))
                             (is (nil? (:claimedBy last-build-rsrc)))
@@ -137,4 +128,17 @@
 
         (is (not-empty (:unclaimable (get-failed-jobs))))
         (is (empty? (:claimed (get-failed-jobs))))
-        (is (empty? (:unclaimed (get-failed-jobs))))))))
+        (is (empty? (:unclaimed (get-failed-jobs))))))
+
+    (testing "If the Jenkins API calls don't finish within one screen refresh interval, an Exception is thrown."
+
+      (with-fake-http
+        [#"http://some-base-url/api/json?.*"
+         (fn [_ _ _] (do (Thread/sleep 1100) get-jobs-response-body))
+         #"http://some-base-url/view/failed-job/api/json?.*"
+         (fn [_ _ _] (do (Thread/sleep 1100) get-job-response-body))
+         #"http://some-base-url/job/failed-job/42/api/json?.*"
+         (fn [_ _ _] (do (Thread/sleep 1100) get-build-response-body-unclaimable))]
+
+        (config/set :refresh-rate 1)
+        (is (thrown? TimeoutException (get-failed-jobs)))))))
