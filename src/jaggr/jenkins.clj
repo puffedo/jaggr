@@ -13,8 +13,12 @@
     (:body
       @(http/get
          (str base-url "api/json?" params)
-         {:basic-auth [(config/get :user) (config/get :user-token)]
-          :keepalive  -1}))
+         ;; send authenticarion header if user name and token are provided
+         (let [user (config/get :user)
+               user-token (config/get :user-token)]
+           (when (and user user-token)
+             {:basic-auth [user user-token]
+              :keepalive  -1}))))
     :key-fn keyword))
 
 

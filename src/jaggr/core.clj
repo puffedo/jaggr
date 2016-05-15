@@ -31,10 +31,10 @@
                      :required    true}
       :user         {:descriptions "A Jenkins user that has access to the base url"
                      :type         :string
-                     :required     true}
+                     :required     false}
       :user-token   {:description "The users access token (see 'Configuration' page in your Jenkins user profile)"
                      :type        :string
-                     :required    true
+                     :required    false
                      :secret      true}
       :refresh-rate {:description "The time between two automatic page reloads in seconds"
                      :type        :number

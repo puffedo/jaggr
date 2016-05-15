@@ -72,8 +72,16 @@ Download the [latest Jaggr release](https://github.com/puffedo/jaggr/releases)
 In the project base directory:
 
 ```sh
-java -jar jaggr-<version>-standalone.jar --user me --user-token asdfghjkl --base-url http://my-ci/jenkins/view/tv/
+java -jar jaggr-<version>-standalone.jar --base-url http://my-jenkins:8081/jenkins/my-project/
 ```
+
+If your Jenkins instance is configured to accept only authenticated clients, add the parameters
+
+```sh
+-- user jenkins-user --user-token ABDCE12345
+```
+
+The user token can be obtained from the Configuration age in your Jankins user profile.
 
 If you don' want to type the config parameters repeatedly, you can also create a
 file named `default.config` (or copy and rename
@@ -90,6 +98,10 @@ and set the parameters there:
 
 Parameters:
 
+* `base-url`
+
+    the url of the page that shows all jobs to be monitored (mandatory)
+
 * `user`
 
     a jenkins user with privileges to see the project's jobs
@@ -98,12 +110,6 @@ Parameters:
 
     the users api-token. It  can be obtained from the jenkins user profile
     configuration page
-
-* `base-url`
-
-    the url of the page that shows all jobs to be monitored
-
-Optional Parameters:
 
 * `port`
 
@@ -126,8 +132,8 @@ Config file parameters override environment variables.
 ### Background images
 
 Background images are automatically loaded from lorempixel.com. You can place
-custom images next to the executable into folders images/red, images/yellow or
-images/green. Images are selected randomly. It works best with grayscale images!
+custom images next to the executable into folders images/red, images/yellow,
+images/green or images/error. Images are selected randomly. It works best with grayscale images!
 
 ## Development
 
@@ -143,8 +149,8 @@ images/green. Images are selected randomly. It works best with grayscale images!
 
 ### Run in DEV mode
 
-Set environment variables for `USER`, `USER_TOKEN` and `BASE_URL` or provide a
-`default.config` file (see above)
+Set environment variable `BASE_URL` (and `USER` and `USER_TOKEN` if required)
+or provide a `default.config` file (see above)
 
 Build and start the server with leiningen:
 
