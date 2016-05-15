@@ -75,7 +75,8 @@ In the project base directory:
 java -jar jaggr-<version>-standalone.jar --base-url http://my-jenkins:8081/jenkins/my-project/
 ```
 
-If your Jenkins instance is configured to accept only authenticated clients, add the parameters
+If your Jenkins instance is configured to accept only authenticated clients,
+add the parameters
 
 ```sh
 -- user jenkins-user --user-token ABDCE12345
@@ -133,7 +134,8 @@ Config file parameters override environment variables.
 
 Background images are automatically loaded from lorempixel.com. You can place
 custom images next to the executable into folders images/red, images/yellow,
-images/green or images/error. Images are selected randomly. It works best with grayscale images!
+images/green or images/error. Images are selected randomly. It works best
+with grayscale images!
 
 ## Development
 
