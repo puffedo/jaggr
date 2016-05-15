@@ -81,26 +81,30 @@
     out))
 
 
+;; wait until a channel closes and retrieve all its values as a collection,
+;; timeout when refresh interval is exceeded
+(defn drain-or-timeout [c]
+  (let [refresh-rate (config/get :refresh-rate)
+        [vals _] (alts!!
+                   [(into '() c)
+                    (timeout (* 1000 refresh-rate))])]
+    (when-not vals
+      (throw (TimeoutException.
+               (str "Did not retrieve anything from the Jenkins API within " refresh-rate " seconds!"))))
+    vals))
+
+
 (defn get-failed-jobs []
   "fetches all failed jobs from jenkins and returns a map that devides them in three classes:
    :claimed, :unclaimed and :unclaimable. For each job of each class, a map is returned with
    :name, :claimed, :claimedBy and :reason"
-  (let [aggregated-job-info-chan
-        (-> (get-failed-jobs-rsrc)
-            (to-chan)
-            (add-last-build-url-chan)
-            (add-claim-info-chan))]
-    (group-by
-      #(cond
-        (true? (:claimed %)) :claimed
-        (false? (:claimed %)) :unclaimed
-        :else :unclaimable)
-      (let [refresh-rate (config/get :refresh-rate)
-            [val _]
-            (alts!!
-              [(into '() aggregated-job-info-chan)
-               (timeout (* 1000 refresh-rate))])]
-        (when-not val
-          (throw (TimeoutException.
-                   (str "Did not retrieve anything from the Jenkins API within " refresh-rate " seconds!"))))
-        val))))
+  (->> (get-failed-jobs-rsrc)
+       (to-chan)
+       (add-last-build-url-chan)
+       (add-claim-info-chan)
+       (drain-or-timeout)
+       (group-by
+         #(cond
+           (true? (:claimed %)) :claimed
+           (false? (:claimed %)) :unclaimed
+           :else :unclaimable))))
