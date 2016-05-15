@@ -99,9 +99,8 @@
 ;; or doesn't exist. The file type is not checked, so no non-image files should be in
 ;; the directory
 (defn- random-image-from [dir]
-  (if-let [files (.listFiles (io/file dir))]
-    (io/file (rand-nth files))
-    nil))
+  (when-let [files (.listFiles (io/file dir))]
+    (io/file (rand-nth files))))
 
 ;; returns an http response that contains an image from the provided directory or
 ;; redirects to an image service if not such file exists
