@@ -4,7 +4,8 @@
   (:require [hiccup.element :refer (link-to)]
             [omniconf.core :as config]
             [clojure.java.io :as io]
-            [clojure.tools.logging :as log]))
+            [clojure.tools.logging :as log])
+  (:import (java.io File)))
 
 
 ;;
@@ -103,8 +104,13 @@
 ;; or doesn't exist. The file type is not checked, so no non-image files should be in
 ;; the directory
 (defn- random-image-from [dir]
-  (when-let [files (.listFiles (io/file dir))]
-    (io/file (rand-nth files))))
+  (let
+    [img-files (->> dir
+                    (io/file)
+                    (file-seq)
+                    (filter #(not (.isDirectory %1)))
+                    (filter #(re-find #"([^\s]+(\.(?i)(jpg|png|gif|bmp))$)" (.getPath %1))))]
+    (when (not-empty img-files) (rand-nth img-files))))
 
 ;; returns an http response that contains an image from the provided directory or
 ;; redirects to an image service if not such file exists
