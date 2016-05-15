@@ -5,17 +5,16 @@
     [jaggr.core :refer [app]]
     [kerodon.core :refer :all]
     [kerodon.test :refer :all]
-    [kerodon.impl :refer [get-attr]]
-    [jaggr.jenkins :as jenkins]))
+    [jaggr.jenkins :as jenkins]
+    [net.cgrand.enlive-html :as enlive]))
 
 
-;; a custom kerodon matcher - verifies that an attribute value contains a given substring
-;; see https://semaphoreci.com/community/tutorials/how-to-write-a-custom-kerodon-matcher
-(defmacro attr-contains? [selector attr expected]
-  `(validate .contains
-             #(get-attr % ~selector ~attr)
-             ~expected
-             (~'attr-contains? ~selector ~attr ~expected)))
+;; convenience macro that is, for some reason, not provided by kerodon
+(defmacro element? [selector]
+  `(validate >
+             #(count (enlive/select (:enlive %) ~selector))
+             0
+             (~'element? ~selector)))
 
 
 (deftest display-error-page-when-exception-is-thrown
@@ -23,7 +22,7 @@
     {#'jenkins/get-failed-jobs (fn [] (throw (.Exception "An exception")))}
     #(-> (session app)
          (visit "/")
-         (has (attr-contains? [:div.error] :class "error")
+         (has (element? [:div.error])
               "The error page should have an element of class 'error'")
          (has (missing? [:div.red])
               "The error page should not show the status 'red' -
@@ -40,18 +39,18 @@
   (with-redefs-fn
     {#'jenkins/get-failed-jobs
      (fn []
-       {:unclaimed   [{:name      "failed-unclaimed-build"
-                       :claimedBy nil :claimed false :reason nil
+       {:unclaimed   [{:name           "failed-unclaimed-build"
+                       :claimedBy      nil :claimed false :reason nil
                        :last-build-url "/failed-unclaimed-build/"}]
-        :claimed     [{:name      "failed-claimed-build-should-be-ignored"
-                       :claimedBy "somebody" :claimed true :reason "a reason"
+        :claimed     [{:name           "failed-claimed-build-should-be-ignored"
+                       :claimedBy      "somebody" :claimed true :reason "a reason"
                        :last-build-url "/failed-claimed-build/"}]
-        :unclaimable [{:name "failed-unclaimable-build-should-be-ignored"}
-                      :last-build-url "/failed-unclaimable-build/"]})}
+        :unclaimable [{:name           "failed-unclaimable-build-should-be-ignored"
+                       :last-build-url "/failed-unclaimable-build/"}]})}
 
     #(-> (session app)
          (visit "/")
-         (has (attr-contains? [:div.red] :class "red")
+         (has (element? [:div.red])
               "The red page should be shown when unclaimed failed builds exist")
          (has (some-text? "failed-unclaimed-build")
               "The name of the unclaimed failed job should be displayed")
@@ -67,15 +66,15 @@
   (with-redefs-fn
     {#'jenkins/get-failed-jobs
      (fn []
-       {:claimed     [{:name      "failed-claimed-build"
-                       :claimedBy "somebody" :claimed true :reason "a reason"
+       {:claimed     [{:name           "failed-claimed-build"
+                       :claimedBy      "somebody" :claimed true :reason "a reason"
                        :last-build-url "/failed-claimed-build/"}]
-        :unclaimable [{:name "failed-unclaimable-build-should-be-ignored"
+        :unclaimable [{:name           "failed-unclaimable-build-should-be-ignored"
                        :last-build-url "/failed-unclaimable-build/"}]})}
 
     #(-> (session app)
          (visit "/")
-         (has (attr-contains? [:div.yellow] :class "yellow")
+         (has (element? [:div.yellow])
               "The yellow Page should be shown when all failed builds are claimed")
          (has (some-text? "failed-claimed-build")
               "The name of the claimed failed job should by displayed")
@@ -95,11 +94,12 @@
   (with-redefs-fn
     {#'jenkins/get-failed-jobs
      (fn []
-       {:unclaimable [{:name "failed-unclaimable-build" :last-build-url "/failed-unclaimable-build/"}]})}
+       {:unclaimable [{:name           "failed-unclaimable-build"
+                       :last-build-url "/failed-unclaimable-build/"}]})}
 
     #(-> (session app)
          (visit "/")
-         (has (attr-contains? [:div.green] :class "green")
+         (has (element? [:div.green])
               "The green page should be shown when no claimable failed jobs exist")
          (has (some-text? "failed-unclaimable-build")
               "since there are no more claimable (= team-owned) failed builds,
@@ -125,6 +125,7 @@
            (visit "/background-image-red")
            (has (status? 200)
                 "The red image page is found")
+           ; we use text as a placeholder for the image, since there is no "image?" matcher
            (has (some-text? image-placeholder)
                 "The body contains the provided image")))))
 
