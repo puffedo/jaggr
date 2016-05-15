@@ -32,7 +32,7 @@
 
 (deftest jenkins-api-access
 
-  (init '("--base-url" "http://some-base-url/" "--user" "me" "--user-token" "token"))
+  (init '("--base-url" "http://some-base-url/"))
 
   (testing "The Jenkins JSON api is used to find failed jobs and group them by the claimed-state of their last broken build."
 

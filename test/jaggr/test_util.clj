@@ -1,8 +1,13 @@
 (ns jaggr.test-util
   (:require [omniconf.core :as config]))
 
-;; makes sure that tests that modify mandatory start parameters leave no side effects behind
-(defn with-preserved-start-params [fn]
+(defn with-preserved-start-params
+  "A test wrapper that allows tests to modify start parameters
+   by restoring the old parameters after the test is finished.
+   Please note that it is often better to set the parameters with
+   the jaggr.core/init function instead of omniconf.core/set, because
+   init sets default values for some mandatory parameters."
+  [fn]
   (let [old-base-url (config/get :base-url)
         old-user (config/get :user)
         old-user-token (config/get :user-token)

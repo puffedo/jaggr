@@ -88,7 +88,7 @@
           [:div.fullscreen.error
            [:h1 "SOMETHING IS WRONG HERE"]
            [:div.subtext "is Jenkins accessible? - wrong parameters? - network problems?"]
-           [:div "I tried to access " (config/get :base-url) " with user " (config/get :user)]
+           [:div "I tried to access " (config/get :base-url)]
            [:div "trying again every " (config/get :refresh-rate) " seconds"]]]]))))
 
 
@@ -96,9 +96,8 @@
 ;; background image handling
 ;;
 
-;; returns a random file from the provided directory or nil if the directory is empty
-;; or doesn't exist. The file type is not checked, so no non-image files should be in
-;; the directory
+;; returns a random image file from the provided directory or nil if the directory is empty,
+;; contains no images or doesn't exist.
 (defn- random-image-from [dir]
   (let
     [img-files (->> dir

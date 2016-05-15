@@ -10,19 +10,23 @@
             [omniconf.core :as config])
   (:gen-class :main true))
 
+
 ;; removes query and fragment from a url string
 ;; ensures, it ends swith a slash
 (defn- normalize-url-string [url]
   (let [pure-url
-        (str
-          (normalize url {:remove-query?    true
-                          :remove-fragment? true}))]
+        (str (normalize url {:remove-query?    true
+                             :remove-fragment? true}))]
     (if (.endsWith pure-url "/")
       pure-url
       (str pure-url "/"))))
 
 
 (defn init
+  "Initializes the start parameters, that can be either configured via
+  command line, environment parameters or a config file. Command line
+  parameters override file parameters, file parameters override environment
+  parameters."
   ([] (init []))
   ([args]
    (config/define
@@ -65,11 +69,13 @@
            (route/resources "/")
            (route/not-found "Page not found"))
 
+
 (def app
   "This is the entry point for the application when
   started via lein ring server"
   (-> (handler/site main-routes)
       (wrap-base-url)))
+
 
 (defn -main
   "This is the main entry point for the application when

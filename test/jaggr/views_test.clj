@@ -199,4 +199,3 @@
          (visit "/background-image-error")
          (has (status? 302)
               "redirect to image service when no error image is provided"))))
-
