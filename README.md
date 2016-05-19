@@ -89,7 +89,7 @@ file named `default.config` (or copy and rename
 [example.config](https://github.com/puffedo/jaggr/blob/master/example.config) )
 and set the parameters there:
 
-```
+```clojure
 {
    :user        "my-user"
    :user-token  "xyzabcdef"
