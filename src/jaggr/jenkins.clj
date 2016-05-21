@@ -48,7 +48,8 @@
     [:lastBuild :url]))
 
 
-;; gets the url of the last build from jenkins for a given job-REST-resource
+;; reads from a channel with job REST resources,
+;; add the url of the last build to each job and returns it on a channel
 (defn- add-last-build-url-chan [job-rsrc-chan]
   (let [out (chan)]
     (go-loop [job-rsrc (<! job-rsrc-chan)]
@@ -69,8 +70,10 @@
     (first)))
 
 
+;; reads from a channel with job REST resources,
+;; each job resource must have a :last-build-url
 ;; adds information on it's last build's claim state to a job resource
-;; the job resource must have a :last-build-url
+;; returns the enriched job resources on a channel
 (defn- add-claim-info-chan [job-rsrc-chan]
   (let [out (chan)]
     (go-loop [job-rsrc (<! job-rsrc-chan)]
@@ -85,8 +88,8 @@
     out))
 
 
-;; wait until a channel closes and retrieve all its values as a collection,
-;; timeout when refresh interval is exceeded
+;; waits until a channel closes and retrieve all its values as a collection,
+;; throws an exception when the refresh interval is exceeded
 (defn- drain-or-timeout [c]
   (let [refresh-rate (config/get :refresh-rate)
         [vals _] (alts!!
@@ -101,7 +104,8 @@
 (defn get-failed-jobs []
   "fetches all failed jobs from jenkins and returns a map that devides them in three classes:
    :claimed, :unclaimed and :unclaimable. For each job of each class, a map is returned with
-   :name, :claimed, :claimedBy and :reason"
+   :name, :last-build-url, :claimed, :claimedBy and :reason
+   throws an exception when the refresh rate is exceeded before all jobs have been processed."
   (->> (get-failed-jobs-rsrc)
        (to-chan)
        (add-last-build-url-chan)
