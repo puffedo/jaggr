@@ -91,22 +91,27 @@ and set the parameters there:
 
 ```clojure
 {
-   :user        "my-user"
-   :user-token  "xyzabcdef"
-   :base-url    "http://my-jenkins:8081/jenkins/my-project/"
+   :user             "my-user"
+   :user-token       "xyzabcdef"
+   :base-url         "http://my-jenkins:8081/jenkins/my-project/"
+   :image-url-red    "http://johnjohnston.info/oddsandends/ds106gif"
+   :image-url-green  "http://thecatapi.com/api/images/get?format=src&type=gif"
 }
 ```
 
 Parameters:
 
 ```
---base-url     - The Jenkins URL that shows all jobs to monitor. Required.
---user         - A Jenkins user that has access to the base url.
---user-token   - The users access token (see 'Configuration' page in your Jenkins user profile).
---config-file  - A file containing config parameters. Default: default.config
---image-url    - A URL that serves a background image (unless a more specific one can be found in the file system). Default: http://lorempixel.com/g/400/200
---port         - The port. Default: 3000
---refresh-rate - The time between two automatic page reloads in seconds. Default: 60
+--user             - A Jenkins user that has access to the base url.
+--user-token       - The users access token (see 'Configuration' page in your Jenkins user profile).```
+--config-file      - A file containing config parameters. Default: default.config
+--image-url        - A URL that serves a background image (unless a more specific one can be found in the file system). Default: http://lorempixel.com/g/400/200
+--image-url-red    - A URL that serves a background image for red screens. Overrides the image-url parameter.).
+--image-url-yellow - A URL that serves a background image for yellow screens. Overrides the image-url parameter.).
+--image-url-green  - A URL that serves a background image for green screens. Overrides the image-url parameter.).
+--image-url-error  - A URL that serves a background image for error screens. Overrides the image-url parameter.).
+--port             - The port. Default: 3000
+--refresh-rate     - The time between two automatic page reloads in seconds. Default: 60
 ```
 
 All parameters can also be specified as environment variables (`USER`,

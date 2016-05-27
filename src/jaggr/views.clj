@@ -108,30 +108,31 @@
     (when (not-empty img-files) (rand-nth img-files))))
 
 ;; returns an http response that contains an image from the provided directory or
-;; redirects to an image service if not such file exists
-(defn- image-from [dir]
+;; redirects to an image service if not such file exists. The image service url
+;; can be provided or left empty, so a fallback service is used
+(defn- image-from [dir url]
   (if-let [image (random-image-from dir)]
     ;; file exists
     {:status 200
      :body   image}
     ;; no file is found
     {:status  302
-     :headers {"Location" (config/get :image-url)}
+     :headers {"Location" (or url (config/get :image-url))}
      :body    ""}))
 
 (defn background-image-red []
   "returns an http response that contains a background image for red screens"
-  (image-from "images/red/"))
+  (image-from "images/red/" (config/get :image-url-red)))
 
 (defn background-image-yellow []
   "returns an http response that contains a background image for yellow screens"
-  (image-from "images/yellow/"))
+  (image-from "images/yellow/" (config/get :image-url-yellow)))
 
 (defn background-image-green []
   "returns an http response that contains a background image for green screens"
-  (image-from "images/green/"))
+  (image-from "images/green/" (config/get :image-url-green)))
 
 (defn background-image-error []
   "returns an http response that contains a background image for error screens"
-  (image-from "images/error/"))
+  (image-from "images/error/" (config/get :image-url-error)))
 
