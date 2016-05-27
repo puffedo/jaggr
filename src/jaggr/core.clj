@@ -33,7 +33,7 @@
      {:base-url     {:description "The Jenkins URL that shows all jobs to monitor"
                      :parser      normalize-url-string
                      :required    true}
-      :user         {:descriptions "A Jenkins user that has access to the base url"
+      :user         {:description "A Jenkins user that has access to the base url"
                      :type         :string
                      :required     false}
       :user-token   {:description "The users access token (see 'Configuration' page in your Jenkins user profile)"
@@ -48,7 +48,11 @@
                      :default     3000}
       :config-file  {:description "A file containing config parameters"
                      :type        :string
-                     :default     "default.config"}})
+                     :default     "default.config"}
+      :image-url    {:description "A URL that serves a background image (unless a more specific one can be found in the file system)"
+                     :type        :string
+                     :default     "http://lorempixel.com/g/400/200"}})
+
 
    (config/populate-from-env)
     ; read cmd line paramaterss, so a user can specify the config-file parameter

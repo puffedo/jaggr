@@ -99,30 +99,15 @@ and set the parameters there:
 
 Parameters:
 
-* `base-url`
-
-    the url of the page that shows all jobs to be monitored (mandatory)
-
-* `user`
-
-    a jenkins user with privileges to see the project's jobs
-
-* `user-token`
-
-    the users api-token. It  can be obtained from the jenkins user profile
-    configuration page
-
-* `port`
-
-    defaults to 3000
-
-* `refresh-rate`
-
-    defaults to 60s
-
-* `config-file`
-
-    location and name of the config file (default: `./default.config`)
+```clojure
+--base-url     - The Jenkins URL that shows all jobs to monitor. Required.
+--user         - A Jenkins user that has access to the base url.
+--user-token   - The users access token (see 'Configuration' page in your Jenkins user profile).
+--config-file  - A file containing config parameters. Default: default.config
+--image-url    - A URL that serves a background image (unless a more specific one can be found in the file system). Default: http://lorempixel.com/g/400/200
+--port         - The port. Default: 3000
+--refresh-rate - The time between two automatic page reloads in seconds. Default: 60
+```
 
 All parameters can also be specified as environment variables (`USER`,
 `USER_TOKEN`, `BASE_URL`, ...)

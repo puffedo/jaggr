@@ -116,7 +116,7 @@
      :body   image}
     ;; no file is found
     {:status  302
-     :headers {"Location" "http://lorempixel.com/g/400/200"}
+     :headers {"Location" (config/get :image-url)}
      :body    ""}))
 
 (defn background-image-red []
