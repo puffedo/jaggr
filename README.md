@@ -94,8 +94,6 @@ and set the parameters there:
    :user             "my-user"
    :user-token       "xyzabcdef"
    :base-url         "http://my-jenkins:8081/jenkins/my-project/"
-   :image-url-red    "http://johnjohnston.info/oddsandends/ds106gif"
-   :image-url-green  "http://thecatapi.com/api/images/get?format=src&type=gif"
 }
 ```
 
