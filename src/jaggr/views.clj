@@ -104,7 +104,7 @@
                     (io/file)
                     (file-seq)
                     (filter #(not (.isDirectory %1)))
-                    (filter #(re-find #"([^\s]+(\.(?i)(jpg|png|gif|bmp))$)" (.getPath %1))))]
+                    (filter #(re-find #"([^\s]+(\.(?i)(jpg|jpeg|png|gif|bmp))$)" (.getPath %1))))]
     (when (not-empty img-files) (rand-nth img-files))))
 
 ;; returns an http response that contains an image from the provided directory or
