@@ -10,6 +10,9 @@ engines:
   markdownlint:
     enabled: true
     checks:
+      # disable a check that limits line length - I don't want to insert line breake in code snippets
+      MD013:
+        enabled: false
       # disable a check that disallows using punctation in headers - "Why?" should be a legtimate header
       MD026:
         enabled: false
