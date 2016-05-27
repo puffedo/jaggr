@@ -99,7 +99,7 @@ and set the parameters there:
 
 Parameters:
 
-```clojure
+```
 --base-url     - The Jenkins URL that shows all jobs to monitor. Required.
 --user         - A Jenkins user that has access to the base url.
 --user-token   - The users access token (see 'Configuration' page in your Jenkins user profile).
