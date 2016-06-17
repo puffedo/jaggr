@@ -28,7 +28,7 @@
 
 (defn fullscreen-body [& content]
   [:body
-   [:img#logo {:src "/img/jaggr-logo.png"}]
+   (link-to "/config" [:img#logo {:src "/img/jaggr-logo.png"}])
    [:div.fullscreen content]])
 
 
