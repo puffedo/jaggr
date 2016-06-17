@@ -37,15 +37,15 @@
 ;;
 
 (def config-form
-  {:fields      [{:name :base-url :label "Jenkins Base URL"}
-                 {:name :user :label "User name"}
-                 {:name :user-token :label "User-Token" :type :password}
+  {:fields      [{:name :base-url :label "Jenkins Base URL" :blank-nil true}
+                 {:name :user :label "User name" :blank-nil true}
+                 {:name :user-token :label "User-Token" :type :password :blank-nil true}
                  {:name :refresh-rate :label "Refresh rate (in seconds)" :datatype :int}
-                 {:name :image-url :label "Default URL for background images"}
-                 {:name :image-url-red :label "URL for red page background image"}
-                 {:name :image-url-yellow :label "URL for yellow page background image"}
-                 {:name :image-url-green :label "URL for green page background image"}
-                 {:name :image-url-error :label "URL for error page background image"}]
+                 {:name :image-url :label "Default URL for background images" :blank-nil true}
+                 {:name :image-url-red :label "URL for red page background image" :blank-nil true}
+                 {:name :image-url-yellow :label "URL for yellow page background image" :blank-nil true}
+                 {:name :image-url-green :label "URL for green page background image" :blank-nil true}
+                 {:name :image-url-error :label "URL for error page background image":blank-nil true}]
    :validations [[:required [:base-url]]
                  [:url [:base-url :image-url :image-url-red :image-url-yellow
                         :image-url-green :image-url-error]]
