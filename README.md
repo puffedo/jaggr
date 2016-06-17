@@ -72,17 +72,23 @@ Download the [latest Jaggr release](https://github.com/puffedo/jaggr/releases)
 In the project base directory:
 
 ```sh
-java -jar jaggr-<version>-standalone.jar --base-url http://my-jenkins:8081/jenkins/my-project/
+java -jar jaggr-<version>-standalone.jar
 ```
 
+In your browser, go to <http://localhost:3000/config> and provide a Jenkins URL.
 If your Jenkins instance is configured to accept only authenticated clients,
-add the parameters
+also provide a user name and a user token. The user token can be obtained
+from the Configuration page in your Jenkins user profile.
+
+
+#### Configuration options
+
+You can configure Jaggr with command line parameters:
 
 ```sh
--- user jenkins-user --user-token ABDCE12345
+java -jar jaggr-<version>-standalone.jar --base-url http://my-jenkins:8081/jenkins/my-project/ -- user jenkins-user --user-token ABDCE12345
 ```
 
-The user token can be obtained from the Configuration page in your Jenkins user profile.
 
 If you don't want to type the config parameters repeatedly, you can also create a
 file named `default.config` (or copy and rename
@@ -100,16 +106,17 @@ and set the parameters there:
 Parameters:
 
 ```
+--base-url         - The Jenkins URL that shows all jobs to monitor. Required.
 --user             - A Jenkins user that has access to the base url.
---user-token       - The users access token (see 'Configuration' page in your Jenkins user profile).```
+--user-token       - The users access token (see 'Configuration' page in your Jenkins user profile).
 --config-file      - A file containing config parameters. Default: default.config
---image-url        - A URL that serves a background image (unless a more specific one can be found in the file system). Default: http://lorempixel.com/g/400/200
---image-url-red    - A URL that serves a background image for red screens. Overrides the image-url parameter.).
---image-url-yellow - A URL that serves a background image for yellow screens. Overrides the image-url parameter.).
---image-url-green  - A URL that serves a background image for green screens. Overrides the image-url parameter.).
---image-url-error  - A URL that serves a background image for error screens. Overrides the image-url parameter.).
 --port             - The port. Default: 3000
 --refresh-rate     - The time between two automatic page reloads in seconds. Default: 60
+--image-url        - A URL that serves a background image (unless a more specific one can be found in the file system). Default: http://lorempixel.com/g/400/200
+--image-url-error  - A URL that serves a background image for error screens. Overrides the image-url parameter.).
+--image-url-green  - A URL that serves a background image for green screens. Overrides the image-url parameter.).
+--image-url-red    - A URL that serves a background image for red screens. Overrides the image-url parameter.).
+--image-url-yellow - A URL that serves a background image for yellow screens. Overrides the image-url parameter.).
 ```
 
 All parameters can also be specified as environment variables (`USER`,
@@ -118,12 +125,14 @@ All parameters can also be specified as environment variables (`USER`,
 Parameters specified via the command line override config file parameters.
 Config file parameters override environment variables.
 
-### Background images
+#### Background images
 
-Background images are automatically loaded from lorempixel.com. You can place
-custom images next to the executable into folders images/red, images/yellow,
-images/green or images/error. Images are selected randomly. It works best
-with grayscale images!
+Background images are automatically loaded from <https://lorempixel.com>. Other URLs can
+be configured - either globally or for spefific pages (red, yellow, green, error).
+
+You can also provide custom images by putting them in the file system next to the
+executable into folders images/red, images/yellow, images/green or images/error.
+Images are selected randomly.
 
 ## Development
 
