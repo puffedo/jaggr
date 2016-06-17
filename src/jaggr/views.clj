@@ -49,6 +49,7 @@
    :validations [[:required [:base-url]]
                  [:url [:base-url :image-url :image-url-red :image-url-yellow
                         :image-url-green :image-url-error]]
+                 [:matches #".*/$" [:base-url] "must end with a slash '/'"]
                  [:min-val 10 [:refresh-rate]]]})
 
 
