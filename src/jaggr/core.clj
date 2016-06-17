@@ -73,11 +73,13 @@
      (config/populate-from-file (config/get :config-file)))
     ; re-apply cmd line parameters to override parameters from config-file
    (config/populate-from-cmd args)
-   (config/verify :quit-on-error true)))
+   (config/verify :quit-on-error false)))
 
 
 (defroutes main-routes
            (GET "/" [] (index-page))
+           (GET "/config" [] (config-page))
+           (POST "/config" [& params] (submit-config-form params))
            (GET "/background-image-red" [] (background-image-red))
            (GET "/background-image-yellow" [] (background-image-yellow))
            (GET "/background-image-green" [] (background-image-green))

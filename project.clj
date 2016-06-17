@@ -17,6 +17,7 @@
                  [ring/ring-jetty-adapter "1.5.0"]
                  [compojure "1.5.0"]
                  [hiccup "1.0.5"]
+                 [formative "0.8.8"]
                  [http-kit "2.1.19"]
                  [org.clojure/data.json "0.2.6"]
                  [com.grammarly/omniconf "0.2.2"]

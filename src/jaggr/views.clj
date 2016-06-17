@@ -2,14 +2,14 @@
   (:use [hiccup core page]
         [jaggr.jenkins])
   (:require [hiccup.element :refer (link-to)]
+            [formative.core :as f]
+            [formative.parse :as fp]
             [omniconf.core :as config]
             [clojure.java.io :as io]
             [clojure.tools.logging :as log]))
 
 
-;;
-;; index page
-;;
+
 
 (defn header []
   [:head
@@ -19,6 +19,59 @@
    (include-css "https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic")
    [:link {:rel "shortcut icon" :href "img/favicon.ico"}]])
 
+;;
+;; config page
+;;
+
+(def config-form
+  {:fields      [{:name :base-url :label "Jenkins Base URL"}
+                 {:name :user :label "User name"}
+                 {:name :user-token :label "User-Token" :type :password}
+                 {:name :refresh-rate :label "Refresh rate (in seconds)" :datatype :int}
+                 {:name :image-url :label "Default URL for background images"}
+                 {:name :image-url-red :label "URL for red page background image"}
+                 {:name :image-url-yellow :label "URL for yellow page background image"}
+                 {:name :image-url-green :label "URL for green page background image"}
+                 {:name :image-url-error :label "URL for error page background image"}]
+   :validations [[:required [:base-url]]
+                 [:url [:base-url :image-url :image-url-red :image-url-yellow
+                        :image-url-green :image-url-error]]
+                 [:min-val 10 [:refresh-rate]]]})
+
+
+(defn config-page [& {:keys [problems]}]
+  (html5
+    (header)
+    [:body
+     [:img#logo {:src "/img/jaggr-logo.png"}]
+     [:div.fullscreen
+      [:img {:src "/background-image-error"}]
+      [:div.fullscreen.error
+       [:h1 "WHERE IS MY JENKINS?"]
+       [:div.subtext "please provide some configuration parameters"]
+       (f/render-form (assoc config-form
+                        :values (config/get)
+                        :problems problems))]]]))
+
+(defn submit-config-form [params]
+  (fp/with-fallback
+    #(config-page :problems %)
+    (let [p (fp/parse-params config-form params)]
+      (doseq [[k v] p] (config/set k v))
+      (try
+        (config/verify :quit-on-error false)
+        {:status  302
+         :headers {"Location" "/"}
+         :body    ""}
+        (catch Exception _
+          {:status  302
+           :headers {"Location" "/config"}
+           :body    ""})))))
+
+
+;;
+;; index page
+;;
 
 (defn job-details [job]
   (when job
@@ -89,7 +142,9 @@
            [:h1 "SOMETHING IS WRONG HERE"]
            [:div.subtext "is Jenkins accessible? - wrong parameters? - network problems?"]
            [:div "I tried to access " (config/get :base-url)]
-           [:div "trying again every " (config/get :refresh-rate) " seconds"]]]]))))
+           [:div "trying again every " (config/get :refresh-rate) " seconds"]
+           [:br]
+           (link-to {:class "config-link"} "/config" "Change configuration parameters")]]]))))
 
 
 ;;
