@@ -9,15 +9,28 @@
             [clojure.tools.logging :as log]))
 
 
+;;
+;; common page elements
+;;
 
-
-(defn header []
+(defn header [& {:keys [meta-tag]}]
   [:head
-   [:meta {:http-equiv "refresh" :content (str (config/get :refresh-rate))}]
    [:title "JAGGR"]
    (include-css "/css/style.css")
    (include-css "https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic")
-   [:link {:rel "shortcut icon" :href "img/favicon.ico"}]])
+   [:link {:rel "shortcut icon" :href "img/favicon.ico"}]
+   (when meta-tag meta-tag)])
+
+
+(defn reload-header []
+  (header :meta-tag [:meta {:http-equiv "refresh" :content (str (config/get :refresh-rate))}]))
+
+
+(defn fullscreen-body [& content]
+  [:body
+   [:img#logo {:src "/img/jaggr-logo.png"}]
+   [:div.fullscreen content]])
+
 
 ;;
 ;; config page
@@ -42,16 +55,14 @@
 (defn config-page [& {:keys [problems]}]
   (html5
     (header)
-    [:body
-     [:img#logo {:src "/img/jaggr-logo.png"}]
-     [:div.fullscreen
+    (fullscreen-body
       [:img {:src "/background-image-error"}]
       [:div.fullscreen.error
        [:h1 "WHERE IS MY JENKINS?"]
        [:div.subtext "please provide some configuration parameters"]
        (f/render-form (assoc config-form
                         :values (config/get)
-                        :problems problems))]]]))
+                        :problems problems))])))
 
 (defn submit-config-form [params]
   (fp/with-fallback
@@ -93,9 +104,8 @@
   (try
     (let [failed-jobs (get-failed-jobs)]
       (html5
-        (header)
-        [:body
-         [:img#logo {:src "/img/jaggr-logo.png"}]
+        (reload-header)
+        (fullscreen-body
          (cond
            (not-empty (:unclaimed failed-jobs))
            [:div.fullscreen
@@ -128,14 +138,13 @@
             [:img {:src "/background-image-green"}]
             [:div.fullscreen.green
              [:h1 "HOORAY!"]
-             [:div.subtext "all builds are green! - better go home now..."]]])]))
+             [:div.subtext "all builds are green! - better go home now..."]]]))))
 
     (catch Exception e
       (log/error e "Something is wrong here!")
       (html5
-        (header)
-        [:body
-         [:img#logo {:src "/img/jaggr-logo.png"}]
+        (reload-header)
+        (fullscreen-body
          [:div.fullscreen
           [:img {:src "/background-image-error"}]
           [:div.fullscreen.error
@@ -144,7 +153,7 @@
            [:div "I tried to access " (config/get :base-url)]
            [:div "trying again every " (config/get :refresh-rate) " seconds"]
            [:br]
-           (link-to {:class "config-link"} "/config" "Change configuration parameters")]]]))))
+           (link-to {:class "config-link"} "/config" "Change configuration parameters")]])))))
 
 
 ;;
