@@ -99,3 +99,25 @@ h1 {
    font-size: 2vw;
    font-weight: bold;
 }
+
+fieldset {
+   border: none;
+}
+
+input {
+    background-color: #888888;
+    background-color: rgba(250,250,250,.3);
+    color: white;
+    width: 30%;
+    border: none;
+    border-radius: 3px;
+    text-align: center;
+}
+
+input.btn {
+    color: inherit;
+    text-decoration: none;
+    font-size: 2vw;
+    font-weight: bold;
+    background: none;
+}
