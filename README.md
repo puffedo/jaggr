@@ -80,7 +80,6 @@ If your Jenkins instance is configured to accept only authenticated clients,
 also provide a user name and a user token. The user token can be obtained
 from the Configuration page in your Jenkins user profile.
 
-
 #### Configuration options
 
 You can configure Jaggr with command line parameters:
@@ -88,7 +87,6 @@ You can configure Jaggr with command line parameters:
 ```sh
 java -jar jaggr-<version>-standalone.jar --base-url http://my-jenkins:8081/jenkins/my-project/ -- user jenkins-user --user-token ABDCE12345
 ```
-
 
 If you don't want to type the config parameters repeatedly, you can also create a
 file named `default.config` (or copy and rename
