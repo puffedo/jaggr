@@ -104,6 +104,14 @@ fieldset {
    border: none;
 }
 
+.control-label {
+    font-size: 8pt;
+}
+
+.label-shell {
+    padding-top: 10px;
+}
+
 input {
     background-color: #888888;
     background-color: rgba(250,250,250,.3);
@@ -120,4 +128,5 @@ input.btn {
     font-size: 2vw;
     font-weight: bold;
     background: none;
+    padding-top: 10px;
 }
