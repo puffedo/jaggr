@@ -15,7 +15,7 @@
                  [org.clojure/core.async "0.2.385"]
                  [ring/ring-core "1.5.0"]
                  [ring/ring-jetty-adapter "1.5.0"]
-                 [compojure "1.5.0"]
+                 [compojure "1.5.1"]
                  [hiccup "1.0.5"]
                  [formative "0.8.8"]
                  [http-kit "2.1.19"]
