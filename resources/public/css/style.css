@@ -1,132 +1,141 @@
-html, body {
-
-   -webkit-background-size: cover;
-   -moz-background-size: cover;
-   -o-background-size: cover;
-   background-size: cover;
-
-   color: #ffffff;
-   font-family: 'Open Sans', sans-serif;
-   width: 100%;
-   height: 100%;
-   margin: 0;
-   padding: 0;
-   border: none;
-   position: absolute;
+html,
+body {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  color: #ffffff;
+  font-family: 'Open Sans', sans-serif;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  position: absolute;
 }
 
 #logo {
-   position: absolute;
-   right: 0;
-   bottom: 0;
-   padding: 50px;
-   height: 50px;
-   width: 50px;
-   z-index: 1;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 50px;
+  height: 50px;
+  width: 50px;
+  z-index: 1;
 }
 
 h1 {
-   font-size: 4vw;
+  font-size: 4vw;
 }
 
 .fullscreen {
-   text-align: center;
-   position: fixed;
-   top: -50%;
-   left: -50%;
-   width: 200%;
-   height: 200%;
-   font-size: 1vw;
+  text-align: center;
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  font-size: 1vw;
 }
 
 .fullscreen img {
-   position: absolute;
-   top: 0;
-   left: 0;
-   right: 0;
-   bottom: 0;
-   margin: auto;
-   min-width: 50%;
-   min-height: 50%;
-   overflow-x: hidden;
-   z-index: -999;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  min-width: 50%;
+  min-height: 50%;
+  overflow-x: hidden;
+  z-index: -999;
 }
 
 .red {
-   top: 0;
-   background: red;
-   background: rgba(200,0,0,0.7);
-   z-index: 2;
+  top: 0;
+  background: red;
+  background: rgba(200, 0, 0, 0.7);
+  z-index: 2;
 }
 
 .yellow {
-   top: 0;
-   background: yellow;
-   background: rgba(240,160,0,0.7);
-   z-index: 2;
+  top: 0;
+  background: yellow;
+  background: rgba(240, 160, 0, 0.7);
+  z-index: 2;
 }
 
 .green {
-   top: 0;
-   background: green;
-   background: rgba(0,100,0,0.7);
-   z-index: 2;
+  top: 0;
+  background: green;
+  background: rgba(0, 100, 0, 0.7);
+  z-index: 2;
 }
 
 .error {
-   top: 0;
-   background: black;
-   background: rgba(20,0,0,0.9);
-   z-index: 2;
+  top: 0;
+  background: black;
+  background: rgba(20, 0, 0, 0.7);
+  z-index: 2;
 }
 
 .subtext {
-   font-size: 1.4vw;
-   font-style: italic;
-   padding: 1em;
+  font-size: 1.4vw;
+  font-style: italic;
+  padding: 1em;
 }
 
 .job-name {
-   color: inherit;
-   text-decoration: none;
-   font-size: 2vw;
-   font-weight: bold;
+  color: inherit;
+  text-decoration: none;
+  font-size: 2vw;
+  font-weight: bold;
 }
 
 .config-link {
-   color: inherit;
-   text-decoration: none;
-   font-size: 2vw;
-   font-weight: bold;
+  color: inherit;
+  text-decoration: none;
+  font-size: 2vw;
+  font-weight: bold;
 }
 
 fieldset {
-   border: none;
+  border: none;
 }
 
 .control-label {
-    font-size: 8pt;
+  font-size: 8pt;
 }
 
 .label-shell {
-    padding-top: 10px;
+  padding-top: 10px;
 }
 
 input {
-    background-color: #888888;
-    background-color: rgba(250,250,250,.3);
-    color: white;
-    width: 30%;
-    border: none;
-    border-radius: 3px;
-    text-align: center;
+  background-color: #888888;
+  background-color: rgba(250, 250, 250, .3);
+  color: white;
+  width: 90%;
+  border: none;
+  border-radius: 3px;
+  text-align: center;
 }
 
 .btn {
-    color: inherit;
-    text-decoration: none;
-    font-size: 2vw;
-    font-weight: bold;
-    background: none;
-    padding-top: 10px;
+  color: inherit;
+  text-decoration: none;
+  font-size: 12pt;
+  font-weight: bold;
+  background: none;
+  padding-top: 10px;
+}
+
+.form-shell {
+  vertical-align: bottom;
+  position: relative;
+  top: 0;
+  left: 50vw;
+  width: 50%;
+  height: 70vh;
+  overflow-y: auto;
 }

@@ -61,9 +61,9 @@
       [:div.fullscreen.error
        [:h1 "WHERE IS MY JENKINS?"]
        [:div.subtext "please provide some configuration parameters"]
-       (f/render-form (assoc config-form
+       [:div (f/render-form (assoc config-form
                         :values (config/get)
-                        :problems problems))])))
+                        :problems problems))]])))
 
 (defn submit-config-form [params]
   (fp/with-fallback
