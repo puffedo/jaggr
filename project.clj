@@ -33,9 +33,6 @@
 
   :main jaggr.core
 
-  :profiles
-  {:dev
-   {:dependencies [[http-kit.fake "0.2.2"]
-                   [kerodon "0.7.0"]]}
-   }
-  )
+  :profiles {:dev       {:dependencies [[http-kit.fake "0.2.2"]
+                                        [kerodon "0.7.0"]]}
+             :uberjar   {:aot :all}})
