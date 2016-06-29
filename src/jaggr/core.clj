@@ -73,7 +73,8 @@
      (config/populate-from-file (config/get :config-file)))
     ; re-apply cmd line parameters to override parameters from config-file
    (config/populate-from-cmd args)
-   (config/verify :quit-on-error false)))
+   ; keep the app running on config errors so the config page is accessible to fix the problems
+   (try (config/verify :quit-on-error false) (catch Exception _) )))
 
 
 (defroutes main-routes
