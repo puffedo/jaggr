@@ -6,7 +6,8 @@
     [kerodon.core :refer :all]
     [kerodon.test :refer :all]
     [jaggr.jenkins :as jenkins]
-    [net.cgrand.enlive-html :as enlive]))
+    [net.cgrand.enlive-html :as enlive]
+    [jaggr.test-util :refer (with-preserved-start-params)]))
 
 
 ;; convenience macro that is, for some reason, not provided by kerodon
@@ -199,3 +200,47 @@
          (visit "/background-image-error")
          (has (status? 302)
               "redirect to image service when no error image is provided"))))
+
+
+
+(defn- test-invalid-input [input-selector input-value expected-result]
+
+  ;; make sure the global config is not accidentally changed on submit
+  (with-preserved-start-params
+
+    #(-> (session app)
+         (visit "/config")
+         (fill-in input-selector input-value)
+         (press "Submit")
+         (has (element? [:div.form-problems])
+              expected-result))))
+
+
+(deftest config-form-validates-input
+
+  (test-invalid-input [:input#field-base-url] ""
+                      "Configuring an empty base-url should lead to an error message")
+
+  (test-invalid-input [:input#field-base-url] "not-a-valid-url"
+                      "Configuring a base-url that is not a valid URL should lead to an error message")
+
+  (test-invalid-input [:input#field-base-url] "http://my-jenkins.com"
+                      "Configuring a base-url without a trailing slash should lead to an error message")
+
+  (test-invalid-input [:input#field-image-url] "not-a-valid-url"
+                      "Configuring a default-image-url that is not a valid URL should lead to an error message")
+
+  (test-invalid-input [:input#field-image-url-red] "not-a-valid-url"
+                      "Configuring a red-image-url that is not a valid URL should lead to an error message")
+
+  (test-invalid-input [:input#field-image-url-yellow] "not-a-valid-url"
+                      "Configuring a yellow-image-url that is not a valid URL should lead to an error message")
+
+  (test-invalid-input [:input#field-image-url-green] "not-a-valid-url"
+                      "Configuring a green-image-url that is not a valid URL should lead to an error message")
+
+  (test-invalid-input [:input#field-image-url-error] "not-a-valid-url"
+                      "Configuring an error-image-url that is not a valid URL should lead to an error message")
+
+  (test-invalid-input [:input#field-refresh-rate] 9
+                      "Configuring a refresh rate of less than 10 seconds should lead to an error message"))
