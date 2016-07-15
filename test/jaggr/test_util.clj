@@ -8,16 +8,6 @@
    the jaggr.core/init function instead of omniconf.core/set, because
    init sets default values for some mandatory parameters."
   [fn]
-  (let [old-base-url (config/get :base-url)
-        old-user (config/get :user)
-        old-user-token (config/get :user-token)
-        old-refresh-rate (config/get :refresh-rate)
-        old-port (config/get :port)
-        old-config-file (config/get :config-file)]
+  (let [old-config (config/get)]
     (fn)
-    (config/set :base-url old-base-url)
-    (config/set :user old-user)
-    (config/set :user-token old-user-token)
-    (config/set :refresh-rate old-refresh-rate)
-    (config/set :port old-port)
-    (config/set :config-file old-config-file)))
+    (doseq [[k v] old-config] (config/set k v))))
