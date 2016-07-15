@@ -7,7 +7,8 @@
     [kerodon.test :refer :all]
     [jaggr.jenkins :as jenkins]
     [net.cgrand.enlive-html :as enlive]
-    [jaggr.test-util :refer (with-preserved-start-params)]))
+    [jaggr.test-util :refer (with-preserved-start-params)]
+    [omniconf.core :as config]))
 
 
 ;; convenience macro that is, for some reason, not provided by kerodon
@@ -244,3 +245,33 @@
 
   (test-invalid-input [:input#field-refresh-rate] 9
                       "Configuring a refresh rate of less than 10 seconds should lead to an error message"))
+
+
+(deftest config-form-submit-changes-config
+
+  ;; make sure the global config is changed only temporarily on submit
+  (with-preserved-start-params
+
+    #(do
+      (-> (session app)
+          (visit "/config")
+          (fill-in [:input#field-base-url] "http://my-jenkins.com/test/")
+          (fill-in [:input#field-user] "test-user")
+          (fill-in [:input#field-user-token] "test-token")
+          (fill-in [:input#field-refresh-rate] 42)
+          (fill-in [:input#field-image-url] "http://my-images.com/")
+          (fill-in [:input#field-image-url-red] "http://my-images.com/red/")
+          (fill-in [:input#field-image-url-yellow] "http://my-images.com/yellow/")
+          (fill-in [:input#field-image-url-green] "http://my-images.com/green/")
+          (fill-in [:input#field-image-url-error] "http://my-images.com/error/")
+          (press "Submit"))
+
+      (is (= (config/get :base-url) "http://my-jenkins.com/test/"))
+      (is (= (config/get :user) "test-user"))
+      (is (= (config/get :user-token) "test-token"))
+      (is (= (config/get :refresh-rate) 42))
+      (is (= (config/get :image-url) "http://my-images.com/"))
+      (is (= (config/get :image-url-red) "http://my-images.com/red/"))
+      (is (= (config/get :image-url-yellow) "http://my-images.com/yellow/"))
+      (is (= (config/get :image-url-green) "http://my-images.com/green/"))
+      (is (= (config/get :image-url-error) "http://my-images.com/error/")))))
