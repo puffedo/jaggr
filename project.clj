@@ -18,7 +18,7 @@
                  [compojure "1.5.1"]
                  [hiccup "1.0.5"]
                  [formative "0.8.8"]
-                 [http-kit "2.1.19"]
+                 [http-kit "2.2.0"]
                  [org.clojure/data.json "0.2.6"]
                  [com.grammarly/omniconf "0.2.2"]
                  [url-normalizer "0.5.3-1"]]
@@ -34,5 +34,5 @@
   :main jaggr.core
 
   :profiles {:dev       {:dependencies [[http-kit.fake "0.2.2"]
-                                        [kerodon "0.7.0"]]}
+                                        [kerodon "0.8.0"]]}
              :uberjar   {:aot :all}})
