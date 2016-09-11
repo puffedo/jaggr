@@ -7,7 +7,7 @@
 
 
 ;; calls the Jenkins JSON api for a given url (must end with /),
-;; returns the body of the response as JSON with keys converted to clojure keywords
+;; returns the body of the response as a map with keys converted to clojure keywords
 (defn- get-from-jenkins [base-url params]
   (json/read-str
     (:body
@@ -49,7 +49,7 @@
 
 
 ;; reads from a channel with job REST resources,
-;; add the url of the last build to each job and returns it on a channel
+;; adds the url of the last build to each job and returns it on a channel
 (defn- add-last-build-url-chan [job-rsrc-chan]
   (let [out (chan)]
     (go-loop [job-rsrc (<! job-rsrc-chan)]
@@ -78,12 +78,11 @@
   (let [out (chan)]
     (go-loop [job-rsrc (<! job-rsrc-chan)]
       (if job-rsrc
-        (do
-          (->>
-            (get-claim-info (:last-build-url job-rsrc))
-            (merge job-rsrc)
-            (>! out))
-          (recur (<! job-rsrc-chan)))
+        (do (->>
+              (get-claim-info (:last-build-url job-rsrc))
+              (merge job-rsrc)
+              (>! out))
+            (recur (<! job-rsrc-chan)))
         (close! out)))
     out))
 
@@ -102,10 +101,10 @@
 
 
 (defn get-failed-jobs []
-  "fetches all failed jobs from jenkins and returns a map that devides them in three classes:
+  "fetches all failed jobs from jenkins and returns a map that groups them in three classes:
    :claimed, :unclaimed and :unclaimable. For each job of each class, a map is returned with
    :name, :last-build-url, :claimed, :claimedBy and :reason
-   throws an exception when the refresh rate is exceeded before all jobs have been processed."
+   throws an exception when the screen refresh time is exceeded before all jobs have been processed."
   (->> (get-failed-jobs-rsrc)
        (to-chan)
        (add-last-build-url-chan)
