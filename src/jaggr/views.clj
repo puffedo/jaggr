@@ -1,12 +1,13 @@
 (ns jaggr.views
-  (:use [hiccup core page]
-        [jaggr.jenkins])
-  (:require [hiccup.element :refer (link-to)]
+  (:require [clojure.java.io :as io]
+            [clojure.tools.logging :as log]
             [formative.core :as f]
             [formative.parse :as fp]
-            [omniconf.core :as config]
-            [clojure.java.io :as io]
-            [clojure.tools.logging :as log]))
+            [hiccup.core :refer :all]
+            [hiccup.element :refer [link-to]]
+            [hiccup.page :refer :all]
+            [jaggr.jenkins :refer :all]
+            [omniconf.core :as config]))
 
 
 ;;

@@ -1,13 +1,13 @@
 (ns jaggr.core
-  (:use compojure.core
-        jaggr.views
-        [clojure.java.io :only (as-file)]
-        [hiccup.middleware :only (wrap-base-url)]
-        [ring.adapter.jetty :only (run-jetty)]
-        [url-normalizer.core :only (normalize)])
-  (:require [compojure.route :as route]
+  (:require [clojure.java.io :refer [as-file]]
+            [compojure.core :refer :all]
             [compojure.handler :as handler]
-            [omniconf.core :as config])
+            [compojure.route :as route]
+            [hiccup.middleware :refer [wrap-base-url]]
+            [jaggr.views :refer :all]
+            [omniconf.core :as config]
+            [ring.adapter.jetty :refer [run-jetty]]
+            [url-normalizer.core :refer [normalize]])
   (:gen-class :main true))
 
 

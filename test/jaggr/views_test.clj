@@ -1,14 +1,12 @@
 (ns jaggr.views-test
-  (:use jaggr.views)
-  (:use clojure.test)
-  (:require
-    [jaggr.core :refer [app]]
-    [kerodon.core :refer :all]
-    [kerodon.test :refer :all]
-    [jaggr.jenkins :as jenkins]
-    [net.cgrand.enlive-html :as enlive]
-    [jaggr.test-util :refer (with-preserved-start-params)]
-    [omniconf.core :as config]))
+  (:require [clojure.test :refer :all]
+            [jaggr.core :refer [app]]
+            [jaggr.jenkins :as jenkins]
+            [jaggr.test-util :refer [with-preserved-start-params]]
+            [kerodon.core :refer :all]
+            [kerodon.test :refer :all]
+            [net.cgrand.enlive-html :as enlive]
+            [omniconf.core :as config]))
 
 
 ;; convenience macro that is, for some reason, not provided by kerodon

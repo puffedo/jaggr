@@ -1,8 +1,8 @@
 (ns jaggr.core-test
-  (:use jaggr.core)
-  (:use clojure.test)
-  (:require [jaggr.test-util :refer (with-preserved-start-params)])
-  (:require [omniconf.core :as config]))
+  (:require [clojure.test :refer :all]
+            [jaggr.core :refer :all]
+            [jaggr.test-util :refer [with-preserved-start-params]]
+            [omniconf.core :as config]))
 
 
 (use-fixtures :each with-preserved-start-params)

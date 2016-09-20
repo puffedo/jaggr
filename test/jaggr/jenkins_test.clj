@@ -1,10 +1,10 @@
 (ns jaggr.jenkins-test
-  (:use jaggr.jenkins)
-  (:use clojure.test)
-  (:require [jaggr.test-util :refer (with-preserved-start-params)])
-  (:require [jaggr.core :refer (init)])
-  (:require [org.httpkit.fake :refer (with-fake-http)]
-            [omniconf.core :as config])
+  (:require [clojure.test :refer :all]
+            [jaggr.core :refer [init]]
+            [jaggr.jenkins :refer :all]
+            [jaggr.test-util :refer [with-preserved-start-params]]
+            [omniconf.core :as config]
+            [org.httpkit.fake :refer [with-fake-http]])
   (:import (java.util.concurrent TimeoutException)))
 
 
