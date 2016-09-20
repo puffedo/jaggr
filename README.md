@@ -126,7 +126,7 @@ Config file parameters override environment variables.
 #### Background images
 
 Background images are automatically loaded from <https://lorempixel.com>. Other URLs can
-be configured - either globally or for spefific pages (red, yellow, green, error).
+be configured - either globally or for specific pages (red, yellow, green, error).
 
 You can also provide custom images by putting them in the file system next to the
 executable into folders images/red, images/yellow, images/green or images/error.

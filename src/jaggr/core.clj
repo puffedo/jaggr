@@ -67,7 +67,7 @@
 
 
    (config/populate-from-env)
-    ; read cmd line paramaterss, so a user can specify the config-file parameter
+    ; read cmd line paramaters, so a user can specify the config-file parameter
    (config/populate-from-cmd args)
    (if (.exists (as-file (config/get :config-file)))
      (config/populate-from-file (config/get :config-file)))
