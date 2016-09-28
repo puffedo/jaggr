@@ -20,7 +20,7 @@
                  [formative "0.8.8"]
                  [http-kit "2.2.0"]
                  [org.clojure/data.json "0.2.6"]
-                 [com.grammarly/omniconf "0.2.2"]
+                 [com.grammarly/omniconf "0.2.3"]
                  [url-normalizer "0.5.3-1"]]
 
   :dev-dependencies [[ring/ring-devel "1.1.0"]]
