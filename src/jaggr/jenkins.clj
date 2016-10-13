@@ -6,14 +6,15 @@
   (:import (java.util.concurrent TimeoutException)))
 
 
-;; calls the Jenkins JSON api for a given url (must end with /),
+;; calls the Jenkins JSON api for a given url (must end with /)
+;; optional parameters may be provited (e.g. "tree=key[subkey1,subkey2]" to specify filter criteria)
 ;; returns the body of the response as a map with keys converted to clojure keywords
 (defn- get-from-jenkins [base-url params]
   (json/read-str
     (:body
       @(http/get
          (str base-url "api/json?" params)
-         ;; send authenticarion header if user name and token are provided
+         ;; send authentication header if user name and token are provided
          (let [user (config/get :user)
                user-token (config/get :user-token)]
            (when (and user user-token)
@@ -22,7 +23,7 @@
     :key-fn keyword))
 
 
-;; gets the jobs REST resource for the globally configured base-url
+;; gets the (pre-filtered) jobs REST resource for the globally configured base-url
 (defn- get-jobs-rsrc []
   (:jobs
     (get-from-jenkins
@@ -55,7 +56,7 @@
     (go-loop [job-rsrc (<! job-rsrc-chan)]
       (if job-rsrc
         (do
-          (>! out (assoc job-rsrc :last-completed-build-url (get-last-completed-build-url job-rsrc)))
+          (>! out (assoc job-rsrc :lastCompletedBuildUrl (get-last-completed-build-url job-rsrc)))
           (recur (<! job-rsrc-chan)))
         (close! out)))
     out))
@@ -79,7 +80,7 @@
     (go-loop [job-rsrc (<! job-rsrc-chan)]
       (if job-rsrc
         (do (->>
-              (get-claim-info (:last-completed-build-url job-rsrc))
+              (get-claim-info (:lastCompletedBuildUrl job-rsrc))
               (merge job-rsrc)
               (>! out))
             (recur (<! job-rsrc-chan)))
@@ -103,7 +104,7 @@
 (defn get-failed-jobs []
   "fetches all failed jobs from jenkins and returns a map that groups them in three classes:
    :claimed, :unclaimed and :unclaimable. For each job of each class, a map is returned with
-   :name, :last-build-url, :claimed, :claimedBy and :reason
+   :name, :lastCompletedBuildUrl, :claimed, :claimedBy and :reason
    throws an exception when the screen refresh time is exceeded before all jobs have been processed."
   (->> (get-failed-jobs-rsrc)
        (to-chan)

@@ -89,7 +89,7 @@
 (defn job-details [job]
   (when job
     [:div.job
-     (link-to {:class "job-name"} (:last-completed-build-url job) (h (:name job)))
+     (link-to {:class "job-name"} (:lastCompletedBuildUrl job) (h (:name job)))
      (when (:claimedBy job)
        [:div.job-claimed-by "was heroically claimed by " (h (:claimedBy job))])
      (when (:reason job)

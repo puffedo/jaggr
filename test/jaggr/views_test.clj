@@ -39,14 +39,14 @@
   (with-redefs-fn
     {#'jenkins/get-failed-jobs
      (fn []
-       {:unclaimed   [{:name                     "failed-unclaimed-build"
-                       :claimedBy                nil :claimed false :reason nil
-                       :last-completed-build-url "/failed-unclaimed-build/"}]
-        :claimed     [{:name                     "failed-claimed-build-should-be-ignored"
-                       :claimedBy                "somebody" :claimed true :reason "a reason"
-                       :last-completed-build-url "/failed-claimed-build/"}]
-        :unclaimable [{:name                     "failed-unclaimable-build-should-be-ignored"
-                       :last-completed-build-url "/failed-unclaimable-build/"}]})}
+       {:unclaimed   [{:name                  "failed-unclaimed-build"
+                       :claimedBy             nil :claimed false :reason nil
+                       :lastCompletedBuildUrl "/failed-unclaimed-build/"}]
+        :claimed     [{:name                  "failed-claimed-build-should-be-ignored"
+                       :claimedBy             "somebody" :claimed true :reason "a reason"
+                       :lastCompletedBuildUrl "/failed-claimed-build/"}]
+        :unclaimable [{:name                  "failed-unclaimable-build-should-be-ignored"
+                       :lastCompletedBuildUrl "/failed-unclaimable-build/"}]})}
 
     #(-> (session app)
          (visit "/")
@@ -66,11 +66,11 @@
   (with-redefs-fn
     {#'jenkins/get-failed-jobs
      (fn []
-       {:claimed     [{:name                     "failed-claimed-build"
-                       :claimedBy                "somebody" :claimed true :reason "a reason"
-                       :last-completed-build-url "/failed-claimed-build/"}]
-        :unclaimable [{:name                     "failed-unclaimable-build-should-be-ignored"
-                       :last-completed-build-url "/failed-unclaimable-build/"}]})}
+       {:claimed     [{:name                  "failed-claimed-build"
+                       :claimedBy             "somebody" :claimed true :reason "a reason"
+                       :lastCompletedBuildUrl "/failed-claimed-build/"}]
+        :unclaimable [{:name                  "failed-unclaimable-build-should-be-ignored"
+                       :lastCompletedBuildUrl "/failed-unclaimable-build/"}]})}
 
     #(-> (session app)
          (visit "/")
@@ -94,8 +94,8 @@
   (with-redefs-fn
     {#'jenkins/get-failed-jobs
      (fn []
-       {:unclaimable [{:name                     "failed-unclaimable-build"
-                       :last-completed-build-url "/failed-unclaimable-build/"}]})}
+       {:unclaimable [{:name                  "failed-unclaimable-build"
+                       :lastCompletedBuildUrl "/failed-unclaimable-build/"}]})}
 
     #(-> (session app)
          (visit "/")
