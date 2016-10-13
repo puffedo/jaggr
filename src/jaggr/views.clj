@@ -46,7 +46,7 @@
                  {:name :image-url-red :label "URL for red page background image" :blank-nil true}
                  {:name :image-url-yellow :label "URL for yellow page background image" :blank-nil true}
                  {:name :image-url-green :label "URL for green page background image" :blank-nil true}
-                 {:name :image-url-error :label "URL for error page background image":blank-nil true}]
+                 {:name :image-url-error :label "URL for error page background image" :blank-nil true}]
    :validations [[:required [:base-url]]
                  [:url [:base-url :image-url :image-url-red :image-url-yellow
                         :image-url-green :image-url-error]]
@@ -63,8 +63,8 @@
        [:h1 "WHERE IS MY JENKINS?"]
        [:div.subtext "please provide some configuration parameters"]
        [:div (f/render-form (assoc config-form
-                        :values (config/get)
-                        :problems problems))]])))
+                              :values (config/get)
+                              :problems problems))]])))
 
 (defn submit-config-form [params]
   (fp/with-fallback
@@ -108,54 +108,54 @@
       (html5
         (reload-header)
         (fullscreen-body
-         (cond
-           (not-empty (:unclaimed failed-jobs))
-           [:div.fullscreen
-            [:img {:src "/background-image-red"}]
-            [:div.fullscreen.red
-             [:h1 "BROKEN BUILDS - CLAIM AND FIX THEM!"]
-             [:div.subtext
-              "have a look at the broken builds - find someone who can fix the problem - claim the builds and fix them"]
-             (job-list (:unclaimed failed-jobs))]]
+          (cond
+            (not-empty (:unclaimed failed-jobs))
+            [:div.fullscreen
+             [:img {:src "/background-image-red"}]
+             [:div.fullscreen.red
+              [:h1 "BROKEN BUILDS - CLAIM AND FIX THEM!"]
+              [:div.subtext
+               "have a look at the broken builds - find someone who can fix the problem - claim the builds and fix them"]
+              (job-list (:unclaimed failed-jobs))]]
 
-           (not-empty (:claimed failed-jobs))
-           [:div.fullscreen
-            [:img {:src "/background-image-yellow"}]
-            [:div.fullscreen.yellow
-             [:h1 "BROKEN BUILDS - HELP IS ON THE WAY!"]
-             [:div.subtext
-              "see if you can help - check in with care - be careful with merges"]
-             (job-list (:claimed failed-jobs))]]
+            (not-empty (:claimed failed-jobs))
+            [:div.fullscreen
+             [:img {:src "/background-image-yellow"}]
+             [:div.fullscreen.yellow
+              [:h1 "BROKEN BUILDS - HELP IS ON THE WAY!"]
+              [:div.subtext
+               "see if you can help - check in with care - be careful with merges"]
+              (job-list (:claimed failed-jobs))]]
 
-           (not-empty (:unclaimable failed-jobs))
-           [:div.fullscreen
-            [:img {:src "/background-image-green"}]
-            [:div.fullscreen.green
-             [:h1 "MOST BUILDS ARE MOSTLY OK"]
-             [:div.subtext "maybe have a look at some of these jobs as well"]
-             (job-list (:unclaimable failed-jobs))]]
+            (not-empty (:unclaimable failed-jobs))
+            [:div.fullscreen
+             [:img {:src "/background-image-green"}]
+             [:div.fullscreen.green
+              [:h1 "MOST BUILDS ARE MOSTLY OK"]
+              [:div.subtext "maybe have a look at some of these jobs as well"]
+              (job-list (:unclaimable failed-jobs))]]
 
-           :else
-           [:div.fullscreen
-            [:img {:src "/background-image-green"}]
-            [:div.fullscreen.green
-             [:h1 "HOORAY!"]
-             [:div.subtext "all builds are green! - better go home now..."]]]))))
+            :else
+            [:div.fullscreen
+             [:img {:src "/background-image-green"}]
+             [:div.fullscreen.green
+              [:h1 "HOORAY!"]
+              [:div.subtext "all builds are green! - better go home now..."]]]))))
 
     (catch Exception e
       (log/error e "Something is wrong here!")
       (html5
         (reload-header)
         (fullscreen-body
-         [:div.fullscreen
-          [:img {:src "/background-image-error"}]
-          [:div.fullscreen.error
-           [:h1 "SOMETHING IS WRONG HERE"]
-           [:div.subtext "is Jenkins accessible? - wrong parameters? - network problems?"]
-           [:div "I tried to access " (config/get :base-url)]
-           [:div "trying again every " (config/get :refresh-rate) " seconds"]
-           [:br]
-           (link-to {:class "config-link"} "/config" "Change configuration parameters")]])))))
+          [:div.fullscreen
+           [:img {:src "/background-image-error"}]
+           [:div.fullscreen.error
+            [:h1 "SOMETHING IS WRONG HERE"]
+            [:div.subtext "is Jenkins accessible? - wrong parameters? - network problems?"]
+            [:div "I tried to access " (config/get :base-url)]
+            [:div "trying again every " (config/get :refresh-rate) " seconds"]
+            [:br]
+            (link-to {:class "config-link"} "/config" "Change configuration parameters")]])))))
 
 
 ;;
