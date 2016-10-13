@@ -1,4 +1,4 @@
-(defproject jaggr "0.5.0-SNAPSHOT"
+(defproject jaggr "0.4.1-SNAPSHOT"
 
   :description "An aggregated CI traffic light for jenkins, based on the Jenkins Claims plugin"
 
@@ -33,6 +33,6 @@
 
   :main jaggr.core
 
-  :profiles {:dev       {:dependencies [[http-kit.fake "0.2.2"]
-                                        [kerodon "0.8.0"]]}
-             :uberjar   {:aot :all}})
+  :profiles {:dev     {:dependencies [[http-kit.fake "0.2.2"]
+                                      [kerodon "0.8.0"]]}
+             :uberjar {:aot :all}})

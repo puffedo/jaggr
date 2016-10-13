@@ -30,41 +30,41 @@
       "tree=jobs[name,color,url]")))
 
 
-;; returns red or yellow if this is the actual color of the job
+;; returns the color of the job if it indicates a failure status
 ;; or nil otherwise. can be used as a predicate
-(defn- red-or-yellow [job-rsrc]
-  (#{"red" "yellow"} (:color job-rsrc)))
+(defn- failure-indicating-color [job-rsrc]
+  (#{"red" "red_anime" "yellow" "yellow_anime" "aborted" "aborted_anime"} (:color job-rsrc)))
 
 
-;; gets all failed (red or yellow) jobs from the globally configured base-url
+;; gets all failed jobs from the globally configured base-url
 (defn- get-failed-jobs-rsrc []
-  (filter red-or-yellow (get-jobs-rsrc)))
+  (filter failure-indicating-color (get-jobs-rsrc)))
 
 
 ;; gets the url of the last build from jenkins for a given job-REST-resource
-(defn- get-last-build-url [job-rsrc]
+(defn- get-last-completed-build-url [job-rsrc]
   (get-in
-    (get-from-jenkins (:url job-rsrc) "tree=lastBuild[url]")
-    [:lastBuild :url]))
+    (get-from-jenkins (:url job-rsrc) "tree=lastCompletedBuild[url]")
+    [:lastCompletedBuild :url]))
 
 
 ;; reads from a channel with job REST resources,
 ;; adds the url of the last build to each job and returns it on a channel
-(defn- add-last-build-url-chan [job-rsrc-chan]
+(defn- add-last-completed-build-url-chan [job-rsrc-chan]
   (let [out (chan)]
     (go-loop [job-rsrc (<! job-rsrc-chan)]
       (if job-rsrc
         (do
-          (>! out (assoc job-rsrc :last-build-url (get-last-build-url job-rsrc)))
+          (>! out (assoc job-rsrc :last-completed-build-url (get-last-completed-build-url job-rsrc)))
           (recur (<! job-rsrc-chan)))
         (close! out)))
     out))
 
 
 ;; gets the claim info for a job resource and throws away everything else
-(defn- get-claim-info [last-build-url]
+(defn- get-claim-info [last-completed-build-url]
   (->>
-    (get-from-jenkins last-build-url "tree=actions[claimed,claimedBy,reason]")
+    (get-from-jenkins last-completed-build-url "tree=actions[claimed,claimedBy,reason]")
     (:actions)
     (filter not-empty)
     (first)))
@@ -79,7 +79,7 @@
     (go-loop [job-rsrc (<! job-rsrc-chan)]
       (if job-rsrc
         (do (->>
-              (get-claim-info (:last-build-url job-rsrc))
+              (get-claim-info (:last-completed-build-url job-rsrc))
               (merge job-rsrc)
               (>! out))
             (recur (<! job-rsrc-chan)))
@@ -107,7 +107,7 @@
    throws an exception when the screen refresh time is exceeded before all jobs have been processed."
   (->> (get-failed-jobs-rsrc)
        (to-chan)
-       (add-last-build-url-chan)
+       (add-last-completed-build-url-chan)
        (add-claim-info-chan)
        (drain-or-timeout)
        (group-by
