@@ -9,44 +9,55 @@
 
 
 ;; test fixtures
+;; each one exemplifies the body of a response to a http GET on a certain type of REST resource
+
+;; a jenkins jobs list, referencing several jobs in different failure states
 (def
   get-jobs-response-body
-  "{\"jobs\":[
-  {\"name\":\"red-job\",\"url\":\"http://some-base-url/view/failed-job/\",\"color\":\"red\"},
-  {\"name\":\"red-job-running\",\"url\":\"http://some-base-url/view/failed-job/\",\"color\":\"red_anime\"},
-  {\"name\":\"yellow-job\",\"url\":\"http://some-base-url/view/failed-job/\",\"color\":\"yellow\"},
-  {\"name\":\"yellow-job-running\",\"url\":\"http://some-base-url/view/failed-job/\",\"color\":\"yellow_anime\"},
-  {\"name\":\"aborted-job\",\"url\":\"http://some-base-url/view/failed-job/\",\"color\":\"aborted\"},
-  {\"name\":\"aborted-job-running\",\"url\":\"http://some-base-url/view/failed-job/\",\"color\":\"aborted_anime\"},
-  {\"name\":\"ok-job\",\"url\":\"http://some-base-url/view/ok-job/\",\"color\":\"blue\"}]}")
+  "{\"jobs\" : [
+   {\"name\" : \"red-job\",             \"url\" : \"http://example.com/view/failed-1/\", \"color\" : \"red\"},
+   {\"name\" : \"red-job-running\",     \"url\" : \"http://example.com/view/failed-2/\", \"color\" : \"red_anime\"},
+   {\"name\" : \"yellow-job\",          \"url\" : \"http://example.com/view/failed-3/\", \"color\" : \"yellow\"},
+   {\"name\" : \"yellow-job-running\",  \"url\" : \"http://example.com/view/failed-4/\", \"color\" : \"yellow_anime\"},
+   {\"name\" : \"aborted-job\",         \"url\" : \"http://example.com/view/failed-5/\", \"color\" : \"aborted\"},
+   {\"name\" : \"aborted-job-running\", \"url\" : \"http://example.com/view/failed-6/\", \"color\" : \"aborted_anime\"},
+   {\"name\" : \"ok-job\",              \"url\" : \"http://example.com/view/ok/\",       \"color\" : \"blue\"}]}")
+
+;; a specific job, with a reference to its last completed build
 (def
   get-job-response-body
-  "{\"lastCompletedBuild\":{\"url\":\"http://some-base-url/job/failed-job/42/\"}}")
+  "{\"lastCompletedBuild\" : {\"url\" : \"http://example.com/job/failed-job/42/\"}}")
+
+;; a claimed build
 (def
   get-build-response-body-claimed
-  "{\"actions\":[{},{\"claimed\":true,\"claimedBy\":\"somebody\",\"reason\":\"some reason\"}]}")
+  "{\"actions\" : [{}, {\"claimed\" : true, \"claimedBy\" : \"somebody\" , \"reason\" : \"some reason\"}]}")
+
+;; an unclaimed build
 (def
   get-build-response-body-unclaimed
-  "{\"actions\":[{},{\"claimed\":false,\"claimedBy\":null,\"reason\":null}]}")
+  "{\"actions\" : [{}, {\"claimed\" : false, \"claimedBy\" : null, \"reason\" : null}]}")
+
+;; a build of a job not configured to be claimable
 (def
   get-build-response-body-unclaimable
-  "{\"actions\":[{}]}")
+  "{\"actions\" : [{}]}")
 
 
 (use-fixtures :once with-preserved-start-params)
 
 (deftest jenkins-api-access
 
-  (init '("--base-url" "http://some-base-url/"))
+  (init '("--base-url" "http://example.com/"))
 
-  (testing "The Jenkins JSON api is used to find failed jobs and group them by the claimed-state of their last broken build."
+  (testing "The Jenkins JSON api is used to find failed jobs and group them by the claimed-state of their last completed build."
 
     (testing "This requires some intermediate steps:"
 
       (testing "The jobs-REST-resource is retrieved, it contains all jobs."
 
         (with-fake-http
-          [#"http://some-base-url/api/json?.*" get-jobs-response-body]
+          [#"http://example.com/api/json?.*" get-jobs-response-body]
 
           (let [jobs-rsrc (@#'jaggr.jenkins/get-jobs-rsrc)
                 all-job-names #{"red-job" "red-job-running"
@@ -66,18 +77,18 @@
                 (is (= 6 (count failed-jobs-rsrc)))
                 (is (= failed-job-names (set (map :name failed-jobs-rsrc))))
 
-                (testing "A failed job's last-completed-build-REST-resource is located."
+                (testing "A failed job's last-completed-build's REST-resource is located."
 
                   (with-fake-http
-                    [#"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body]
+                    [#"http://example.com/view/failed-.*/api/json.*" get-job-response-body]
 
                     (let [last-completed-build-url (@#'jaggr.jenkins/get-last-completed-build-url (first failed-jobs-rsrc))]
-                      (is (= "http://some-base-url/job/failed-job/42/" last-completed-build-url))
+                      (is (= "http://example.com/job/failed-job/42/" last-completed-build-url))
 
-                      (testing "When fetching a claimed last-completed-build-REST-resource, it contains claimed-state, claimer and reason."
+                      (testing "For a claimed build, it contains claimed-state, claimer and reason."
 
                         (with-fake-http
-                          [#"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-claimed]
+                          [#"http://example.com/job/failed-job/42/api/json?.*" get-build-response-body-claimed]
 
                           (let [last-completed-build-rsrc (@#'jaggr.jenkins/get-claim-info last-completed-build-url)]
 
@@ -86,22 +97,20 @@
                             (is (= "somebody" (:claimedBy last-completed-build-rsrc)))
                             (is (= "some reason" (:reason last-completed-build-rsrc))))))
 
-                      (testing "When fetching an unclaimed last-build-REST-resource, it contains :claimed = false"
+                      (testing "For a claimed build, it contains :claimed = false"
 
                         (with-fake-http
-                          [#"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body
-                           #"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-unclaimed]
+                          [#"http://example.com/job/failed-job/42/api/json?.*" get-build-response-body-unclaimed]
 
                           (let [last-completed-build-rsrc (@#'jaggr.jenkins/get-claim-info last-completed-build-url)]
 
                             (is (not-empty last-completed-build-rsrc))
                             (is (false? (:claimed last-completed-build-rsrc))))))
 
-                      (testing "When fetching a last-build-REST-resource of an unclaimable job, it contains no claimed-state, claimer or reason."
+                      (testing "For a build of an unclaimable job, it contains no claimed-state, claimer or reason."
 
                         (with-fake-http
-                          [#"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body
-                           #"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-unclaimable]
+                          [#"http://example.com/job/failed-job/42/api/json?.*" get-build-response-body-unclaimable]
 
                           (let [last-completed-build-rsrc (@#'jaggr.jenkins/get-claim-info last-completed-build-url)]
 
@@ -112,9 +121,9 @@
     (testing "Failed jobs with claimed builds are returned under the key :claimed ."
 
       (with-fake-http
-        [#"http://some-base-url/api/json?.*" get-jobs-response-body
-         #"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body
-         #"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-claimed]
+        [#"http://example.com/api/json?.*" get-jobs-response-body
+         #"http://example.com/view/failed.*/api/json?.*" get-job-response-body
+         #"http://example.com/job/failed-job/42/api/json?.*" get-build-response-body-claimed]
 
         (is (not-empty (:claimed (get-failed-jobs))))
         (is (empty? (:unclaimed (get-failed-jobs))))
@@ -123,9 +132,9 @@
     (testing "Failed jobs with unclaimed builds are returned under the key :unclaimed ."
 
       (with-fake-http
-        [#"http://some-base-url/api/json?.*" get-jobs-response-body
-         #"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body
-         #"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-unclaimed]
+        [#"http://example.com/api/json?.*" get-jobs-response-body
+         #"http://example.com/view/failed.*/api/json?.*" get-job-response-body
+         #"http://example.com/job/failed-job/42/api/json?.*" get-build-response-body-unclaimed]
 
         (is (not-empty (:unclaimed (get-failed-jobs))))
         (is (empty? (:claimed (get-failed-jobs))))
@@ -134,9 +143,9 @@
     (testing "Failed unclaimable jobs are returned under the key :unclaimable ."
 
       (with-fake-http
-        [#"http://some-base-url/api/json?.*" get-jobs-response-body
-         #"http://some-base-url/view/failed-job/api/json?.*" get-job-response-body
-         #"http://some-base-url/job/failed-job/42/api/json?.*" get-build-response-body-unclaimable]
+        [#"http://example.com/api/json?.*" get-jobs-response-body
+         #"http://example.com/view/failed.*/api/json?.*" get-job-response-body
+         #"http://example.com/job/failed-job/42/api/json?.*" get-build-response-body-unclaimable]
 
         (is (not-empty (:unclaimable (get-failed-jobs))))
         (is (empty? (:claimed (get-failed-jobs))))
@@ -145,11 +154,11 @@
     (testing "If the Jenkins API calls don't finish within one screen refresh interval, an Exception is thrown."
 
       (with-fake-http
-        [#"http://some-base-url/api/json?.*"
+        [#"http://example.com/api/json?.*"
          (fn [_ _ _] (do (Thread/sleep 1100) get-jobs-response-body))
-         #"http://some-base-url/view/failed-job/api/json?.*"
+         #"http://example.com/view/failed.*/api/json?.*"
          (fn [_ _ _] (do (Thread/sleep 1100) get-job-response-body))
-         #"http://some-base-url/job/failed-job/42/api/json?.*"
+         #"http://example.com/job/failed-job/42/api/json?.*"
          (fn [_ _ _] (do (Thread/sleep 1100) get-build-response-body-unclaimable))]
 
         (config/set :refresh-rate 1)
