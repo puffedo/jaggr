@@ -48,27 +48,23 @@
         (with-fake-http
           [#"http://some-base-url/api/json?.*" get-jobs-response-body]
 
-          (let [jobs-rsrc (@#'jaggr.jenkins/get-jobs-rsrc)]
+          (let [jobs-rsrc (@#'jaggr.jenkins/get-jobs-rsrc)
+                all-job-names #{"red-job" "red-job-running"
+                                "yellow-job" "yellow-job-running"
+                                "aborted-job" "aborted-job-running"
+                                "ok-job"}]
             (is (= 7 (count jobs-rsrc)))
-            (is (= "red-job" (:name (first jobs-rsrc))))
-            (is (= "red-job-running" (:name (nth jobs-rsrc 1))))
-            (is (= "yellow-job" (:name (nth jobs-rsrc 2))))
-            (is (= "yellow-job-running" (:name (nth jobs-rsrc 3))))
-            (is (= "aborted-job" (:name (nth jobs-rsrc 4))))
-            (is (= "aborted-job-running" (:name (nth jobs-rsrc 5))))
-            (is (= "ok-job" (:name (nth jobs-rsrc 6))))
+            (is (= all-job-names (set (map :name jobs-rsrc))))
 
             (testing
               "The failed jobs are identified. Red, yellow and aborted jobs are considered a failure, as well as running jobs that were in a failure state before they started. "
 
-              (let [failed-jobs-rsrc (@#'jaggr.jenkins/get-failed-jobs-rsrc)]
+              (let [failed-jobs-rsrc (@#'jaggr.jenkins/get-failed-jobs-rsrc)
+                    failed-job-names #{"red-job" "red-job-running"
+                                       "yellow-job" "yellow-job-running"
+                                       "aborted-job" "aborted-job-running"}]
                 (is (= 6 (count failed-jobs-rsrc)))
-                (is (= "red-job" (:name (first failed-jobs-rsrc))))
-                (is (= "red-job-running" (:name (nth failed-jobs-rsrc 1))))
-                (is (= "yellow-job" (:name (nth failed-jobs-rsrc 2))))
-                (is (= "yellow-job-running" (:name (nth failed-jobs-rsrc 3))))
-                (is (= "aborted-job" (:name (nth failed-jobs-rsrc 4))))
-                (is (= "aborted-job-running" (:name (nth failed-jobs-rsrc 5))))
+                (is (= failed-job-names (set (map :name failed-jobs-rsrc))))
 
                 (testing "A failed job's last-completed-build-REST-resource is located."
 
