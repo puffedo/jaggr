@@ -7,20 +7,16 @@
 
 
 ;; calls the Jenkins JSON api for a given url (must end with /)
-;; optional parameters may be provited (e.g. "tree=key[subkey1,subkey2]" to specify filter criteria)
+;; optional url parameters may be provided (e.g. "tree=key[subkey1,subkey2]" to get a filtered response)
 ;; returns the body of the response as a map with keys converted to clojure keywords
 (defn- get-from-jenkins [base-url params]
-  (json/read-str
-    (:body
-      @(http/get
-         (str base-url "api/json?" params)
-         ;; send authentication header if user name and token are provided
-         (let [user (config/get :user)
-               user-token (config/get :user-token)]
-           (when (and user user-token)
-             {:basic-auth [user user-token]
-              :keepalive  -1}))))
-    :key-fn keyword))
+  (let [url (str base-url "api/json?" params)
+        user (config/get :user)
+        user-token (config/get :user-token)
+        response @(http/get url
+                    ;; send authentication header if user name and token are provided
+                    (when (and user user-token) {:basic-auth [user user-token] :keepalive -1}))]
+    (json/read-str (:body response) :key-fn keyword)))
 
 
 ;; gets the (pre-filtered) jobs REST resource for the globally configured base-url

@@ -162,4 +162,7 @@
          (fn [_ _ _] (do (Thread/sleep 1100) get-build-response-body-unclaimable))]
 
         (config/set :refresh-rate 1)
-        (is (thrown? TimeoutException (get-failed-jobs)))))))
+        (is (thrown? TimeoutException (get-failed-jobs)))
+        ;; allow enough time for all faked http calls to time out
+        ;; the with-fake-http-macro doesn't play well with async http call chains
+        (Thread/sleep 7000)))))
