@@ -19,7 +19,9 @@
 
 (deftest display-error-page-when-exception-is-thrown
   (with-redefs-fn
-    {#'jenkins/get-failed-jobs (fn [] (throw (Exception. "A test exception")))}
+    {#'jenkins/get-failed-jobs
+     (fn [] (throw (Exception. "This Exception was thrown deliberately to test error handling")))}
+
     #(-> (session app)
          (visit "/")
          (has (element? [:div.error])
