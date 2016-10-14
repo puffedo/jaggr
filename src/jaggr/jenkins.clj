@@ -6,6 +6,16 @@
   (:import (java.util.concurrent TimeoutException)))
 
 
+;; returns a channel with the results of the (unary) function fn applied to the values taken from the in channel
+(defn- map-chan [fn in]
+  (let [out (chan)]
+    (go-loop [val (<! in)]
+      (if val (do
+                (>! out (fn val))
+                (recur (<! in)))
+              (close! out)))
+    out))
+
 ;; calls the Jenkins JSON api for a given url (must end with /)
 ;; optional url parameters may be provided (e.g. "tree=key[subkey1,subkey2]" to get a filtered response)
 ;; returns the body of the response as a map with keys converted to clojure keywords
@@ -13,9 +23,8 @@
   (let [url (str base-url "api/json?" params)
         user (config/get :user)
         user-token (config/get :user-token)
-        response @(http/get url
-                    ;; send authentication header if user name and token are provided
-                    (when (and user user-token) {:basic-auth [user user-token] :keepalive -1}))]
+        options (when (and user user-token) {:basic-auth [user user-token] :keepalive -1})
+        response @(http/get url options)]
     (json/read-str (:body response) :key-fn keyword)))
 
 
@@ -48,14 +57,9 @@
 ;; reads from a channel with job REST resources,
 ;; adds the url of the last build to each job and returns it on a channel
 (defn- add-last-completed-build-url-chan [job-rsrc-chan]
-  (let [out (chan)]
-    (go-loop [job-rsrc (<! job-rsrc-chan)]
-      (if job-rsrc
-        (do
-          (>! out (assoc job-rsrc :lastCompletedBuildUrl (get-last-completed-build-url job-rsrc)))
-          (recur (<! job-rsrc-chan)))
-        (close! out)))
-    out))
+  (map-chan
+    #(assoc %1 :lastCompletedBuildUrl (get-last-completed-build-url %1))
+    job-rsrc-chan))
 
 
 ;; gets the claim info for a job resource and throws away everything else
@@ -72,16 +76,9 @@
 ;; adds information on it's last build's claim state to a job resource
 ;; returns the enriched job resources on a channel
 (defn- add-claim-info-chan [job-rsrc-chan]
-  (let [out (chan)]
-    (go-loop [job-rsrc (<! job-rsrc-chan)]
-      (if job-rsrc
-        (do (->>
-              (get-claim-info (:lastCompletedBuildUrl job-rsrc))
-              (merge job-rsrc)
-              (>! out))
-            (recur (<! job-rsrc-chan)))
-        (close! out)))
-    out))
+  (map-chan
+    #(merge %1 (get-claim-info (:lastCompletedBuildUrl %1)))
+    job-rsrc-chan))
 
 
 ;; waits until a channel closes and retrieve all its values as a collection,
