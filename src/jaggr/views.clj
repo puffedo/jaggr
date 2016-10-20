@@ -7,7 +7,8 @@
             [hiccup.element :refer [link-to]]
             [hiccup.page :refer :all]
             [jaggr.jenkins :refer :all]
-            [omniconf.core :as config]))
+            [omniconf.core :as config]
+            [trptcolin.versioneer.core :as version]))
 
 
 ;;
@@ -29,7 +30,10 @@
 
 (defn fullscreen-body [& content]
   [:body
-   (link-to "/config" [:img#logo {:src "/img/jaggr-logo.png"}])
+   (link-to "/config"
+            [:img#logo {:src   "/img/jaggr-logo.png"
+                        :title (str "click to configure\n"
+                                    "version " (version/get-version "jaggr" "jaggr" "N/A"))}])
    [:div.fullscreen content]])
 
 

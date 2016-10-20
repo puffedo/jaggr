@@ -1,4 +1,4 @@
-(defproject jaggr "0.4.3"
+(defproject jaggr "0.5.0-SNAPSHOT"
 
   :description "An aggregated CI traffic light for jenkins, based on the Jenkins Claims plugin"
 
@@ -21,7 +21,8 @@
                  [http-kit "2.2.0"]
                  [org.clojure/data.json "0.2.6"]
                  [com.grammarly/omniconf "0.2.3"]
-                 [url-normalizer "0.5.3-1"]]
+                 [url-normalizer "0.5.3-1"]
+                 [trptcolin/versioneer "0.2.0"]]
 
   :dev-dependencies [[ring/ring-devel "1.1.0"]]
 
