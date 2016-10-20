@@ -21,6 +21,7 @@
    {\"name\" : \"yellow-job-running\",  \"url\" : \"http://example.com/view/failed-4/\", \"color\" : \"yellow_anime\"},
    {\"name\" : \"aborted-job\",         \"url\" : \"http://example.com/view/failed-5/\", \"color\" : \"aborted\"},
    {\"name\" : \"aborted-job-running\", \"url\" : \"http://example.com/view/failed-6/\", \"color\" : \"aborted_anime\"},
+   {\"name\" : \"disabled-job\",        \"url\" : \"http://example.com/view/disabled/\", \"color\" : \"disabled\"},\n
    {\"name\" : \"ok-job\",              \"url\" : \"http://example.com/view/ok/\",       \"color\" : \"blue\"}]}")
 
 ;; a specific job, with a reference to its last completed build
@@ -63,8 +64,7 @@
                 all-job-names #{"red-job" "red-job-running"
                                 "yellow-job" "yellow-job-running"
                                 "aborted-job" "aborted-job-running"
-                                "ok-job"}]
-            (is (= 7 (count jobs-rsrc)))
+                                "disabled-job" "ok-job"}]
             (is (= all-job-names (set (map :name jobs-rsrc))))
 
             (testing
@@ -74,7 +74,6 @@
                     failed-job-names #{"red-job" "red-job-running"
                                        "yellow-job" "yellow-job-running"
                                        "aborted-job" "aborted-job-running"}]
-                (is (= 6 (count failed-jobs-rsrc)))
                 (is (= failed-job-names (set (map :name failed-jobs-rsrc))))
 
                 (testing "A failed job's last-completed-build's REST-resource is located."

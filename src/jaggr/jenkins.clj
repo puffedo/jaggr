@@ -1,6 +1,7 @@
 (ns jaggr.jenkins
   (:require [org.httpkit.client :as http]
             [clojure.data.json :as json]
+            [clojure.set :refer [subset?]]
             [omniconf.core :as config]
             [clojure.core.async :refer [>! >!! <! <!! alts!! timeout close! go-loop chan into to-chan]])
   (:import (java.util.concurrent TimeoutException)))
@@ -67,7 +68,7 @@
   (->>
     (get-from-jenkins last-completed-build-url "tree=actions[claimed,claimedBy,reason]")
     (:actions)
-    (filter not-empty)
+    (filter #(subset? #{:claimed :claimedBy :reason} (set (keys %1))))
     (first)))
 
 
