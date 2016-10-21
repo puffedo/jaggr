@@ -114,6 +114,30 @@
               "The green page should not show have elements of class 'yellow'"))))
 
 
+; in Jenkins 2 there is a bug, so that not all claim info is set to null when dropping a claim
+; therefore, Jaggr must make sure that no defective claim info is displayed for unclaimed builds
+(deftest display-claim-info-only-when-claimed-is-true
+  (with-redefs-fn
+    {#'jenkins/get-failed-jobs
+     (fn []
+       {:unclaimed [{:name                  "failed-build-with-dropped-claim"
+                     :claimed               false
+                     :claimedBy             "last-claimer-should-be-empty-but-is-not"
+                     :reason                "reason-should-be-empty-but-is-not"
+                     :lastCompletedBuildUrl "/failed-unclaimed-build/"}]})}
+
+    #(-> (session app)
+         (visit "/")
+         (has (some-text? "failed-build-with-dropped-claim")
+              "The name of the unclaimed failed job should be displayed")
+         (has (link? :href "/failed-unclaimed-build/")
+              "A link to the jobs last broken build should exist")
+         (has (missing? [:div.job-claimed-by])
+              "The claimer should be ommitted since the build is not claimed anymore")
+         (has (missing? [:div.job-reason])
+              "The reason should be ommitted since the build is not claimed anymore"))))
+
+
 (deftest red-custom-image-is-used-when-provided
   (let [image-placeholder "PLACEHOLDER FOR IMAGE"]
     (with-redefs-fn
