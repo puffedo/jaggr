@@ -65,48 +65,50 @@
 
 ;; gets the claim info for a job resource and throws away everything else
 (defn- get-claim-info [last-completed-build-url]
-  (->>
-    (get-from-jenkins last-completed-build-url "tree=actions[claimed,claimedBy,reason]")
-    (:actions)
-    (filter #(subset? #{:claimed :claimedBy :reason} (set (keys %1))))
-    (first)))
+  (select-keys
+    (->>
+      (get-from-jenkins last-completed-build-url "tree=actions[claimed,claimedBy,reason]")
+      (:actions)
+      (filter #(subset? #{:claimed :claimedBy :reason} (set (keys %1))))
+      (first))
+    [:claimed :claimedBy :reason]))
 
 
-;; reads from a channel with job REST resources,
-;; each job resource must have a :last-build-url
-;; adds information on it's last build's claim state to a job resource
-;; returns the enriched job resources on a channel
-(defn- add-claim-info-chan [job-rsrc-chan]
-  (map-chan
-    #(merge %1 (get-claim-info (:lastCompletedBuildUrl %1)))
-    job-rsrc-chan))
+  ;; reads from a channel with job REST resources,
+  ;; each job resource must have a :last-build-url
+  ;; adds information on it's last build's claim state to a job resource
+  ;; returns the enriched job resources on a channel
+  (defn- add-claim-info-chan [job-rsrc-chan]
+    (map-chan
+      #(merge %1 (get-claim-info (:lastCompletedBuildUrl %1)))
+      job-rsrc-chan))
 
 
-;; waits until a channel closes and retrieve all its values as a collection,
-;; throws an exception when the refresh interval is exceeded
-(defn- drain-or-timeout [c]
-  (let [refresh-rate (config/get :refresh-rate)
-        [vals _] (alts!!
-                   [(into '() c)
-                    (timeout (* 1000 refresh-rate))])]
-    (when-not vals
-      (throw (TimeoutException.
-               (str "Did not retrieve all required job data from the Jenkins API within " refresh-rate " seconds!"))))
-    vals))
+  ;; waits until a channel closes and retrieve all its values as a collection,
+  ;; throws an exception when the refresh interval is exceeded
+  (defn- drain-or-timeout [c]
+    (let [refresh-rate (config/get :refresh-rate)
+          [vals _] (alts!!
+                     [(into '() c)
+                      (timeout (* 1000 refresh-rate))])]
+      (when-not vals
+        (throw (TimeoutException.
+                 (str "Did not retrieve all required job data from the Jenkins API within " refresh-rate " seconds!"))))
+      vals))
 
 
-(defn get-failed-jobs []
-  "fetches all failed jobs from jenkins and returns a map that groups them in three classes:
-   :claimed, :unclaimed and :unclaimable. For each job of each class, a map is returned with
-   :name, :lastCompletedBuildUrl, :claimed, :claimedBy and :reason
-   throws an exception when the screen refresh time is exceeded before all jobs have been processed."
-  (->> (get-failed-jobs-rsrc)
-       (to-chan)
-       (add-last-completed-build-url-chan)
-       (add-claim-info-chan)
-       (drain-or-timeout)
-       (group-by
-         #(cond
-           (true? (:claimed %)) :claimed
-           (false? (:claimed %)) :unclaimed
-           :else :unclaimable))))
+  (defn get-failed-jobs []
+    "fetches all failed jobs from jenkins and returns a map that groups them in three classes:
+     :claimed, :unclaimed and :unclaimable. For each job of each class, a map is returned with
+     :name, :lastCompletedBuildUrl, :claimed, :claimedBy and :reason
+     throws an exception when the screen refresh time is exceeded before all jobs have been processed."
+    (->> (get-failed-jobs-rsrc)
+         (to-chan)
+         (add-last-completed-build-url-chan)
+         (add-claim-info-chan)
+         (drain-or-timeout)
+         (group-by
+           #(cond
+             (true? (:claimed %)) :claimed
+             (false? (:claimed %)) :unclaimed
+             :else :unclaimable))))

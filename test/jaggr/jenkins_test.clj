@@ -32,7 +32,12 @@
 ;; a claimed build
 (def
   get-build-response-body-claimed
-  "{\"actions\" : [{}, {\"claimed\" : true, \"claimedBy\" : \"somebody\" , \"reason\" : \"some reason\"}]}")
+  "{\"actions\" : [{}, {\"claimed\" : true, \"claimedBy\" : \"somebody\", \"reason\" : \"some reason\"}]}")
+
+;; a claimed build, Jenkins 2 format
+(def
+  get-build-response-body-claimed-jenkins-2
+  "{\"actions\" : [{}, {\"_class\" : \"ClaimPlugin\" ,\"claimed\" : true, \"claimedBy\" : \"somebody\", \"reason\" : \"some reason\"}]}")
 
 ;; an unclaimed build
 (def
@@ -43,6 +48,7 @@
 (def
   get-build-response-body-unclaimable
   "{\"actions\" : [{}]}")
+
 
 
 (use-fixtures :once with-preserved-start-params)
@@ -96,7 +102,7 @@
                             (is (= "somebody" (:claimedBy last-completed-build-rsrc)))
                             (is (= "some reason" (:reason last-completed-build-rsrc))))))
 
-                      (testing "For a claimed build, it contains :claimed = false"
+                      (testing "For an unclaimed build, it contains :claimed = false"
 
                         (with-fake-http
                           [#"http://example.com/job/failed-job/42/api/json?.*" get-build-response-body-unclaimed]
@@ -115,7 +121,22 @@
 
                             (is (nil? (:claimed last-completed-build-rsrc)))
                             (is (nil? (:claimedBy last-completed-build-rsrc)))
-                            (is (nil? (:reason last-completed-build-rsrc)))))))))))))))
+                            (is (nil? (:reason last-completed-build-rsrc))))))
+
+                      (testing "Both Jankins 1.x and 2.x API versions are accepted."
+
+                        (let [jenkins-1-url #"http://example.com/jenkins-1/api/json?.*"
+                              jenkins-2-url #"http://example.com/jenkins-2/api/json?.*"]
+
+                        (with-fake-http
+                          [jenkins-1-url get-build-response-body-claimed
+                           jenkins-2-url get-build-response-body-claimed-jenkins-2]
+
+                          (let [jenkins-1-build-rsrc (@#'jaggr.jenkins/get-claim-info jenkins-1-url)
+                                jenkins-2-build-rsrc (@#'jaggr.jenkins/get-claim-info jenkins-2-url)]
+
+                            (is (= jenkins-1-build-rsrc jenkins-2-build-rsrc)))))))))))))))
+
 
     (testing "Failed jobs with claimed builds are returned under the key :claimed ."
 
