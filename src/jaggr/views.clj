@@ -94,9 +94,9 @@
   (when job
     [:div.job
      (link-to {:class "job-name"} (:lastCompletedBuildUrl job) (h (:name job)))
-     (when (and (true? (:claimed job)) (:claimedBy job))
+     (when (and (:claimed job) (:claimedBy job))
        [:div.job-claimed-by "was heroically claimed by " (h (:claimedBy job))])
-     (when (and (true? (:claimed job)) (:reason job))
+     (when (and (:claimed job) (:reason job))
        [:div.job-reason "'" (h (:reason job)) "'"])]))
 
 
