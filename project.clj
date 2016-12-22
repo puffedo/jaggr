@@ -17,10 +17,10 @@
                  [ring/ring-jetty-adapter "1.5.0"]
                  [compojure "1.5.1"]
                  [hiccup "1.0.5"]
-                 [formative "0.8.8"]
+                 [formative "0.8.9"]
                  [http-kit "2.2.0"]
                  [org.clojure/data.json "0.2.6"]
-                 [com.grammarly/omniconf "0.2.3"]
+                 [com.grammarly/omniconf "0.2.5"]
                  [url-normalizer "0.5.3-1"]
                  [trptcolin/versioneer "0.2.0"]]
 
