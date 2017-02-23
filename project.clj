@@ -12,7 +12,7 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/tools.logging "0.3.1"]
-                 [org.clojure/core.async "0.2.395"]
+                 [org.clojure/core.async "0.3.426"]
                  [ring/ring-core "1.5.1"]
                  [ring/ring-jetty-adapter "1.5.1"]
                  [compojure "1.5.2"]
@@ -26,7 +26,7 @@
 
   :dev-dependencies [[ring/ring-devel "1.1.0"]]
 
-  :plugins [[lein-ring "0.10.0"]
+  :plugins [[lein-ring "0.11.0"]
             [lein-cloverage "1.0.9"]]
 
   :ring {:handler jaggr.core/app
