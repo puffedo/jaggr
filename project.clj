@@ -12,7 +12,7 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/tools.logging "0.3.1"]
-                 [org.clojure/core.async "0.3.426"]
+                 [org.clojure/core.async "0.3.441"]
                  [ring/ring-core "1.5.1"]
                  [ring/ring-jetty-adapter "1.5.1"]
                  [compojure "1.5.2"]
