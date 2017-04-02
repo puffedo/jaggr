@@ -20,7 +20,7 @@
                  [formative "0.8.9"]
                  [http-kit "2.2.0"]
                  [org.clojure/data.json "0.2.6"]
-                 [com.grammarly/omniconf "0.2.5"]
+                 [com.grammarly/omniconf "0.2.6"]
                  [url-normalizer "0.5.3-1"]
                  [trptcolin/versioneer "0.2.0"]]
 
