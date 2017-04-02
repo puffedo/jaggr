@@ -3,18 +3,15 @@
             [clojure.data.json :as json]
             [clojure.set :refer [subset?]]
             [omniconf.core :as config]
-            [clojure.core.async :refer [>! >!! <! <!! alts!! timeout close! go-loop chan into to-chan]])
+            [clojure.core.async :refer [>! >!! <! <!! alts!! timeout close! go-loop chan into to-chan pipeline]])
   (:import (java.util.concurrent TimeoutException)))
 
 
 ;; returns a channel with the results of the (unary) function fn applied to the values taken from the in channel
-(defn- map-chan [fn in]
-  (let [out (chan)]
-    (go-loop [val (<! in)]
-      (if val (do
-                (>! out (fn val))
-                (recur (<! in)))
-              (close! out)))
+(defn map-chan [fn in]
+  (let [out (chan 100)
+        concurrent 10]
+    (pipeline concurrent out (map fn) in)
     out))
 
 ;; calls the Jenkins JSON api for a given url (must end with /)
