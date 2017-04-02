@@ -108,7 +108,7 @@
 
 (defn index-page []
   (try
-    (let [failed-jobs (get-failed-jobs)]
+    (let [failed-jobs (failed-jobs)]
       (html5
         (reload-header)
         (fullscreen-body

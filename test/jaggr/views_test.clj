@@ -19,7 +19,7 @@
 
 (deftest display-error-page-when-exception-is-thrown
   (with-redefs-fn
-    {#'jenkins/get-failed-jobs
+    {#'jenkins/failed-jobs
      (fn [] (throw (Exception. "This Exception was thrown deliberately to test error handling")))}
 
     #(-> (session app)
@@ -39,7 +39,7 @@
 
 (deftest display-red-page-when-unclaimed-failed-builds-exist
   (with-redefs-fn
-    {#'jenkins/get-failed-jobs
+    {#'jenkins/failed-jobs
      (fn []
        {:unclaimed   [{:name                  "failed-unclaimed-build"
                        :claimedBy             nil :claimed false :reason nil
@@ -66,7 +66,7 @@
 
 (deftest display-yellow-page-when-all-failed-builds-are-claimed
   (with-redefs-fn
-    {#'jenkins/get-failed-jobs
+    {#'jenkins/failed-jobs
      (fn []
        {:claimed     [{:name                  "failed-claimed-build"
                        :claimedBy             "somebody" :claimed true :reason "a reason"
@@ -94,7 +94,7 @@
 
 (deftest display-green-page-when-no-failed-builds-exist
   (with-redefs-fn
-    {#'jenkins/get-failed-jobs
+    {#'jenkins/failed-jobs
      (fn []
        {:unclaimable [{:name                  "failed-unclaimable-build"
                        :lastCompletedBuildUrl "/failed-unclaimable-build/"}]})}
@@ -118,7 +118,7 @@
 ; therefore, Jaggr must make sure that no defective claim info is displayed for unclaimed builds
 (deftest display-claim-info-only-when-claimed-is-true
   (with-redefs-fn
-    {#'jenkins/get-failed-jobs
+    {#'jenkins/failed-jobs
      (fn []
        {:unclaimed [{:name                  "failed-build-with-dropped-claim"
                      :claimed               false
