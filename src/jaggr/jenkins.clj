@@ -3,16 +3,13 @@
             [clojure.data.json :as json]
             [clojure.set :refer [subset?]]
             [omniconf.core :as config]
-            [clojure.core.async :refer [>! >!! <! <!! alts!! timeout close! go-loop chan into to-chan pipeline]])
+            [clojure.core.async :refer [>! >!! <! <!! alts!! timeout close! go-loop chan into to-chan pipe]])
   (:import (java.util.concurrent TimeoutException)))
 
 
 ;; returns a channel with the results of the (unary) function fn applied to the values taken from the in channel
 (defn map-chan [fn in]
-  (let [out (chan 100)
-        concurrent 10]
-    (pipeline concurrent out (map fn) in)
-    out))
+    (pipe in (chan 100 (map fn))))
 
 ;; calls the Jenkins JSON api for a given url (must end with /)
 ;; optional url parameters may be provided (e.g. "tree=key[subkey1,subkey2]" to get a filtered response)
@@ -54,12 +51,9 @@
     [:lastCompletedBuild :url]))
 
 
-;; reads from a channel with jobs,
-;; adds the url of the last build to each job and returns it on a channel
-(defn- add-last-completed-build-url-chan [jobs-chan]
-  (map-chan
-    #(assoc %1 :lastCompletedBuildUrl (get-last-completed-build-url %1))
-    jobs-chan))
+;; takes a jobs and adds the url of the last build to each job
+(defn- add-last-completed-build-url [job]
+    (assoc job :lastCompletedBuildUrl (get-last-completed-build-url job)))
 
 
 ;; http-GETs the build-REST-resource for the provided URL
@@ -74,15 +68,10 @@
     [:claimed :claimedBy :reason]))
 
 
-;; reads from a channel with jobs,
-;; each job must have a :last-build-url
+;; takes a job that must have a :last-build-url
 ;; adds information on it's last build's claim state the each job
-;; returns the enriched jobs on a channel
-(defn- add-claim-info-chan [jobs-chan]
-  (map-chan
-    #(merge %1 (get-claim-info (:lastCompletedBuildUrl %1)))
-    jobs-chan))
-
+(defn- add-claim-info [job]
+    (merge job (get-claim-info (:lastCompletedBuildUrl job))))
 
 ;; waits until a channel closes and retrieve all its values as a collection,
 ;; throws an exception when the refresh interval is exceeded
@@ -104,8 +93,8 @@
    throws an exception when the screen refresh time is exceeded before all jobs have been processed."
   (->> (get-failed-jobs)
        (to-chan)
-       (add-last-completed-build-url-chan)
-       (add-claim-info-chan)
+       (map-chan add-last-completed-build-url)
+       (map-chan add-claim-info)
        (drain-or-timeout)
        (group-by
          #(cond
