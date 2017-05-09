@@ -6,7 +6,7 @@
             [hiccup.core :refer :all]
             [hiccup.element :refer [link-to]]
             [hiccup.page :refer :all]
-            [jaggr.jenkins :refer :all]
+            [jaggr.jenkins :as jenkins]
             [omniconf.core :as config]
             [trptcolin.versioneer.core :as version]))
 
@@ -70,9 +70,9 @@
                               :values (config/get)
                               :problems problems))]])))
 
+
 (defn submit-config-form [params]
-  (fp/with-fallback
-    #(config-page :problems %)
+  (fp/with-fallback #(config-page :problems %)
     (let [p (fp/parse-params config-form params)]
       (doseq [[k v] p] (config/set k v))
       (try
@@ -108,7 +108,7 @@
 
 (defn index-page []
   (try
-    (let [failed-jobs (failed-jobs)]
+    (let [failed-jobs (jenkins/failed-jobs)]
       (html5
         (reload-header)
         (fullscreen-body
@@ -118,8 +118,7 @@
              [:img {:src "/background-image-red"}]
              [:div.fullscreen.red
               [:h1 "BROKEN BUILDS - CLAIM AND FIX THEM!"]
-              [:div.subtext
-               "have a look at the broken builds - find someone who can fix the problem - claim the builds and fix them"]
+              [:div.subtext "have a look at the broken builds - find someone who can fix the problem - claim the builds and fix them"]
               (job-list (:unclaimed failed-jobs))]]
 
             (not-empty (:claimed failed-jobs))
@@ -127,8 +126,7 @@
              [:img {:src "/background-image-yellow"}]
              [:div.fullscreen.yellow
               [:h1 "BROKEN BUILDS - HELP IS ON THE WAY!"]
-              [:div.subtext
-               "see if you can help - check in with care - be careful with merges"]
+              [:div.subtext "see if you can help - check in with care - be careful with merges"]
               (job-list (:claimed failed-jobs))]]
 
             (not-empty (:unclaimable failed-jobs))

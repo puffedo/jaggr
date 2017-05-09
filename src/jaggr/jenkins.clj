@@ -8,8 +8,9 @@
 
 
 ;; returns a channel with the results of the (unary) function fn applied to the values taken from the in channel
-(defn map-chan [fn in]
+(defn- map-chan [fn in]
     (pipe in (chan 100 (map fn))))
+
 
 ;; calls the Jenkins JSON api for a given url (must end with /)
 ;; optional url parameters may be provided (e.g. "tree=key[subkey1,subkey2]" to get a filtered response)
