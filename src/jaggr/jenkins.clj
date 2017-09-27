@@ -19,7 +19,9 @@
   (let [url (str base-url "api/json?" params)
         user (config/get :user)
         user-token (config/get :user-token)
-        options (when (and user user-token) {:basic-auth [user user-token] :keepalive -1})
+        options (when
+                  (and user user-token)
+                  {:basic-auth [user user-token] :keepalive -1 :insecure? true})
         response @(http/get url options)]
     (json/read-str (:body response) :key-fn keyword)))
 

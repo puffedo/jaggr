@@ -1,4 +1,4 @@
-(defproject jaggr "0.5.0-SNAPSHOT"
+(defproject jaggr "0.4.5-SNAPSHOT"
 
   :description "An aggregated CI traffic light for jenkins, based on the Jenkins Claims plugin"
 
@@ -11,10 +11,10 @@
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/tools.logging "0.3.1"]
-                 [org.clojure/core.async "0.3.442"]
-                 [ring/ring-core "1.6.1"]
-                 [ring/ring-jetty-adapter "1.6.1"]
+                 [org.clojure/tools.logging "0.4.0"]
+                 [org.clojure/core.async "0.3.443"]
+                 [ring/ring-core "1.6.2"]
+                 [ring/ring-jetty-adapter "1.6.2"]
                  [compojure "1.6.0"]
                  [hiccup "1.0.5"]
                  [formative "0.8.9"]
@@ -26,7 +26,7 @@
 
   :dev-dependencies [[ring/ring-devel "1.1.0"]]
 
-  :plugins [[lein-ring "0.12.0"]
+  :plugins [[lein-ring "0.12.1"]
             [lein-cloverage "1.0.9"]]
 
   :ring {:handler jaggr.core/app
