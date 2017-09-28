@@ -292,7 +292,7 @@
           (press "Submit"))
 
       (is (= (config/get :base-url) "http://my-jenkins.com/test/"))
-      (is (= (config/get :acc-insecure-conn) true))
+      (is (= (config/get :acc-insecure-conn) "true"))
       (is (= (config/get :user) "test-user"))
       (is (= (config/get :user-token) "test-token"))
       (is (= (config/get :refresh-rate) 42))

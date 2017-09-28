@@ -65,7 +65,7 @@
 
 (defn config-page [& {:keys [problems]}]
   (html5
-    (header))
+    (header)
     [:body
      [:div.fullscreen
       [:img {:src "/background-image-error"}]
