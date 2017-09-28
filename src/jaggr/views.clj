@@ -68,16 +68,17 @@
     (header)
     (println "config-page config " (config/get :acc-insecure-conn))
     (println "render form " (f/render-form (assoc config-form
-                                              :values (config/get)
-                                              :problems problems)))
-    (fullscreen-body
+                                             :values (config/get)
+                                             :problems problems)))
+    [:body
+     [:div.fullscreen
       [:img {:src "/background-image-error"}]
       [:div.fullscreen.error
        [:h1 "WHERE IS MY JENKINS?"]
        [:div.subtext "please provide some configuration parameters"]
        [:div (f/render-form (assoc config-form
                               :values (config/get)
-                              :problems problems))]])))
+                              :problems problems))]]]]))
 
 
 (defn submit-config-form [params]
