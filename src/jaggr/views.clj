@@ -65,11 +65,7 @@
 
 (defn config-page [& {:keys [problems]}]
   (html5
-    (header)
-    (println "config-page config " (config/get :acc-insecure-conn))
-    (println "render form " (f/render-form (assoc config-form
-                                             :values (config/get)
-                                             :problems problems)))
+    (header))
     [:body
      [:div.fullscreen
       [:img {:src "/background-image-error"}]
@@ -84,9 +80,7 @@
 (defn submit-config-form [params]
   (fp/with-fallback #(config-page :problems %)
                     (let [p (fp/parse-params config-form params)]
-                      (println "parsed params " p)
                       (doseq [[k v] p] (config/set k v))
-                      (println "new config " (config/get))
                       (try
                         (config/verify :quit-on-error false)
                         {:status  302
