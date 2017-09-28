@@ -280,6 +280,7 @@
       (-> (session app)
           (visit "/config")
           (fill-in [:input#field-base-url] "http://my-jenkins.com/test/")
+          (choose [:select#field-acc-insecure-conn] "true")
           (fill-in [:input#field-user] "test-user")
           (fill-in [:input#field-user-token] "test-token")
           (fill-in [:input#field-refresh-rate] 42)
@@ -291,6 +292,7 @@
           (press "Submit"))
 
       (is (= (config/get :base-url) "http://my-jenkins.com/test/"))
+      (is (= (config/get :acc-insecure-conn) true))
       (is (= (config/get :user) "test-user"))
       (is (= (config/get :user-token) "test-token"))
       (is (= (config/get :refresh-rate) 42))

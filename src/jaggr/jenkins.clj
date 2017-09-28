@@ -21,7 +21,9 @@
         user-token (config/get :user-token)
         options (when
                   (and user user-token)
-                  {:basic-auth [user user-token] :keepalive -1 :insecure? true})
+                  {:basic-auth [user user-token]
+                   :keepalive -1
+                   :insecure? (Boolean/valueOf (config/get :acc-insecure-conn))})
         response @(http/get url options)]
     (json/read-str (:body response) :key-fn keyword)))
 

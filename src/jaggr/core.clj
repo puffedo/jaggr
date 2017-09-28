@@ -30,40 +30,44 @@
   ([] (init []))
   ([args]
    (config/define
-     {:base-url         {:description "The Jenkins URL that shows all jobs to monitor"
-                         :parser      normalize-url-string
-                         :required    true}
-      :user             {:description "A Jenkins user that has access to the base url"
-                         :type        :string
-                         :required    false}
-      :user-token       {:description "The users access token (see 'Configuration' page in your Jenkins user profile)"
-                         :type        :string
-                         :required    false
-                         :secret      true}
-      :refresh-rate     {:description "The time between two automatic page reloads in seconds"
-                         :type        :number
-                         :default     60}
-      :port             {:description "The port"
-                         :type        :number
-                         :default     3000}
-      :config-file      {:description "A file containing config parameters"
-                         :type        :string
-                         :default     "default.config"}
-      :image-url        {:description "A URL that serves a background image (unless a more specific one can be found in the file system)"
-                         :type        :string
-                         :default     "http://lorempixel.com/g/400/200"}
-      :image-url-red    {:description "A URL that serves a background image for red screens. Overrides the image-url parameter.)"
-                         :type        :string
-                         :required    false}
-      :image-url-yellow {:description "A URL that serves a background image for yellow screens. Overrides the image-url parameter.)"
-                         :type        :string
-                         :required    false}
-      :image-url-green  {:description "A URL that serves a background image for green screens. Overrides the image-url parameter.)"
-                         :type        :string
-                         :required    false}
-      :image-url-error  {:description "A URL that serves a background image for error screens. Overrides the image-url parameter.)"
-                         :type        :string
-                         :required    false}})
+     {:base-url          {:description "The Jenkins URL that shows all jobs to monitor"
+                          :parser      normalize-url-string
+                          :required    true}
+      :acc-insecure-conn {:description "Should insecure connections to Jenkins be accepted?"
+                          :type        :string
+                          :default     "false"
+                          :required    true}
+      :user              {:description "A Jenkins user that has access to the base url"
+                          :type        :string
+                          :required    false}
+      :user-token        {:description "The users access token (see 'Configuration' page in your Jenkins user profile)"
+                          :type        :string
+                          :required    false
+                          :secret      true}
+      :refresh-rate      {:description "The time between two automatic page reloads in seconds"
+                          :type        :number
+                          :default     60}
+      :port              {:description "The port"
+                          :type        :number
+                          :default     3000}
+      :config-file       {:description "A file containing config parameters"
+                          :type        :string
+                          :default     "default.config"}
+      :image-url         {:description "A URL that serves a background image (unless a more specific one can be found in the file system)"
+                          :type        :string
+                          :default     "http://lorempixel.com/g/400/200"}
+      :image-url-red     {:description "A URL that serves a background image for red screens. Overrides the image-url parameter.)"
+                          :type        :string
+                          :required    false}
+      :image-url-yellow  {:description "A URL that serves a background image for yellow screens. Overrides the image-url parameter.)"
+                          :type        :string
+                          :required    false}
+      :image-url-green   {:description "A URL that serves a background image for green screens. Overrides the image-url parameter.)"
+                          :type        :string
+                          :required    false}
+      :image-url-error   {:description "A URL that serves a background image for error screens. Overrides the image-url parameter.)"
+                          :type        :string
+                          :required    false}})
 
 
    (config/populate-from-env)
@@ -73,8 +77,8 @@
      (config/populate-from-file (config/get :config-file)))
     ; re-apply cmd line parameters to override parameters from config-file
    (config/populate-from-cmd args)
-   ; keep the app running on config errors so the config page is accessible to fix the problems
-   (try (config/verify :quit-on-error false) (catch Exception _) )))
+    ; keep the app running on config errors so the config page is accessible to fix the problems
+   (try (config/verify :quit-on-error false) (catch Exception _))))
 
 
 (defroutes main-routes

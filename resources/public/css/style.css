@@ -121,6 +121,16 @@ input {
   text-align: center;
 }
 
+select {
+  background-color: #888888;
+  background-color: rgba(250, 250, 250, .3);
+  color: white;
+  width: 90%;
+  border: none;
+  border-radius: 3px;
+  text-align-last: center;
+}
+
 .btn {
   color: inherit;
   text-decoration: none;

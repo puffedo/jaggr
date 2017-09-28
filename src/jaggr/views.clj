@@ -42,7 +42,12 @@
 ;;
 
 (def config-form
-  {:fields      [{:name :base-url :label "Jenkins Base URL" :blank-nil true}
+  {:fields      [{:name :base-url :label "Jenkins URL" :blank-nil true}
+                 {:name     :acc-insecure-conn :label "How to handle insecure connections to Jenkins?"
+                  :type     :select
+                  :datatype :string
+                  :options  [{:label "Accept insecure connection" :value "true"}
+                             {:label "Require secure connection" :value "false"}]}
                  {:name :user :label "User name" :blank-nil true}
                  {:name :user-token :label "User-Token" :type :password :blank-nil true}
                  {:name :refresh-rate :label "Refresh rate (in seconds)" :datatype :int}
@@ -61,6 +66,10 @@
 (defn config-page [& {:keys [problems]}]
   (html5
     (header)
+    (println "config-page config " (config/get :acc-insecure-conn))
+    (println "render form " (f/render-form (assoc config-form
+                                              :values (config/get)
+                                              :problems problems)))
     (fullscreen-body
       [:img {:src "/background-image-error"}]
       [:div.fullscreen.error
@@ -73,17 +82,19 @@
 
 (defn submit-config-form [params]
   (fp/with-fallback #(config-page :problems %)
-    (let [p (fp/parse-params config-form params)]
-      (doseq [[k v] p] (config/set k v))
-      (try
-        (config/verify :quit-on-error false)
-        {:status  302
-         :headers {"Location" "/"}
-         :body    ""}
-        (catch Exception _
-          {:status  302
-           :headers {"Location" "/config"}
-           :body    ""})))))
+                    (let [p (fp/parse-params config-form params)]
+                      (println "parsed params " p)
+                      (doseq [[k v] p] (config/set k v))
+                      (println "new config " (config/get))
+                      (try
+                        (config/verify :quit-on-error false)
+                        {:status  302
+                         :headers {"Location" "/"}
+                         :body    ""}
+                        (catch Exception _
+                          {:status  302
+                           :headers {"Location" "/config"}
+                           :body    ""})))))
 
 
 ;;

@@ -104,17 +104,18 @@ and set the parameters there:
 Parameters:
 
 ```
---base-url         - The Jenkins URL that shows all jobs to monitor. Required.
---user             - A Jenkins user that has access to the base url.
---user-token       - The users access token (see 'Configuration' page in your Jenkins user profile).
---config-file      - A file containing config parameters. Default: default.config
---port             - The port. Default: 3000
---refresh-rate     - The time between two automatic page reloads in seconds. Default: 60
---image-url        - A URL that serves a background image (unless a more specific one can be found in the file system). Default: http://lorempixel.com/g/400/200
---image-url-error  - A URL that serves a background image for error screens. Overrides the image-url parameter.).
---image-url-green  - A URL that serves a background image for green screens. Overrides the image-url parameter.).
---image-url-red    - A URL that serves a background image for red screens. Overrides the image-url parameter.).
---image-url-yellow - A URL that serves a background image for yellow screens. Overrides the image-url parameter.).
+--base-url           - The Jenkins URL that shows all jobs to monitor. Required.
+--acc-insecure-conn  - Should insecure connections to Jenkins accepted? Default: false
+--user               - A Jenkins user that has access to the base url.
+--user-token         - The users access token (see 'Configuration' page in your Jenkins user profile).
+--config-file        - A file containing config parameters. Default: default.config
+--port               - The port. Default: 3000
+--refresh-rate       - The time between two automatic page reloads in seconds. Default: 60
+--image-url          - A URL that serves a background image (unless a more specific one can be found in the file system). Default: http://lorempixel.com/g/400/200
+--image-url-error    - A URL that serves a background image for error screens. Overrides the image-url parameter.).
+--image-url-green    - A URL that serves a background image for green screens. Overrides the image-url parameter.).
+--image-url-red      - A URL that serves a background image for red screens. Overrides the image-url parameter.).
+--image-url-yellow   - A URL that serves a background image for yellow screens. Overrides the image-url parameter.).
 ```
 
 All parameters can also be specified as environment variables (`USER`,
