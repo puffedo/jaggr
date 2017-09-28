@@ -104,10 +104,27 @@
          (has (element? [:div.green])
               "The green page should be shown when no claimable failed jobs exist")
          (has (some-text? "failed-unclaimable-build")
-              "since there are no more claimable (= team-owned) failed builds,
+              "Since there are no more claimable (= team-owned) failed builds,
               the other failed jobs should be shown for information)")
          (has (link? :href "/failed-unclaimable-build/")
               "A link to the jobs last broken build should exist")
+         (has (missing? [:div.red])
+              "The green page should not show have elements of class 'red'")
+         (has (missing? [:div.yellow])
+              "The green page should not show have elements of class 'yellow'"))))
+
+
+(deftest display-different-green-page-when-there-are-no-unclaimable-failed-builds
+  (with-redefs-fn
+    {#'jenkins/failed-jobs
+     (fn [] {})}
+
+    #(-> (session app)
+         (visit "/")
+         (has (element? [:div.green])
+              "The green page should be shown when no claimable failed jobs exist")
+         (has (missing? [:div.job-list])
+              "Since neither claimable nor unclaimable failed builds exist, no job lists should be shown")
          (has (missing? [:div.red])
               "The green page should not show have elements of class 'red'")
          (has (missing? [:div.yellow])
